@@ -12,9 +12,15 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "typeRoots": [
+      "src/types",
+      "node_modules/@types",
+      "node_modules/phaser/types"
+    ],
     "types": [
       "webpack-env",
-      "jest"
+      "jest",
+      "Phaser"
     ],
     "paths": {
       "@/*": [
