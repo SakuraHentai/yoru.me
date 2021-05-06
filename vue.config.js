@@ -1,6 +1,7 @@
 const pkg = require('./package.json')
 
 module.exports = {
+  productionSourceMap: false,
   chainWebpack: (config) => {
     /* disable insertion of assets as data urls b'z' Phaser doesn't support it */
     const rules = ['images', 'media']
