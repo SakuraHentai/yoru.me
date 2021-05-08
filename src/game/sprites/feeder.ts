@@ -58,8 +58,8 @@ export default class Feeder extends Pet {
   private feed(): void {
     const food = new Food(
       this.scene,
-      this.x + (TEXTURE.PET.WIDTH - TEXTURE.FOOD.WIDTH / 2),
-      this.y - TEXTURE.PET.HEIGHT / 2,
+      this.x,
+      this.y - TEXTURE.FOOD.HEIGHT,
       TEXTURE.FOOD.NAME
     )
     this.emit('feed', food)
