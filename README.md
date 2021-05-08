@@ -2,4 +2,8 @@
 
 ## Play
 
-`space` for feed and `left` and `right` for direction. :bowtie: :bowtie:
+Feed: `Space` or `Left Click`
+
+Direction: `Left/Right Arrow` or `Right Click`
+
+:bowtie: :bowtie:

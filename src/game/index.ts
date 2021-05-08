@@ -5,6 +5,7 @@ import ScoreScene from './scenes/Score'
 function init(parent: string): Phaser.Game {
   const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
+    banner: false,
     width: window.innerWidth,
     height: window.innerHeight,
     parent,

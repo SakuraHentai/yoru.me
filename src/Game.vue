@@ -23,6 +23,10 @@ export default {
     const gameModule = await import('@/game/index')
     game = gameModule.init(this.gameWorld)
     this.loading = false
+    console.log(
+      `%c Hihi! Github: https://github.com/SakuraHentai`,
+      'color: #009688'
+    )
   },
   destroyed(this: InitData): void {
     game?.destroy(true)
