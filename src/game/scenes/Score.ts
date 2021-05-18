@@ -1,5 +1,5 @@
 import { FULLSCORE, SCENES } from '../config'
-
+import MainScene from '../scenes/Main'
 export default class ScoreScene extends Phaser.Scene {
   private mainScene!: MainScene
   private score!: number

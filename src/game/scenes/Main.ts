@@ -1,6 +1,7 @@
 import { LOGO, SCENES, TEXTURE } from '@/game/config'
 import Feeder from '../sprites/feeder'
 import Pet from '../sprites/pet'
+import Food from '../sprites/food'
 
 export default class MainScene extends Phaser.Scene {
   logo!: Phaser.Physics.Arcade.Group
