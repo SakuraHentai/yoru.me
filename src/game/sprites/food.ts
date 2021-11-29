@@ -1,7 +1,7 @@
 import { TEXTURE } from '../config'
-
+import Pet from './pet'
 export default class Food extends Phaser.Physics.Arcade.Sprite {
-  body!: Phaser.Physics.Arcade.Body
+  declare body: Phaser.Physics.Arcade.Body
   speed = 300
   onWordBounds!: (body: Phaser.Physics.Arcade.Body) => void
 
