@@ -18,6 +18,10 @@ const MetaInfo: React.FC<Props> = ({ meta }) => {
     <Head>
       <title>{title}</title>
       <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+      ></meta>
+      <meta
         name="description"
         content={
           meta?.description || 'Yoru games and some posts about frontend.'
