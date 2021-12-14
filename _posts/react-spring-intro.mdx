@@ -1,0 +1,97 @@
+---
+title: 'React 动画库: react-spring 简单使用'
+keywords: react-spring usage,react-spring用法
+description: react-spring 用法
+date: 2021-12-13
+demos: ['thumb', 'react-spring-1', 'react-spring-2']
+tags: ['react', 'react-spring', 'animation']
+summary: 'react-spring 是一个基于弹簧物理的动画库, 应该能满足你大部分 UI 相关的动画需求. 它为您提供了足够灵活的工具, 可以自信地将您的想法转化为移动界面. (摘自官网)'
+---
+
+import Thumb from 'thumb'
+import Demo1 from 'react-spring-1'
+import Demo2 from 'react-spring-2'
+
+<Thumb
+  src="https://wx1.sinaimg.cn/mw2000/6708d6c2gy1gxd5rrus5lj20r80dywic.jpg"
+  alt="react-spring"
+/>
+
+<Demo1 />
+
+```tsx
+const Demo = () => {
+  const props = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    loop: {
+      reverse: true,
+    },
+  })
+
+  return (
+    <div className="demo">
+      <a.div style={props}>Hello</a.div>
+    </div>
+  )
+}
+```
+
+如上代码, <a href="https://react-spring.io" target="_blank">react-spring</a>可简单地使用`useSpring`和`animated(.tag)/a(.tag)`组件实现动画.
+
+> 当使用函数作为参数时, 可使用`api`更灵活地操纵属性变化
+
+```tsx
+// mdx的 esbuild 不支持 type system, 有点尴尬? 好多ignore
+import { useCallback, useMemo, useRef } from 'react'
+import { useSpring, a } from 'react-spring'
+
+const Demo = () => {
+  const [props, api] = useSpring(() => ({ x: 0, y: 0 }))
+  // @ts-ignore
+  const demoRef = useRef(null)
+  const getDemoOffset = useCallback(() => {
+    return {
+      // @ts-ignore
+      x: demoRef.current.offsetLeft,
+      // @ts-ignore
+      y: demoRef.current.offsetTop,
+    }
+  }, [])
+
+  const moveTo = useCallback((e) => {
+    const demoOffset = getDemoOffset()
+    api.start({
+      x: e.pageX - demoOffset.x,
+      y: e.pageY - demoOffset.y,
+      config: { mass: 5, tension: 1000, friction: 60 },
+    })
+  }, [])
+
+  return (
+    <div
+      className="demo"
+      style={{
+        height: 300,
+        cursor: 'move',
+      }}
+      onMouseMove={(e) => moveTo(e)}
+      ref={demoRef}
+    >
+      <a.div style={props}>Move anywhere</a.div>
+    </div>
+  )
+}
+
+export default Demo
+```
+
+<Demo2 />
+
+具体 api 在<a href="https://react-spring.io/basics" target="_blank">官网</a>上太详细了.
+
+<p>
+  <del>其实只是想测试一下`mdx`各样式/组件/图床收录情况.</del>
+</p>
+
+-- Fin --
