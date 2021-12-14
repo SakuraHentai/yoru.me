@@ -11,7 +11,7 @@ const Home: NextPage = () => {
       <MetaInfo />
       <Game />
       <Link href="/blog">
-        <a className={styles.blogEntry} title="Go to view posts">
+        <a className={styles.blogEntry} title="去看看前端~">
           BLOG
         </a>
       </Link>

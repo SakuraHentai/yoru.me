@@ -16,22 +16,20 @@ const MetaInfo: React.FC<Props> = ({ meta }) => {
 
   return (
     <Head>
-      <title>{title}</title>
       <meta
         name="viewport"
         content="width=device-width, initial-scale=1"
       ></meta>
       <meta
         name="description"
-        content={
-          meta?.description || 'Yoru games and some posts about frontend.'
-        }
+        content={meta?.description || 'Yoru 小游戏和一些前端安利'}
       ></meta>
       <meta
         name="keywords"
-        content={meta?.keywords || 'yoru,sakurahentai'}
+        content={meta?.keywords || 'yoru,sakurahentai,前端安利'}
       ></meta>
       <meta name="author" content="Derek"></meta>
+      <title>{title}</title>
     </Head>
   )
 }

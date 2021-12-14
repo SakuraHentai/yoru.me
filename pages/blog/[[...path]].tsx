@@ -15,8 +15,8 @@ type PostsProps = {
 const Blog: NextPage<PostsProps> = ({ posts, pager }) => {
   const meta: MetaProps = {
     title: 'Blog',
-    keywords: 'yoru.me blog, posts about frontend',
-    description: 'Posts about frontend development',
+    keywords: 'yoru.me blog, posts about frontend, yoru前端小知识',
+    description: '一些关于前端的文字',
   }
 
   return (
