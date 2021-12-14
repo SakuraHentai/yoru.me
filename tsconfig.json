@@ -16,13 +16,12 @@
     "incremental": true,
     "typeRoots": [
       "node_modules/@types",
-      "node_modules/phaser/types"
     ],
     "types": [
-      "Phaser",
       "jest"
     ]
   },
+  "files": ["node_modules/phaser/types/phaser.d.ts"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
