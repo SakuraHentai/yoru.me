@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import styles from '../styles/blog.module.scss'
-import { PagerType } from '../services/posts'
+import type { PagerType } from '../types'
 
 type PagerProps = {
   pager: PagerType

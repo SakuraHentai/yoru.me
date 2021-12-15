@@ -2,8 +2,8 @@ import { join } from 'path'
 import { readFile } from 'fs/promises'
 import { bundleMDX } from 'mdx-bundler'
 import { BundleMDX } from 'mdx-bundler/dist/types'
-import { PostMetaType } from '../services/posts'
 import rehypeHighlight from 'rehype-highlight'
+import type { PostMetaType } from '../types'
 
 // ref: https://github.com/kentcdodds/mdx-bundler#nextjs-esbuild-enoent
 if (process.platform === 'win32') {

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import styles from '../styles/blog.module.scss'
-import { PostType } from '../services/posts'
+import type { PostType } from '../types'
 
 type PostCardProps = {
   post: PostType

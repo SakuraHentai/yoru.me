@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import Link from 'next/link'
-import { PostType } from '../services/posts'
+import { getMDXComponent } from 'mdx-bundler/client'
 import styles from '../styles/blog.module.scss'
 import MetaInfo from './meta-info'
-import { getMDXComponent } from 'mdx-bundler/client'
+import type { PostType } from '../types'
 
 type PostProps = {
   post: PostType

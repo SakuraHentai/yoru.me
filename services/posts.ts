@@ -3,31 +3,10 @@ import { readdir, readFile } from 'fs/promises'
 import dayjs from 'dayjs'
 import matter from 'gray-matter'
 import { compileMDX } from '../utils/compile-mdx'
+import type { PagerType, PostType } from '../types'
 
 // use `_` prefix place top in editor
 const postsDirectory = join(process.cwd(), '_posts')
-
-// ref: https://gohugo.io/content-management/front-matter/#front-matter-formats
-export type PostMetaType = {
-  path: string // for url
-  title: string
-  keywords: string
-  description: string
-  date: string
-  tags: string[]
-  demos?: string[]
-  summary: string
-}
-export type PostType = {
-  meta: PostMetaType
-  code?: string
-}
-
-export type PagerType = {
-  prev?: number
-  next?: number
-  tag?: string
-}
 
 const order = (a: PostType, b: PostType) => {
   const aDate = dayjs(a.meta.date)
@@ -85,6 +64,10 @@ export const getAllPosts = async (
 
 export const getPostByName = async (name: string, withContent = false) => {
   const fileName = name.replace(/\.mdx$/, '') // getAllPosts support
+  // check name valid
+  if (!/^[a-zA-Z\-0-9]+$/.test(fileName)) {
+    throw new Error(`${fileName} is not a valid post name`)
+  }
   const filePath = join(postsDirectory, `${fileName}.mdx`)
   const fileContent = await readFile(filePath, 'utf8')
   const { data: meta, content } = matter(fileContent)

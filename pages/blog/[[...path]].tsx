@@ -1,11 +1,12 @@
-import { NextPage, GetServerSideProps } from 'next'
+import type { NextPage, GetServerSideProps } from 'next'
 import { ParsedUrlQuery } from 'node:querystring'
 import MetaInfo, { MetaProps } from '../../components/meta-info'
 import BlogLayout from '../../components/blog-layout'
-import { getAllPosts, PostType, PagerType } from '../../services/posts'
+import { getAllPosts } from '../../services/posts'
 import parseQueryPath from '../../utils/parse-query-path'
 import PostCard from '../../components/post-card'
 import Pager from '../../components/pager'
+import type { PagerType, PostType } from '../../types'
 
 type PostsProps = {
   posts: PostType[]
