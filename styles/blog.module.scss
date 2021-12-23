@@ -34,6 +34,20 @@
     border: 0;
     color: #ddd;
     font-size: 14px;
+    overflow-x: auto;
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #666;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #272822;
+    }
   }
 
   .hljs-tag,
@@ -255,18 +269,18 @@
       img {
         max-width: 100%;
       }
-      p {
-        margin: 0;
-        + p {
-          margin-top: 1em;
-        }
-      }
       blockquote {
         margin: 1em 0;
         padding: 1em;
         background: #fff9c3;
         line-height: 1.6;
         color: #555;
+        p {
+          margin: 0;
+          + p {
+            margin-top: 1em;
+          }
+        }
       }
       code {
         margin: 0 0.1em;
@@ -277,14 +291,14 @@
         font-size: 14px;
       }
       pre {
-        display: flex;
-        max-width: calc(100vw - 2em);
+        display: grid;
         background: #272822;
         border-radius: 4px;
-        overflow-x: auto;
-        code {
-          flex: 1;
-        }
+        overflow: hidden;
+      }
+      .note {
+        font-size: 14px;
+        color: #a1a1a1;
       }
       @extend %demo;
       @extend %highlightTheme;
