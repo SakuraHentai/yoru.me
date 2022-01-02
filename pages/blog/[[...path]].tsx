@@ -11,11 +11,12 @@ import type { PagerType, PostType } from '../../types'
 type PostsProps = {
   posts: PostType[]
   pager: PagerType
+  tag: string
 }
 
-const Blog: NextPage<PostsProps> = ({ posts, pager }) => {
+const Blog: NextPage<PostsProps> = ({ tag, posts, pager }) => {
   const meta: MetaProps = {
-    title: 'Blog',
+    title: tag ? `${tag} 相关` : 'Blog',
     keywords: 'yoru.me blog, posts about frontend, yoru前端小知识',
     description: '一些关于前端的文字',
   }
@@ -39,7 +40,8 @@ export const getServerSideProps: GetServerSideProps<PostsProps, SSRProps> =
   async ({ params }) => {
     const pathParams = parseQueryPath(params?.path)
 
-    const { posts, pager } = await getAllPosts(pathParams.tag, pathParams.page)
+    const tag = pathParams.tag || ''
+    const { posts, pager } = await getAllPosts(tag, pathParams.page)
 
     if (!posts.length) {
       return {
@@ -48,6 +50,7 @@ export const getServerSideProps: GetServerSideProps<PostsProps, SSRProps> =
     }
     return {
       props: {
+        tag,
         posts,
         pager,
       },
