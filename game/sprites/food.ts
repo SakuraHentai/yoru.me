@@ -16,7 +16,7 @@ export default class Food extends Phaser.Physics.Arcade.Sprite {
     this.body
       .setCollideWorldBounds(true, 0, 0.4, true)
       .setGravity(0, this.#speed)
-      .setVelocityY(-this.#speed * 2.5)
+      .setVelocityY(-this.#speed * 4)
 
     // animate it
     this.anims.create({
