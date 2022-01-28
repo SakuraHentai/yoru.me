@@ -1,11 +1,13 @@
-import { LOGO, SCENES, TEXTURE, MIN_WIDTH } from '../config'
+import { LOGO, MIN_WIDTH, SCENES, TEXTURE } from '../config'
 import Feeder from '../sprites/feeder'
-import Pet from '../sprites/pet'
 import Food from '../sprites/food'
+import Pet from '../sprites/pet'
+import BulletTimeSystem from '../systems/bullet-time'
 
 export default class MainScene extends Phaser.Scene {
   logo!: Phaser.Physics.Arcade.Group
-  private player!: Feeder
+  player!: Feeder
+  #bulletTime!: BulletTimeSystem
 
   constructor() {
     super(SCENES.MAIN)
@@ -24,13 +26,17 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.createLogo()
-    this.createPlayer()
-    this.addCollide()
-    this.countScore()
+    this.#createLogo()
+    this.#createPlayer()
+    this.#initCollide()
+    this.#initScore()
+    this.#bulletTime = new BulletTimeSystem(
+      this.player,
+      this.logo.getChildren() as Pet[]
+    )
   }
 
-  private createLogo(): void {
+  #createLogo(): void {
     this.logo = this.physics.add.group({
       // collideWorldBounds: true,
     })
@@ -44,7 +50,7 @@ export default class MainScene extends Phaser.Scene {
               (Math.max(this.cameras.main.width, MIN_WIDTH) -
                 LOGO[0].length * TEXTURE.PET.WIDTH) /
                 2,
-            rowIdx * TEXTURE.PET.HEIGHT + TEXTURE.PET.HEIGHT, // offset a pet height
+            rowIdx * TEXTURE.PET.HEIGHT * 1.2 + TEXTURE.PET.HEIGHT, // offset a pet height
             TEXTURE.PET.NAME
           )
 
@@ -55,7 +61,7 @@ export default class MainScene extends Phaser.Scene {
     })
   }
 
-  private createPlayer(): void {
+  #createPlayer(): void {
     this.player = new Feeder(
       this,
       this.cameras.main.centerX - TEXTURE.PET.WIDTH / 2,
@@ -76,7 +82,7 @@ export default class MainScene extends Phaser.Scene {
     )
   }
 
-  private addCollide(): void {
+  #initCollide(): void {
     this.physics.world.setBoundsCollision(true)
     // pets -> player
     this.physics.add.collider(this.logo.getChildren(), this.player, () => {
@@ -84,12 +90,13 @@ export default class MainScene extends Phaser.Scene {
     })
   }
 
-  private countScore() {
+  #initScore() {
     this.scene.get(SCENES.SCORE).scene.restart()
   }
 
   update(): void {
     // this.cameras.main.centerToSize()
     this.cameras.main.centerOnX(this.player.x)
+    this.#bulletTime.update()
   }
 }

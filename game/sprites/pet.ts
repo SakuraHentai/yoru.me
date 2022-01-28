@@ -3,8 +3,9 @@ import Food from './food'
 
 export default class Pet extends Phaser.Physics.Arcade.Sprite {
   declare body: Phaser.Physics.Arcade.Body
-  speed = 300
-  private onWordBounds!: (body: Phaser.Physics.Arcade.Body) => void
+  #speed = 300
+  #speedRatio = 1
+  #onWordBounds!: (body: Phaser.Physics.Arcade.Body) => void
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     super(scene, x, y, texture)
@@ -13,7 +14,7 @@ export default class Pet extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this)
     scene.physics.add.existing(this)
 
-    this.onWordBounds = this.bounds.bind(this)
+    this.#onWordBounds = this.#bounds.bind(this)
 
     this.body.setCollideWorldBounds(true, 1, 0.4, true)
 
@@ -36,11 +37,24 @@ export default class Pet extends Phaser.Physics.Arcade.Sprite {
     // world bounds event
     this.scene.physics.world.on(
       Phaser.Physics.Arcade.Events.WORLD_BOUNDS,
-      this.onWordBounds
+      this.#onWordBounds
     )
   }
 
-  private bounds(body: Phaser.Physics.Arcade.Body): void {
+  #getSpeed(): number {
+    return this.#speed * this.#speedRatio
+  }
+
+  setSpeedRatio(ratio: number = 1): void {
+    this.#speedRatio = ratio
+    if (ratio === 1) {
+      this.setVelocityY(0)
+    } else {
+      this.setVelocityY(this.#getSpeed())
+    }
+  }
+
+  #bounds(body: Phaser.Physics.Arcade.Body): void {
     if (this.body === body) {
       this.collideWorldBounds()
     }
@@ -53,7 +67,7 @@ export default class Pet extends Phaser.Physics.Arcade.Sprite {
     ) {
       this.scene.physics.world.off(
         Phaser.Physics.Arcade.Events.WORLD_BOUNDS,
-        this.onWordBounds
+        this.#onWordBounds
       )
       this.destroy()
     }
@@ -61,7 +75,7 @@ export default class Pet extends Phaser.Physics.Arcade.Sprite {
 
   collide(from: Pet | Food): void {
     if (from instanceof Food) {
-      this.setGravityY(from.speed)
+      this.setGravityY(this.#getSpeed())
     }
   }
 }

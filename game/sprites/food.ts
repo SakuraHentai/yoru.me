@@ -2,8 +2,8 @@ import { TEXTURE } from '../config'
 import Pet from './pet'
 export default class Food extends Phaser.Physics.Arcade.Sprite {
   declare body: Phaser.Physics.Arcade.Body
-  speed = 300
-  onWordBounds!: (body: Phaser.Physics.Arcade.Body) => void
+  #speed = 300
+  #onWordBounds!: (body: Phaser.Physics.Arcade.Body) => void
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     super(scene, x, y, texture)
@@ -15,8 +15,8 @@ export default class Food extends Phaser.Physics.Arcade.Sprite {
     // emit
     this.body
       .setCollideWorldBounds(true, 0, 0.4, true)
-      .setGravity(0, this.speed)
-      .setVelocityY(-this.speed * 2.5)
+      .setGravity(0, this.#speed)
+      .setVelocityY(-this.#speed * 2.5)
 
     // animate it
     this.anims.create({
@@ -32,20 +32,20 @@ export default class Food extends Phaser.Physics.Arcade.Sprite {
     this.play(TEXTURE.FOOD.ANIM.NAME)
 
     // world bound events
-    this.onWordBounds = this.bounds.bind(this)
+    this.#onWordBounds = this.#bounds.bind(this)
     this.scene.physics.world.on(
       Phaser.Physics.Arcade.Events.WORLD_BOUNDS,
-      this.onWordBounds
+      this.#onWordBounds
     )
   }
 
-  private bounds(body: Phaser.Physics.Arcade.Body): void {
+  #bounds(body: Phaser.Physics.Arcade.Body): void {
     if (this.body === body) {
       this.setAngle(180)
       if (Math.abs(this.body.velocity.y) < 10) {
         this.scene.physics.world.off(
           Phaser.Physics.Arcade.Events.WORLD_BOUNDS,
-          this.onWordBounds
+          this.#onWordBounds
         )
         this.destroy()
       }
@@ -69,7 +69,7 @@ export default class Food extends Phaser.Physics.Arcade.Sprite {
         r1.scene.physics.world.removeCollider(colliderHandler)
         r1.scene.physics.world.off(
           Phaser.Physics.Arcade.Events.WORLD_BOUNDS,
-          this.onWordBounds
+          this.#onWordBounds
         )
 
         r2.setCollideWorldBounds(true)

@@ -40,7 +40,7 @@ export const TEXTURE = {
     },
     SRC: rabbitFrame,
     WIDTH: 32,
-    HEIGHT: 32,
+    HEIGHT: 24,
   },
 }
 

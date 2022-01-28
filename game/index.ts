@@ -1,7 +1,7 @@
 import 'phaser'
+import { MIN_WIDTH } from './config'
 import MainScene from './scenes/main'
 import ScoreScene from './scenes/score'
-import { MIN_WIDTH } from './config'
 
 function init(parent: string): Phaser.Game {
   const config: Phaser.Types.Core.GameConfig = {

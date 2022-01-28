@@ -1,25 +1,36 @@
 import { KEYS, TEXTURE } from '../config'
-import Pet from './pet'
 import Food from './food'
+import Pet from './pet'
+
+export enum DIRECTION {
+  LEFT = -1,
+  RIGHT = 1,
+}
 
 export default class Feeder extends Pet {
-  speed = 300
+  #speed = 300
+  #speedRatio = 1
+  #direction = {
+    x: DIRECTION.LEFT,
+    // y: 0
+  }
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     super(scene, x, y, texture)
 
-    this.body.setCollideWorldBounds(true, 1, 1, true).setVelocityX(-this.speed)
+    this.body.setCollideWorldBounds(true, 1, 1, true)
+    this.#applySpeed()
 
-    this.addEvents()
+    this.#initEvents()
   }
 
-  private addEvents(): void {
+  #initEvents(): void {
     // keyboard event
     this.scene.input.keyboard.on(
       Phaser.Input.Keyboard.Events.ANY_KEY_DOWN,
       (e: KeyboardEvent) => {
         switch (e.key) {
           case KEYS.SPACE: {
-            this.feed()
+            this.#feed()
             break
           }
           // case KEYS.ARROW.UP:
@@ -29,10 +40,10 @@ export default class Feeder extends Pet {
           //   this.goDown()
           //   break
           case KEYS.ARROW.LEFT:
-            this.goLeft()
+            this.#goLeft()
             break
           case KEYS.ARROW.RIGHT:
-            this.goRight()
+            this.#goRight()
             break
         }
       }
@@ -45,17 +56,17 @@ export default class Feeder extends Pet {
         // ref: https://developer.mozilla.org/ja/docs/Web/API/MouseEvent/button
         switch (e.button) {
           case 0:
-            this.feed()
+            this.#feed()
             break
           case 2:
-            this.body.velocity.x > 0 ? this.goLeft() : this.goRight()
+            this.body.velocity.x > 0 ? this.#goLeft() : this.#goRight()
             break
         }
       }
     )
   }
 
-  private feed(): void {
+  #feed(): void {
     const food = new Food(
       this.scene,
       this.x,
@@ -65,23 +76,36 @@ export default class Feeder extends Pet {
     this.emit('feed', food)
   }
 
-  private goUp(): void {
-    this.setVelocityY(-this.speed)
+  #getSpeed(): number {
+    return this.#speed * this.#speedRatio * this.#direction.x
   }
 
-  private goDown(): void {
-    this.setVelocityY(this.speed)
+  #goLeft(): void {
+    this.#direction.x = DIRECTION.LEFT
+    this.setFlipX(false).#applySpeed()
   }
 
-  private goLeft(): void {
-    this.setFlipX(false).setVelocityX(-this.speed)
+  #goRight(): void {
+    this.#direction.x = DIRECTION.RIGHT
+    this.setFlipX(true).#applySpeed()
   }
 
-  private goRight(): void {
-    this.setFlipX(true).setVelocityX(this.speed)
+  #applySpeed() {
+    this.setVelocityX(this.#getSpeed())
   }
 
+  setSpeedRatio(ratio: number = 1): void {
+    this.#speedRatio = ratio
+    this.#applySpeed()
+  }
+
+  getDirection(): DIRECTION {
+    return this.#direction.x
+  }
+
+  // @override pet's collideWorldBounds
   collideWorldBounds(): void {
+    this.#direction.x *= -1
     this.setFlipX(!this.flipX)
   }
 
