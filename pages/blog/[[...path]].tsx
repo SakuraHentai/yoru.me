@@ -1,4 +1,4 @@
-import type { NextPage, GetServerSideProps } from 'next'
+import type { NextPage, GetStaticProps, GetStaticPaths } from 'next'
 import { ParsedUrlQuery } from 'node:querystring'
 import MetaInfo, { MetaProps } from '../../components/meta-info'
 import BlogLayout from '../../components/blog-layout'
@@ -32,29 +32,37 @@ const Blog: NextPage<PostsProps> = ({ tag, posts, pager }) => {
   )
 }
 
-type SSRProps = {
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: 'blocking',
+  }
+}
+
+type SSGProps = {
   path?: []
 } & ParsedUrlQuery
 
-export const getServerSideProps: GetServerSideProps<PostsProps, SSRProps> =
-  async ({ params }) => {
-    const pathParams = parseQueryPath(params?.path)
+export const getStaticProps: GetStaticProps<PostsProps, SSGProps> = async ({
+  params,
+}) => {
+  const pathParams = parseQueryPath(params?.path)
 
-    const tag = pathParams.tag || ''
-    const { posts, pager } = await getAllPosts(tag, pathParams.page)
+  const tag = pathParams.tag || ''
+  const { posts, pager } = await getAllPosts(tag, pathParams.page)
 
-    if (!posts.length) {
-      return {
-        notFound: true,
-      }
-    }
+  if (!posts.length) {
     return {
-      props: {
-        tag,
-        posts,
-        pager,
-      },
+      notFound: true,
     }
   }
+  return {
+    props: {
+      tag,
+      posts,
+      pager,
+    },
+  }
+}
 
 export default Blog
