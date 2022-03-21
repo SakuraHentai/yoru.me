@@ -3,8 +3,20 @@
  *
  */
 // @ts-ignore
-const Thumb = ({ src, alt }) => {
-  return <img src={src} alt={alt} referrerPolicy="no-referrer" />
+const Thumb = ({ src, alt, width, height }) => {
+  const aspectRatio = `${width} / ${height}`
+  return (
+    <img
+      src={src}
+      alt={alt}
+      referrerPolicy="no-referrer"
+      loading="lazy"
+      style={{
+        width,
+        aspectRatio,
+      }}
+    />
+  )
 }
 
 export default Thumb
