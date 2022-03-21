@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { readdir, readFile } from 'fs/promises'
+import { readdir, readFile, stat } from 'fs/promises'
 import dayjs from 'dayjs'
 import matter from 'gray-matter'
 import { compileMDX } from '../utils/compile-mdx'
@@ -62,6 +62,28 @@ export const getAllPosts = async (
   }
 }
 
+const extractDemosFromImport = async (
+  fileContent: string
+): Promise<string[]> => {
+  const demos: string[] = []
+  const importRegex = /import\s+[^\s]+\s+from\s+'(?<name>[^']+)'/g
+
+  let match
+
+  while ((match = importRegex.exec(fileContent)) !== null) {
+    const importName = match.groups!.name
+    const importPath = join(process.cwd(), '_demos', `${importName}.tsx`)
+    // check demo exist avoid invalid import from demo source code
+    const demoExist = await stat(importPath).then((stat) => stat.isFile())
+
+    if (demoExist) {
+      demos.push(importName)
+    }
+  }
+
+  return demos
+}
+
 export const getPostByName = async (name: string, withContent = false) => {
   const fileName = name.replace(/\.mdx$/, '') // getAllPosts support
   // check name valid
@@ -72,6 +94,9 @@ export const getPostByName = async (name: string, withContent = false) => {
   const fileContent = await readFile(filePath, 'utf8')
   const { data: meta, content } = matter(fileContent)
 
+  // auto import demos from source code
+  meta.demos = await extractDemosFromImport(fileContent)
+
   const res: PostType = {
     meta: {
       path: fileName,
@@ -79,7 +104,7 @@ export const getPostByName = async (name: string, withContent = false) => {
       keywords: meta.keywords,
       description: meta.description,
       date: dayjs(meta.date).format('YYYY-MM-DD'),
-      demos: meta.demos || [],
+      demos: meta.demos,
       tags: meta.tags,
       summary: meta.summary,
     },
