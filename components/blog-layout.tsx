@@ -13,6 +13,7 @@ const BlogLayout: React.FC = ({ children }) => {
           <div className="bg">
             <Image
               src={asideBg}
+              alt="kizuna ai"
               loading="lazy"
               layout="fill"
               objectFit="cover"
