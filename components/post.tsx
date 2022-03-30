@@ -1,8 +1,7 @@
-import { useMemo } from 'react'
-import Link from 'next/link'
 import { getMDXComponent } from 'mdx-bundler/client'
+import Link from 'next/link'
+import { useMemo } from 'react'
 import styles from '../styles/blog.module.scss'
-import MetaInfo from './meta-info'
 import type { PostType } from '../types'
 
 type PostProps = {
@@ -16,7 +15,6 @@ const Post: React.FC<PostProps> = ({ post }) => {
 
   return (
     <article className={styles.post}>
-      <MetaInfo meta={meta} />
       <h1>{meta.title}</h1>
       <section className="content">
         <Component />
