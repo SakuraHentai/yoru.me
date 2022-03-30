@@ -25,7 +25,7 @@ const setupSDK = (props: ShareProps) => {
     .then(async (res) => {
       if (res.code === 0) {
         wx.config({
-          debug: true,
+          // debug: true,
           appId: res.data.appId,
           timestamp: res.data.timestamp,
           nonceStr: res.data.nonceStr,
