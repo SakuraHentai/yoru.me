@@ -38,13 +38,13 @@ const setupSDK = (props: ShareProps) => {
             title: props.title,
             desc: props.desc,
             link: currentURL,
-            imgUrl: props.imgURL,
+            imgUrl: `https://yoru.me${props.imgURL}`,
             success: function () {},
           })
           wx.updateTimelineShareData({
             title: props.title,
             link: currentURL,
-            imgUrl: props.imgURL,
+            imgUrl: `https://yoru.me${props.imgURL}`,
             success: function () {},
           })
         })
