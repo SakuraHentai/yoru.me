@@ -11,8 +11,8 @@ RUN yarn install --frozen-lockfile
 FROM node:16.13.1-alpine3.14 AS builder
 ENV NODE_ENV production
 WORKDIR /app
-COPY . .
 COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 RUN yarn build
 
 # Production image, copy all the files and run next
@@ -24,15 +24,13 @@ ENV NODE_ENV production
 RUN addgroup -S nodejs -g 1001
 RUN adduser -S nextjs -u 1001
 
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 # posts and demos in runtime
-COPY --from=builder /app/_posts ./_posts
-COPY --from=builder /app/_demos ./_demos
 COPY --from=builder --chown=nextjs:nodejs /app/_posts ./_posts
 COPY --from=builder --chown=nextjs:nodejs /app/_demos ./_demos
-COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 USER nextjs
