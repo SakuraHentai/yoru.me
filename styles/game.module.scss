@@ -8,6 +8,9 @@
   height: 100vh;
   font-family: Fipps;
   text-align: center;
+  canvas {
+    display: block;
+  }
 }
 
 .loading {
