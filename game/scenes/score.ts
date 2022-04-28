@@ -81,10 +81,10 @@ export default class ScoreScene extends Phaser.Scene {
 
   #parseTime(): string {
     const s = this.#duration / 1e3,
-      m = Math.floor(s / 60),
-      h = Math.floor(m / 60)
-    return `${h.toString().padStart(2, '0')}:${m
+      m = Math.floor(s / 60)
+    return `${m.toString().padStart(2, '0')}:${(s % 60)
+      .toFixed(3)
       .toString()
-      .padStart(2, '0')}:${(s % 60).toFixed(3).toString().padStart(6, '0')}`
+      .padStart(6, '0')}`
   }
 }

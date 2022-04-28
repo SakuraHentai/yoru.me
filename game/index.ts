@@ -8,7 +8,8 @@ function init(parent: string): Phaser.Game {
     type: Phaser.AUTO,
     banner: false,
     width: window.innerWidth,
-    height: window.innerHeight,
+    // ref: https://developer.chrome.com/blog/url-bar-resizing/
+    height: document.body.clientHeight,
     parent,
     scale: {
       parent,
