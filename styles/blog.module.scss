@@ -296,6 +296,10 @@
         border-radius: 2px;
         font-size: 14px;
       }
+      ol,
+      ul {
+        padding-left: 1em;
+      }
       pre {
         display: grid;
         background: #272822;
@@ -305,6 +309,14 @@
       .note {
         font-size: 14px;
         color: #a1a1a1;
+      }
+      .thumb-anchor {
+        display: block;
+        text-align: center;
+        img {
+          display: block;
+          margin: 0 auto;
+        }
       }
       @extend %demo;
       @extend %highlightTheme;
