@@ -5,7 +5,7 @@ FROM node:16.13.1-alpine3.14 AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN yarn global add pnpm && pnpm i --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM node:16.13.1-alpine3.14 AS builder
@@ -13,7 +13,7 @@ ENV NODE_ENV production
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN pnpm build
+RUN yarn build
 
 # Production image, copy all the files and run next
 FROM node:16.13.1-alpine3.14 AS runner
