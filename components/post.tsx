@@ -25,9 +25,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
       <ul className="tags">
         {tags.map((tag) => (
           <li key={tag}>
-            <Link href={`/blog/tag/${tag}`}>
-              <a>#{tag}</a>
-            </Link>
+            <Link href={`/blog/tag/${tag}`}>#{tag}</Link>
           </li>
         ))}
       </ul>

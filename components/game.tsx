@@ -1,7 +1,7 @@
-import { useState, useMemo, useCallback } from 'react'
-import { useIsomorphicLayoutEffect } from '../utils/use-isomorphic-layout-effect'
+import { useCallback, useMemo, useRef, useState } from 'react'
+import { a, useSprings } from 'react-spring'
 import styles from '../styles/game.module.scss'
-import { useSprings, a } from 'react-spring'
+import { useIsomorphicLayoutEffect } from '../utils/use-isomorphic-layout-effect'
 
 const Loading = () => {
   const loadingText = useMemo(() => {
@@ -49,24 +49,31 @@ const Game = () => {
   // game id for phaser
   const gameWrapper = 'yoru'
   const [loading, setLoading] = useState(true)
+  const needGameModule = useRef(true)
+  const gameModule = useRef<{ init: (parent: string) => Phaser.Game }>()
+  const gameInstance = useRef<Phaser.Game>()
 
-  // define load and init game
-  const initGame = useCallback(async () => {
-    const gameInst = (await import('../game/index')).default.init(gameWrapper)
-    gameInst.events.on(Phaser.Scenes.Events.READY, () => {
-      setLoading(false)
-    })
-    return gameInst
+  // load game module
+  const loadGame = useCallback(async () => {
+    if (needGameModule.current) {
+      needGameModule.current = false
+      gameModule.current = (await import('../game/index')).default
+    }
   }, [])
 
-  // load game on mount
+  // init game on mount
   useIsomorphicLayoutEffect(() => {
-    let gameInst: Phaser.Game
-    initGame().then((g) => {
-      gameInst = g
+    loadGame().then(() => {
+      if (gameModule.current) {
+        gameInstance.current = gameModule.current.init(gameWrapper)
+        gameInstance.current.events.on(Phaser.Scenes.Events.READY, () => {
+          setLoading(false)
+        })
+      }
     })
     return () => {
-      gameInst?.destroy(true)
+      gameInstance.current?.destroy(true)
+      gameInstance.current = undefined
     }
   }, [])
 

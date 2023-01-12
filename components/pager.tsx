@@ -25,16 +25,8 @@ const Pager: React.FC<PagerProps> = ({ pager }) => {
 
   return (
     <div className={styles.pager}>
-      {prevLink && (
-        <Link href={prevLink}>
-          <a>Prev</a>
-        </Link>
-      )}
-      {nextLink && (
-        <Link href={nextLink}>
-          <a>Next</a>
-        </Link>
-      )}
+      {prevLink && <Link href={prevLink}>Prev</Link>}
+      {nextLink && <Link href={nextLink}>Next</Link>}
     </div>
   )
 }

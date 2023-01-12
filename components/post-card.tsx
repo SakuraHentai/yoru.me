@@ -12,9 +12,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   return (
     <article className={styles.postCard}>
       <Link href={`/blog/${path}`}>
-        <a>
-          <h2 className="title">{title}</h2>
-        </a>
+        <h2 className="title">{title}</h2>
       </Link>
       <time className="date" dateTime={date}>
         {date}
@@ -22,9 +20,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       <ul className="tags">
         {tags.map((tag) => (
           <li key={tag}>
-            <Link href={`/blog/tag/${tag}`}>
-              <a>#{tag}</a>
-            </Link>
+            <Link href={`/blog/tag/${tag}`}>#{tag}</Link>
           </li>
         ))}
       </ul>

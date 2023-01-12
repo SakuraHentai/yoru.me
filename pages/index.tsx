@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
-import MetaInfo from '../components/meta-info'
-import Game from '../components/game'
 import Link from 'next/link'
+import Game from '../components/game'
+import MetaInfo from '../components/meta-info'
 
 import styles from '../styles/home.module.scss'
 
@@ -10,10 +10,8 @@ const Home: NextPage = () => {
     <>
       <MetaInfo />
       <Game />
-      <Link href="/blog">
-        <a className={styles.blogEntry} title="去看看前端~">
-          BLOG
-        </a>
+      <Link href="/blog" className={styles.blogEntry} title="去看看前端~">
+        BLOG
       </Link>
     </>
   )
