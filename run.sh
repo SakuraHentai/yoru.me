@@ -1,4 +1,4 @@
 #!/bin/sh
 
-docker-compose up -d
+docker-compose up --build -d
 docker images | grep '<none>' | awk '{print $3}' | xargs docker rmi
