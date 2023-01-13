@@ -34,6 +34,7 @@
     border: 0;
     color: #ddd;
     font-size: 14px;
+    font-family: 'Fira Code', monospace, auto;
     overflow-x: auto;
     &::-webkit-scrollbar {
       width: 10px;
@@ -97,7 +98,7 @@
   .hljs-quote,
   .hljs-deletion,
   .hljs-meta {
-    color: #75715e;
+    color: #999584;
   }
 
   .hljs-keyword,
@@ -108,7 +109,7 @@
   .hljs-section,
   .hljs-type,
   .hljs-selector-id {
-    font-weight: bold;
+    font-weight: 400;
   }
 }
 

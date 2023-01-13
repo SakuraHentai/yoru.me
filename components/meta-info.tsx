@@ -7,6 +7,7 @@ export type MetaProps = {
   title: string
   keywords: string
   description?: string
+  summary?: string
 }
 
 type Props = {
@@ -37,6 +38,15 @@ const MetaInfo: React.FC<Props> = ({ meta }) => {
         <meta name="keywords" content={metaInfo.keywords}></meta>
         <meta name="author" content="Derek"></meta>
         <title>{metaInfo.title}</title>
+        {meta?.summary && (
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/firacode/6.2.0/fira_code.min.css"
+            integrity="sha512-MbysAYimH1hH2xYzkkMHB6MqxBqfP0megxsCLknbYqHVwXTCg9IqHbk+ZP/vnhO8UEW6PaXAkKe2vQ+SWACxxA=="
+            crossOrigin="anonymous"
+            referrerPolicy="no-referrer"
+          />
+        )}
       </Head>
       <MpShare
         title={metaInfo.title}
