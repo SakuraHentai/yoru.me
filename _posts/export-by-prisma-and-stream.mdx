@@ -103,6 +103,8 @@ queryStream.pipe(formatter)
 处理后的数据, 使用 Writable 接收, commit 到 excel 的 stream 中
 
 ```ts
+import Excel from 'exceljs'
+
 const exportToXlsxStream = (header: string[]) => {
   // 使用 PassThrough 将 Writable 转到 Readable, 后续可以灵活地最后处理数据
   const reader = new PassThrough()

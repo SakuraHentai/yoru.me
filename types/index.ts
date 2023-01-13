@@ -6,7 +6,6 @@ export type PostMetaType = {
   description: string
   date: string
   tags: string[]
-  demos?: string[]
   summary: string
 }
 
