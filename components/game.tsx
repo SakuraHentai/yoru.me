@@ -57,7 +57,7 @@ const Game = () => {
   const loadGame = useCallback(async () => {
     if (needGameModule.current) {
       needGameModule.current = false
-      gameModule.current = (await import('../game/index')).default
+      gameModule.current = await import('../game/index')
     }
   }, [])
 

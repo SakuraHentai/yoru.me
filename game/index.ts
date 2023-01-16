@@ -16,7 +16,6 @@ function init(parent: string): Phaser.Game {
       mode: Phaser.Scale.RESIZE,
     },
     backgroundColor: '#fff',
-    disableContextMenu: true,
     transparent: true,
     physics: {
       default: 'arcade',
@@ -38,7 +37,18 @@ function init(parent: string): Phaser.Game {
     scene: [MainScene, ScoreScene],
   }
 
-  return new Phaser.Game(config)
+  const gameInstance = new Phaser.Game(config)
+
+  // NOTE: wait phaser v3.60 release
+  // disableContextMenu now effect on `body`, which will cause all app with no context menu
+  // it should effect on canvas
+  // https://github.com/photonstorm/phaser/discussions/6316
+  gameInstance.canvas.addEventListener('contextmenu', (e) => {
+    e.preventDefault()
+    return false
+  })
+
+  return gameInstance
 }
 
-export default { init }
+export { init }

@@ -49,7 +49,6 @@ export default class Feeder extends Pet {
       }
     )
     // mouse left to feed, right to change direction
-    this.scene.input.mouse.disableContextMenu()
     this.scene.input.on(
       Phaser.Input.Events.POINTER_DOWN,
       (e: Phaser.Input.Pointer) => {
