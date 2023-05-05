@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  output: 'standalone',
   reactStrictMode: true,
   images: {
-    domains: ['sm.ms', 'wx1.sinaimg.cn'],
+    domains: ['yoru.me'],
   },
 }
