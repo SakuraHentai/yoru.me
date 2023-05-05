@@ -1,9 +1,8 @@
-import { useCallback, useMemo, useRef } from 'react'
-import { useSpring, a } from 'react-spring'
+import { useCallback, useRef } from 'react'
+import { a, useSpring } from 'react-spring'
 
 const Demo = () => {
   const [props, api] = useSpring(() => ({ x: 0, y: 0 }))
-  // @ts-ignore
   const demoRef = useRef(null)
   const getDemoOffset = useCallback(() => {
     return {
