@@ -1,18 +1,19 @@
----
-title: 'React 动画库: react-spring 简单使用'
-keywords: react-spring usage,react-spring用法
-description: react-spring 用法
-date: 2021-12-13
-tags: ['react', 'react-spring', 'animation']
-summary: 'react-spring 是一个基于弹簧物理的动画库, 应该能满足你大部分 UI 相关的动画需求. 它为您提供了足够灵活的工具, 可以自信地将您的想法转化为移动界面. (摘自官网)'
----
+export const meta = {
+  title: 'React 动画库: react-spring 简单使用',
+  keywords: 'react-spring usage,react-spring用法',
+  description: 'react-spring 用法',
+  date: '2021-12-13',
+  tags: ['react', 'react-spring', 'animation'],
+  summary:
+    'react-spring 是一个基于弹簧物理的动画库, 应该能满足你大部分 UI 相关的动画需求. 它为您提供了足够灵活的工具, 可以自信地将您的想法转化为移动界面. (摘自官网)',
+}
 
-import Thumb from 'thumb'
-import ExternalLink from 'external-link'
-import Demo1 from 'react-spring-1'
-import Demo2 from 'react-spring-2'
+import PostLayout from 'components/post-layout'
+import Img from 'components/mdx/img'
+import Demo1 from '_demos/react-spring-1'
+import Demo2 from '_demos/react-spring-2'
 
-<Thumb
+<Img
   src="https://yoru.me/weibo/mw2000/6708d6c2gy1gxd5rrus5lj20r80dywic.jpg"
   alt="react-spring"
   width={980}
@@ -39,7 +40,7 @@ const Demo = () => {
 }
 ```
 
-如上代码, <ExternalLink href="https://react-spring.io" children={'react-spring'} />可简单地使用`useSpring`和`animated(.tag)/a(.tag)`组件实现动画.
+如上代码, [react-spring](https://react-spring.io) 可简单地使用`useSpring`和`animated(.tag)/a(.tag)`组件实现动画.
 
 > 当使用函数作为参数时, 可使用`api`更灵活地操纵属性变化
 
@@ -90,10 +91,12 @@ export default Demo
 
 <Demo2 />
 
-具体 api 在<ExternalLink href="https://react-spring.io/basics" children={'官网'} />上太详细了.
+具体 api 在[官网](https://react-spring.io/basics)上太详细了.
 
 <p>
   <del>其实只是想测试一下`mdx`各样式/组件/图床收录情况.</del>
 </p>
 
 -- Fin --
+
+export default ({ children }) => <PostLayout meta={meta}>{children}</PostLayout>

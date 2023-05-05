@@ -1,12 +1,10 @@
 import dayjs from 'dayjs'
-import { readdir, readFile } from 'fs/promises'
-import matter from 'gray-matter'
+import { readdir } from 'fs/promises'
 import { join } from 'path'
-import type { PagerType, PostType } from '../types'
-import { compileMDX } from '../utils/compile-mdx'
+import type { PagerType, PostMetaType, PostType } from '../types'
 
 // use `_` prefix place top in editor
-const postsDirectory = join(process.cwd(), '_posts')
+const postsDirectory = join(process.cwd(), 'pages/blog')
 
 const order = (a: PostType, b: PostType) => {
   const aDate = dayjs(a.meta.date)
@@ -19,11 +17,14 @@ export const getAllPosts = async (
   page: number = 1,
   limit: number = 6
 ) => {
+  // TODO: read from build cache.
   const posts = await readdir(postsDirectory)
 
   // compile meta data
   const compiledPosts = await Promise.all(
-    posts.map(async (post) => await getPostByName(post))
+    posts
+      .filter((post) => post.endsWith('.mdx'))
+      .map(async (post) => await getPostByName(post))
   )
 
   // order by date
@@ -68,9 +69,10 @@ export const getPostByName = async (name: string, withContent = false) => {
   if (!/^[a-zA-Z\-0-9]+$/.test(fileName)) {
     throw new Error(`${fileName} is not a valid post name`)
   }
-  const filePath = join(postsDirectory, `${fileName}.mdx`)
-  const fileContent = await readFile(filePath, 'utf8')
-  const { data: meta, content } = matter(fileContent)
+
+  const mdxModule = await import(`../pages/blog/${fileName}.mdx`)
+
+  const meta = mdxModule.meta as PostMetaType
 
   const res: PostType = {
     meta: {
@@ -84,9 +86,5 @@ export const getPostByName = async (name: string, withContent = false) => {
     },
   }
 
-  if (withContent) {
-    // auto import demos from source code
-    res.code = await compileMDX(content)
-  }
   return res
 }

@@ -1,16 +1,17 @@
----
-title: '使用 Prisma 和 Stream 导出大量数据'
-keywords: Prisma导出excel,nestjs,nodejs,stream使用
-description: Prisma 利用 stream 导出数据到 excel
-date: 2023-01-12
-tags: ['prisma', 'nodejs']
-summary: '数据库有大量数据, 服务器内存有限, 如何使用 Prisma + Stream 导出, 来一起走进科学...'
----
+export const meta = {
+  title: '使用 Prisma 和 Stream 导出大量数据',
+  keywords: 'Prisma导出excel,nestjs,nodejs,stream使用',
+  description: 'Prisma 利用 stream 导出数据到 excel',
+  date: '2023-01-12',
+  tags: ['prisma', 'nodejs'],
+  summary:
+    '数据库有大量数据, 服务器内存有限, 如何使用 Prisma + Stream 导出, 来一起走进科学...',
+}
 
-import Thumb from 'thumb'
-import ExternalLink from 'external-link'
+import PostLayout from 'components/post-layout'
+import Img from 'components/mdx/img'
 
-<Thumb
+<Img
   src="https://yoru.me/weibo/mw2000/6708d6c2gy1h9zu29jm8sj20mh07e77s.jpg"
   alt="prisma client"
   width={809}
@@ -27,7 +28,7 @@ Prisma 使用 cursor, 包一个 Readable stream, 再通过 Transform 格式化�
 
 - 在不需要跳页的情况下, cursor 模式显得更加适合. 但需要一个唯一且顺序的字段充当 cursor 这一角色, 例如 id (id > cursor 查询).
 
-<Thumb
+<Img
   src="https://yoru.me/weibo/mw2000/6708d6c2gy1ha0tfw8mwvj20i2062q3x.jpg"
   alt="prisma cursor pagination"
   width={650}
@@ -147,7 +148,7 @@ const exportToXlsxStream = (header: string[]) => {
 
 流程最后就是, 这样!
 
-<Thumb
+<Img
   src="https://yoru.me/weibo/mw2000/6708d6c2gy1ha0usagiybj20hl09ytar.jpg"
   alt="prisma cursor pagination"
   width={633}
@@ -240,7 +241,9 @@ if (
 
 ### 相关库
 
-- Prisma: <ExternalLink href="https://www.prisma.io/" children={'Prisma 官网'} />
-- exceljs: <ExternalLink href="https://github.com/exceljs/exceljs" children={'Github 地址'} />
+- Prisma: [官网](https://www.prisma.io/)
+- exceljs: [Github 地址](https://github.com/exceljs/exceljs)
 
 -- Fin --
+
+export default ({ children }) => <PostLayout meta={meta}>{children}</PostLayout>

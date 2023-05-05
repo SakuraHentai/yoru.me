@@ -1,13 +1,14 @@
-/**
- * esbuild can't use type system, so need to use `ts-ignore`
- *
- */
-// @ts-ignore
-const Thumb = ({ src, alt, width, height, note }) => {
+import Image from 'next/image'
+
+type Props = {
+  note: string
+} & HTMLImageElement
+
+const Img: React.FC<Props> = ({ src, alt, width, height, note }) => {
   const aspectRatio = `${width} / ${height}`
   return (
     <a className="thumb-anchor" href={src} target="_blank" rel="noreferrer">
-      <img
+      <Image
         src={src}
         alt={alt}
         referrerPolicy="no-referrer"
@@ -22,4 +23,4 @@ const Thumb = ({ src, alt, width, height, note }) => {
   )
 }
 
-export default Thumb
+export default Img

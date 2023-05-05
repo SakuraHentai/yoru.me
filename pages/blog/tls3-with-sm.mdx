@@ -1,16 +1,17 @@
----
-title: '记一下升级国密通信的过程'
-keywords: php国密通信,tlsv1.3 sm,tls_sm4_gcm_sm3,go使用c代码
-description: 某一天, 收到某局接口计划升级国密通信的需求, 坑就开始了~
-date: 2022-05-20
-tags: ['go', 'tcp']
-summary: '一天, 收到某局接口计划升级国密通信(sm)的需求, 因现有后端使用php5.4, 便从php开始入手, 结果坑便开始了...'
----
+export const meta = {
+  title: '记一下升级国密通信的过程',
+  keywords: 'php国密通信,tlsv1.3 sm,tls_sm4_gcm_sm3,go使用c代码',
+  description: '某一天, 收到某局接口计划升级国密通信的需求, 坑就开始了~',
+  date: '2022-05-20',
+  tags: ['go', 'tcp'],
+  summary:
+    '一天, 收到某局接口计划升级国密通信(sm)的需求, 因现有后端使用php5.4, 便从php开始入手, 结果坑便开始了...',
+}
 
-import Thumb from 'thumb'
-import ExternalLink from 'external-link'
+import PostLayout from 'components/post-layout'
+import Img from 'components/mdx/img'
 
-<Thumb
+<Img
   src="https://yoru.me/weibo/large/6708d6c2gy1h2enjq6pb0j20su0bk780.jpg"
   alt="openssl ciphers"
   width={1038}
@@ -73,7 +74,7 @@ print "Server started at $host:$port\n";
 ./babassl/apps/openssl s_client -connect 127.0.0.1:4433 -tls1_3 -ciphersuites TLS_SM4_GCM_SM3 -pass pass:your_password -key your.key -cert your.pem -CAfile ca.pem
 ```
 
-<Thumb
+<Img
   src="https://yoru.me/weibo/large/6708d6c2gy1h2ep0r9j0oj20a007vdhy.jpg"
   alt="anya wakuwaku"
   note="wakuwaku"
@@ -101,7 +102,7 @@ Why?? 开 wireshark 也是同样结果, 只能怀疑不能简单的替换 openss
 
 因为 Babassl 使用的是 C, 自然也就沿用回来了, 准备一下 gcc 环境, 写下代码, 编译成静态库, 起个 go 测试一下~
 
-<Thumb
+<Img
   src="https://yoru.me/weibo/large/6708d6c2gy1h2eq1mon2vj21eu1bgwul.jpg"
   alt="babassl init ssl"
   width={1830}
@@ -155,7 +156,7 @@ SSL_CTX_set1_groups_list(ctx, "SM2");
 
 如果不加上 SM2 一行, 握手阶段 ServerHello 后, 会报`bad key share`.
 
-<Thumb
+<Img
   src="https://yoru.me/weibo/large/6708d6c2gy1h2ertkq1tsj20q503h78c.jpg"
   alt="ssl handshake fail"
   note="bad key share"
@@ -167,7 +168,7 @@ SSL_CTX_set1_groups_list(ctx, "SM2");
 
 虽然看下来很短, 但也折腾了 2-3 天, 开发机 tcpdump, 本地机开 wireshark, 跑测试, 编译等等...
 
-最后还是万能的中间件, 又因为文档问题浪费大半天. 看源码, 翻遍了文档, 最后在提交更改的 commit 的测试用例找到了 <ExternalLink href="https://github.com/BabaSSL/BabaSSL/commit/61fab104aa51bf47724a169993ff080570dc1316#diff-d2dc4f62796c02c933b84b970395459cfb3d9789a28ba56d49b485b1358df530R387" children={'一丝线索'} />
+最后还是万能的中间件, 又因为文档问题浪费大半天. 看源码, 翻遍了文档, 最后在提交更改的 commit 的测试用例找到了 [一丝线索](https://github.com/BabaSSL/BabaSSL/commit/61fab104aa51bf47724a169993ff080570dc1316#diff-d2dc4f62796c02c933b84b970395459cfb3d9789a28ba56d49b485b1358df530R387)
 
 本想向文档提个 pr, 点开 repo, 发现只有两条分支, 还是作罢
 
@@ -177,7 +178,9 @@ SSL_CTX_set1_groups_list(ctx, "SM2");
 
 ### 相关文档
 
-- BabaSSl: <ExternalLink href="https://github.com/BabaSSL/BabaSSL" children={'阿里开源国密实现'} />
-- RFC: <ExternalLink href="https://datatracker.ietf.org/doc/html/rfc8998" children={'rfc8998'} />
+- BabaSSl: [阿里开源国密实现](https://github.com/BabaSSL/BabaSSL)
+- RFC: [rfc8998](https://datatracker.ietf.org/doc/html/rfc8998)
 
 -- Fin --
+
+export default ({ children }) => <PostLayout meta={meta}>{children}</PostLayout>
