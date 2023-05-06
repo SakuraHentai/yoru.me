@@ -11,7 +11,6 @@ export type PostMetaType = {
 
 export type PostType = {
   meta: PostMetaType
-  code?: string
 }
 
 export type PagerType = {
