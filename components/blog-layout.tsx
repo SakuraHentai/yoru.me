@@ -28,7 +28,7 @@ const BlogLayout: React.FC = ({ children }) => {
           </div>
           <h3 className={styles.author}>
             <a
-              href="https://github.com/SakuraHentai/yoru.me"
+              href="https://github.com/SakuraHentai"
               target="_blank"
               rel="noreferrer"
             >
