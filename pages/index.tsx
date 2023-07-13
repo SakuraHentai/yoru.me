@@ -10,9 +10,19 @@ const Home: NextPage = () => {
     <>
       <MetaInfo />
       <Game />
-      <Link href="/blog" className={styles.blogEntry} title="去看看前端~">
-        BLOG
-      </Link>
+      <div className={styles.entries}>
+        <Link href="/blog" title="去看看前端~">
+          BLOG
+        </Link>
+        <span className={styles.sep}>/</span>
+        <Link
+          href="https://github.com/sakurahentai"
+          title="Github~"
+          target="_blank"
+        >
+          GITHUB
+        </Link>
+      </div>
     </>
   )
 }

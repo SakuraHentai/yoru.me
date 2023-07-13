@@ -1,8 +1,14 @@
-.blogEntry {
+.entries {
   position: fixed;
   bottom: 2vh;
-  right: 6vw;
+  right: 3vw;
   color: #555;
   font-family: 'Fipps';
   font-size: 16px;
+}
+.sep {
+  margin: 0 1em;
+  font-family: 'Fipps';
+  font-size: 16px;
+  user-select: none;
 }
