@@ -3,13 +3,11 @@ import { a, useSpring } from 'react-spring'
 
 const Demo = () => {
   const [props, api] = useSpring(() => ({ x: 0, y: 0 }))
-  const demoRef = useRef(null)
+  const demoRef = useRef<HTMLDivElement>(null)
   const getDemoOffset = useCallback(() => {
     return {
-      // @ts-ignore
-      x: demoRef.current.offsetLeft,
-      // @ts-ignore
-      y: demoRef.current.offsetTop,
+      x: demoRef.current?.offsetLeft ?? 0,
+      y: demoRef.current?.offsetTop ?? 0,
     }
   }, [])
 

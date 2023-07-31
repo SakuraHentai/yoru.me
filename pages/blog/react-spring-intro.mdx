@@ -10,8 +10,8 @@ export const meta = {
 
 import PostLayout from 'components/post-layout'
 import Img from 'components/mdx/img'
-import Demo1 from '_demos/react-spring-1'
-import Demo2 from '_demos/react-spring-2'
+import Demo1 from '_demos/react-spring-intro/react-spring-1'
+import Demo2 from '_demos/react-spring-intro/react-spring-2'
 
 <Img
   src="/weibo/mw2000/6708d6c2gy1gxd5rrus5lj20r80dywic.jpg"
@@ -45,20 +45,17 @@ const Demo = () => {
 > 当使用函数作为参数时, 可使用`api`更灵活地操纵属性变化
 
 ```tsx
-// mdx的 esbuild 不支持 type system, 有点尴尬? 好多ignore
 import { useCallback, useMemo, useRef } from 'react'
 import { useSpring, a } from 'react-spring'
 
 const Demo = () => {
   const [props, api] = useSpring(() => ({ x: 0, y: 0 }))
-  // @ts-ignore
-  const demoRef = useRef(null)
+
+  const demoRef = useRef<HTMLDivElement>(null)
   const getDemoOffset = useCallback(() => {
     return {
-      // @ts-ignore
-      x: demoRef.current.offsetLeft,
-      // @ts-ignore
-      y: demoRef.current.offsetTop,
+      x: demoRef.current?.offsetLeft ?? 0,
+      y: demoRef.current?.offsetTop ?? 0,
     }
   }, [])
 

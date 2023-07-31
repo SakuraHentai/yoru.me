@@ -14,8 +14,10 @@ const Img: React.FC<Props> = ({ src, alt, width, height, note }) => {
         alt={alt}
         referrerPolicy="no-referrer"
         loading="lazy"
+        width={width}
+        height={height}
         style={{
-          width,
+          height: 'auto',
           aspectRatio,
         }}
       />
