@@ -1,15 +1,34 @@
-import Image from 'next/image'
+import type { NextPage } from 'next'
 import Link from 'next/link'
-import img404 from '../assets/img-404.jpg'
+import Game from '../components/game'
+import MetaInfo from '../components/meta-info'
+
 import styles from '../styles/page404.module.scss'
 
-const Page404 = () => {
+const Page404: NextPage = () => {
   return (
-    <div className={styles.notFound}>
-      <Link href="/" replace>
-        <Image src={img404} title="Click to back" alt="404" />
-      </Link>
-    </div>
+    <>
+      <MetaInfo
+        meta={{
+          title: '404',
+        }}
+      />
+      <Game />
+      <div className={styles.entries}>
+        <Link href="/blog" title="去看看前端~">
+          BLOG
+        </Link>
+        <span className={styles.sep}>/</span>
+        <Link
+          href="https://github.com/sakurahentai"
+          title="Github~"
+          target="_blank"
+        >
+          GITHUB
+        </Link>
+      </div>
+    </>
   )
 }
+
 export default Page404

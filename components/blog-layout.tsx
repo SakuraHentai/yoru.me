@@ -26,18 +26,20 @@ const BlogLayout: React.FC = ({ children }) => {
               loading="lazy"
             />
           </div>
-          <h3 className={styles.author}>
-            <a
-              href="https://github.com/SakuraHentai"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Derek
-            </a>
-          </h3>
-          <div className={styles.pages}>
-            <Link href="/">Game</Link>
-            <Link href="/blog">Blog</Link>
+          <div className={styles.info}>
+            <h3 className={styles.author}>
+              <a
+                href="https://github.com/SakuraHentai"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Derek
+              </a>
+            </h3>
+            <div className={styles.pages}>
+              <Link href="/">Home</Link>
+              <Link href="/blog">Blog</Link>
+            </div>
           </div>
         </div>
       </aside>
