@@ -1,9 +1,13 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import Game from '../components/game'
 import MetaInfo from '../components/meta-info'
 
 import styles from '../styles/page404.module.scss'
+import dynamic from 'next/dynamic'
+
+const Game = dynamic(() => import('../components/game'), {
+  ssr: false,
+})
 
 const Page404: NextPage = () => {
   return (

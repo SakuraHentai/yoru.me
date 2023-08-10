@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { MouseEvent, useCallback, useRef } from 'react'
 import { a, useSpring } from 'react-spring'
 
 const Demo = () => {
@@ -11,7 +11,7 @@ const Demo = () => {
     }
   }, [])
 
-  const moveTo = useCallback((e) => {
+  const moveTo = useCallback((e: MouseEvent<HTMLDivElement>) => {
     const demoOffset = getDemoOffset()
     api.start({
       x: e.pageX - demoOffset.x,

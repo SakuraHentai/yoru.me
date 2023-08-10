@@ -1,17 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Preahvihear&display=swap');
 
 .home {
+  display: grid;
+  width: 100vw;
   height: 100vh;
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   background: rgba(255, 229, 0, 1);
 }
 
+.bgCanvas {
+  grid-row-start: 1;
+  grid-row-end: span 6;
+  grid-column-start: 1;
+  grid-column-end: span 12;
+}
+
 .header {
+  position: fixed;
+  right: 2em;
   display: flex;
-  justify-content: flex-end;
 }
 
 .nav {
-  margin: 1em 2em;
+  display: flex;
+  align-items: center;
+  height: 4em;
+  margin: 1em 0;
   padding: 0.5em 2em;
   background: rgba(22, 101, 52, 0.5);
   border-radius: 4em;
@@ -42,4 +57,14 @@
       }
     }
   }
+}
+
+.loading {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5vw;
+  font-family: 'Preahvihear', Tahoma, sans-serif;
+  user-select: none;
 }

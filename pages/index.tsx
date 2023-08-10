@@ -3,44 +3,81 @@ import Link from 'next/link'
 import MetaInfo from '../components/meta-info'
 
 import styles from '../styles/home.module.scss'
-import { Canvas } from '@react-three/fiber'
-import { Center, OrbitControls, Text3D } from '@react-three/drei'
+import {
+  PointerEvent,
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react'
+import { throttle } from 'lodash-es'
+import mouseSpringPos from 'store/mouseSpringPos'
+import { useSnapshot } from 'valtio'
+import { a, useSpring, useSprings } from 'react-spring'
+import dynamic from 'next/dynamic'
 
-const BgCanvas = () => {
+const Loading = () => {
+  const $mouseSpringPos = useSnapshot(mouseSpringPos)
+  const loadingText = useMemo(() => {
+    return 'Loading...'.split('')
+  }, [])
+
+  const [chars, api] = useSprings(
+    loadingText.length,
+    (i) => ({
+      x: 10,
+      y: 10,
+    }),
+    []
+  )
+
+  useEffect(() => {
+    api.start((i) => {
+      return {
+        x: $mouseSpringPos.x,
+        y: $mouseSpringPos.y,
+        delay: i * 100,
+      }
+    })
+  }, [$mouseSpringPos])
+
   return (
-    <>
-      <Canvas>
-        <Center rotation={[-0.5, -0.25, 0]}>
-          <Text3D
-            curveSegments={32}
-            bevelEnabled
-            bevelSize={0.04}
-            bevelThickness={0.1}
-            height={0.5}
-            lineHeight={0.5}
-            letterSpacing={-0.06}
-            size={1.5}
-            font="/Fipps-Regular.ttf"
-          >
-            {`HELLO\nI'm Derek`}
-            <meshNormalMaterial />
-          </Text3D>
-        </Center>
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          minPolarAngle={Math.PI / 2}
-          maxPolarAngle={Math.PI / 2}
-        />
-      </Canvas>
-    </>
+    <a.div className={styles.loading}>
+      {chars.map((prop, i) => (
+        <a.span key={i} style={prop}>
+          {loadingText[i]}
+        </a.span>
+      ))}
+    </a.div>
   )
 }
+
+const BgCanvas = dynamic(() => import('../components/bg-canvas'), {
+  loading: Loading,
+  ssr: false,
+})
+
 const Home: NextPage = () => {
+  const [props, api] = useSpring(() => ({ x: 0, y: 0 }), [])
+  const onPointerMove = useCallback(
+    throttle((e: PointerEvent) => {
+      api.start({
+        x: e.clientX,
+        y: e.clientY,
+        config: { mass: 5, tension: 1000, friction: 60 },
+        onChange() {
+          mouseSpringPos.x = props.x.get()
+          mouseSpringPos.y = props.y.get()
+        },
+      })
+    }, 100),
+    []
+  )
   return (
     <>
       <MetaInfo />
-      <div className={styles.home}>
+      <div className={styles.home} onPointerMove={onPointerMove}>
         <BgCanvas />
         <header className={styles.header}>
           <nav className={styles.nav}>
