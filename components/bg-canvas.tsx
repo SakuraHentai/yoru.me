@@ -1,7 +1,7 @@
 import { Canvas, useThree } from '@react-three/fiber'
 import { Center, Text3D } from '@react-three/drei'
 import { useSnapshot } from 'valtio'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { a, useSpring, useSpringValue } from 'react-spring'
 import styles from '../styles/home.module.scss'
 import mouseSpringPos from 'store/mouseSpringPos'
@@ -43,13 +43,16 @@ const MoveEffect = () => {
 
 const BgCanvas = () => {
   const [rendered, setRendered] = useState(false)
+  const isMobile = useMemo(() => {
+    return window.innerWidth < 768
+  }, [window.innerWidth])
 
   return (
     <>
       <Canvas
         className={styles.bgCanvas}
         camera={{
-          position: [0, 0, 10],
+          position: [0, 0, isMobile ? 20 : 10],
         }}
         onCreated={() => {
           setRendered(true)
