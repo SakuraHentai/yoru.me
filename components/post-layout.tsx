@@ -1,11 +1,14 @@
 import { MDXProvider } from '@mdx-js/react'
-import mdxComponents from 'components/mdx'
+
 import Link from 'next/link'
+
+import { ReactNode } from 'react'
+
+import mdxComponents from '../components/mdx'
 import styles from '../styles/blog.module.scss'
 import type { PostMetaType } from '../types'
 import BlogLayout from './blog-layout'
 import MetaInfo from './meta-info'
-import { ReactNode } from 'react'
 
 const PostPage: React.FC<{ meta: PostMetaType; children: ReactNode }> = ({
   meta,

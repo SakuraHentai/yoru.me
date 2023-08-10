@@ -32,7 +32,7 @@ export default class MainScene extends Phaser.Scene {
     this.#initScore()
     this.#bulletTime = new BulletTimeSystem(
       this.player,
-      this.logo.getChildren() as Pet[]
+      this.logo.getChildren() as Pet[],
     )
   }
 
@@ -51,7 +51,7 @@ export default class MainScene extends Phaser.Scene {
                 LOGO[0].length * TEXTURE.PET.WIDTH) /
                 2,
             rowIdx * TEXTURE.PET.HEIGHT * 1.2 + TEXTURE.PET.HEIGHT, // offset a pet height
-            TEXTURE.PET.NAME
+            TEXTURE.PET.NAME,
           )
 
           // add to group
@@ -66,7 +66,7 @@ export default class MainScene extends Phaser.Scene {
       this,
       this.cameras.main.centerX - TEXTURE.PET.WIDTH / 2,
       this.cameras.main.height - TEXTURE.PET.HEIGHT * 2,
-      TEXTURE.PET.NAME
+      TEXTURE.PET.NAME,
     )
 
     this.player.on('feed', (food: Food) => {
@@ -78,7 +78,7 @@ export default class MainScene extends Phaser.Scene {
       0,
       0,
       Math.max(MIN_WIDTH, this.cameras.main.width),
-      this.cameras.main.height
+      this.cameras.main.height,
     )
   }
 

@@ -1,5 +1,6 @@
 import { FULL_SCORE, SCENES } from '../config'
 import MainScene from './main'
+
 export default class ScoreScene extends Phaser.Scene {
   #mainScene!: MainScene
   #score!: number
@@ -37,7 +38,7 @@ export default class ScoreScene extends Phaser.Scene {
         color: '#ccc',
         fixedWidth: this.#scoreTextWidth,
         fixedHeight: this.#scoreTextHeight,
-      }
+      },
     )
     this.#scoreTime = this.add.text(
       this.#margin,
@@ -49,7 +50,7 @@ export default class ScoreScene extends Phaser.Scene {
         color: '#ccc',
         fixedWidth: this.#scoreTimeWidth,
         fixedHeight: this.#scoreTimeHeight,
-      }
+      },
     )
 
     this.scene.moveDown()

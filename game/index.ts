@@ -1,4 +1,5 @@
 import 'phaser'
+
 import { MIN_WIDTH } from './config'
 import MainScene from './scenes/main'
 import ScoreScene from './scenes/score'

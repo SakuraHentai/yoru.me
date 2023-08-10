@@ -1,5 +1,6 @@
 import { TEXTURE } from '../config'
 import Pet from './pet'
+
 export default class Food extends Phaser.Physics.Arcade.Sprite {
   declare body: Phaser.Physics.Arcade.Body
   #speed = 300
@@ -35,7 +36,7 @@ export default class Food extends Phaser.Physics.Arcade.Sprite {
     this.#onWordBounds = this.#bounds.bind(this)
     this.scene.physics.world.on(
       Phaser.Physics.Arcade.Events.WORLD_BOUNDS,
-      this.#onWordBounds
+      this.#onWordBounds,
     )
   }
 
@@ -45,7 +46,7 @@ export default class Food extends Phaser.Physics.Arcade.Sprite {
       if (Math.abs(this.body.velocity.y) < 10) {
         this.scene.physics.world.off(
           Phaser.Physics.Arcade.Events.WORLD_BOUNDS,
-          this.#onWordBounds
+          this.#onWordBounds,
         )
         this.destroy()
       }
@@ -53,7 +54,7 @@ export default class Food extends Phaser.Physics.Arcade.Sprite {
   }
 
   addCollide(
-    obj: Phaser.GameObjects.GameObject[] | Phaser.GameObjects.GameObject
+    obj: Phaser.GameObjects.GameObject[] | Phaser.GameObjects.GameObject,
   ): void {
     const colliderHandler = this.scene.physics.add.collider(
       this,
@@ -66,7 +67,7 @@ export default class Food extends Phaser.Physics.Arcade.Sprite {
         r1.scene.physics.world.removeCollider(colliderHandler)
         r1.scene.physics.world.off(
           Phaser.Physics.Arcade.Events.WORLD_BOUNDS,
-          this.#onWordBounds
+          this.#onWordBounds,
         )
 
         r2.setCollideWorldBounds(true)
@@ -75,7 +76,7 @@ export default class Food extends Phaser.Physics.Arcade.Sprite {
         r2.collide(r1)
         // boom
         r1.destroy()
-      }
+      },
     )
   }
 }

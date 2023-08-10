@@ -1,5 +1,7 @@
 import Head from 'next/head'
+
 import React from 'react'
+
 import avatar from '../assets/avatar.png'
 import MpShare from './mp-share'
 
@@ -23,7 +25,7 @@ const MetaInfo: React.FC<Props> = ({ meta }) => {
     {
       ...meta,
       title: meta?.title ? `${meta.title} | Yoru.me` : 'Yoru.me',
-    }
+    },
   )
 
   return (

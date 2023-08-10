@@ -37,7 +37,7 @@ export default class Pet extends Phaser.Physics.Arcade.Sprite {
     // world bounds event
     this.scene.physics.world.on(
       Phaser.Physics.Arcade.Events.WORLD_BOUNDS,
-      this.#onWordBounds
+      this.#onWordBounds,
     )
   }
 
@@ -67,7 +67,7 @@ export default class Pet extends Phaser.Physics.Arcade.Sprite {
     ) {
       this.scene.physics.world.off(
         Phaser.Physics.Arcade.Events.WORLD_BOUNDS,
-        this.#onWordBounds
+        this.#onWordBounds,
       )
       this.destroy()
     }

@@ -1,10 +1,12 @@
-import { Canvas, useThree } from '@react-three/fiber'
+import { useSpring } from '@react-spring/web'
 import { Center, Text3D } from '@react-three/drei'
-import { useSnapshot } from 'valtio'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { a, useSpring, useSpringValue } from 'react-spring'
-import styles from '../styles/home.module.scss'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useMemo, useState } from 'react'
+
 import mouseSpringPos from 'store/mouseSpringPos'
+import { useSnapshot } from 'valtio'
+
+import styles from '../styles/home.module.scss'
 
 const MoveEffect = () => {
   const { camera, viewport, size } = useThree()
@@ -28,16 +30,15 @@ const MoveEffect = () => {
         camera.lookAt(0, 0, 0)
       },
     },
-    [camera, size, viewport]
+    [camera, size, viewport],
   )
 
-  useEffect(() => {
+  useFrame(() => {
     smoothMove.start({
       x: $mouseSpringPos.x,
       y: $mouseSpringPos.y,
     })
-  }, [$mouseSpringPos, smoothMove])
-
+  })
   return null
 }
 

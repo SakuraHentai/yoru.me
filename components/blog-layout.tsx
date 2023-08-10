@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
+
 import React, { ReactNode } from 'react'
+
 import avatar from '../assets/avatar.png'
 import asideBg from '../assets/bg-aside.jpg'
 import styles from '../styles/blog.module.scss'

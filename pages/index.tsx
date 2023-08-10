@@ -1,22 +1,16 @@
 import type { NextPage } from 'next'
-import Link from 'next/link'
-import MetaInfo from '../components/meta-info'
-
-import styles from '../styles/home.module.scss'
-import {
-  PointerEvent,
-  Suspense,
-  lazy,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react'
-import { throttle } from 'lodash-es'
-import mouseSpringPos from 'store/mouseSpringPos'
-import { useSnapshot } from 'valtio'
-import { a, useSpring, useSprings } from 'react-spring'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
+
+import { a, useSpring, useSprings } from '@react-spring/web'
+import { PointerEvent, useEffect, useMemo, useRef } from 'react'
+
+import { throttle } from 'lodash-es'
+import { useSnapshot } from 'valtio'
+
+import MetaInfo from '../components/meta-info'
+import mouseSpringPos from '../store/mouseSpringPos'
+import styles from '../styles/home.module.scss'
 
 const Loading = () => {
   const $mouseSpringPos = useSnapshot(mouseSpringPos)
@@ -30,7 +24,7 @@ const Loading = () => {
       x: 10,
       y: 10,
     }),
-    []
+    [],
   )
 
   useEffect(() => {
@@ -72,7 +66,7 @@ const Home: NextPage = () => {
           mouseSpringPos.y = props.y.get()
         },
       })
-    }, 100)
+    }, 100),
   )
   return (
     <>

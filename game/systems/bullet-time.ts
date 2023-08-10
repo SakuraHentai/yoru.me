@@ -27,7 +27,7 @@ export default class CollideSystem {
           this.#source.x,
           this.#source.y,
           target.x,
-          target.y
+          target.y,
         ) <= this.#triggerDistance
     }
     return inRange
@@ -36,7 +36,7 @@ export default class CollideSystem {
   #checkBulletTime(): void {
     // get target is active && moving
     const activeTargets = this.#targets.filter(
-      (t) => t.active && t.body.gravity.y > 0
+      (t) => t.active && t.body.gravity.y > 0,
     )
     const inRangeTargets = activeTargets.filter((t) => this.#targetInRange(t))
     if (inRangeTargets.length) {

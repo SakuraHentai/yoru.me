@@ -1,5 +1,6 @@
+import { a, useSprings } from '@react-spring/web'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { a, useSprings } from 'react-spring'
+
 import styles from '../styles/game.module.scss'
 import { useIsomorphicLayoutEffect } from '../utils/use-isomorphic-layout-effect'
 

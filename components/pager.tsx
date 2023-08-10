@@ -1,4 +1,5 @@
 import Link from 'next/link'
+
 import styles from '../styles/blog.module.scss'
 import type { PagerType } from '../types'
 

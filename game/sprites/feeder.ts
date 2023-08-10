@@ -47,7 +47,7 @@ export default class Feeder extends Pet {
             this.#goRight()
             break
         }
-      }
+      },
     )
     // mouse left to feed, right to change direction
     this.scene.input.on(
@@ -62,7 +62,7 @@ export default class Feeder extends Pet {
             this.body.velocity.x > 0 ? this.#goLeft() : this.#goRight()
             break
         }
-      }
+      },
     )
   }
 
@@ -71,7 +71,7 @@ export default class Feeder extends Pet {
       this.scene,
       this.x,
       this.y - TEXTURE.FOOD.HEIGHT,
-      TEXTURE.FOOD.NAME
+      TEXTURE.FOOD.NAME,
     )
     this.emit('feed', food)
   }

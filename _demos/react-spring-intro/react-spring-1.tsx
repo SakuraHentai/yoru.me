@@ -1,4 +1,4 @@
-import { useSpring, a } from 'react-spring'
+import { a, useSpring } from '@react-spring/web'
 
 const Demo = () => {
   const props = useSpring({

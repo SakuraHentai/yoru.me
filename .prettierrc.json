@@ -8,5 +8,16 @@
         "parser": "mdx"
       }
     }
-  ]
+  ],
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports"
+  ],
+  "importOrder": [
+    "^@?next",
+    "^@?react",
+    "^[a-z]",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }

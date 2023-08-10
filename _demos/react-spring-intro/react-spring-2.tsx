@@ -1,5 +1,5 @@
+import { a, useSpring } from '@react-spring/web'
 import { MouseEvent, useCallback, useRef } from 'react'
-import { a, useSpring } from 'react-spring'
 
 const Demo = () => {
   const [props, api] = useSpring(() => ({ x: 0, y: 0 }))
