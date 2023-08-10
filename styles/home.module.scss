@@ -1,4 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Preahvihear&display=swap');
+
 .home {
   height: 100vh;
   background: rgba(255, 229, 0, 1);
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nav {
+  margin: 1em 2em;
+  padding: 0.5em 2em;
+  background: rgba(22, 101, 52, 0.5);
+  border-radius: 4em;
+  ul {
+    display: flex;
+    gap: 1em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      a {
+        display: block;
+        min-width: 6em;
+        padding: 0.5em;
+        background: rgba(92, 101, 22, 0.3);
+        border-radius: 2em;
+        color: #fff;
+        text-align: center;
+        font-family: 'Preahvihear', sans-serif;
+        line-height: 1.6em;
+        transition: background 0.3s;
+        &:visited {
+          color: #fff;
+        }
+        &:hover {
+          background: rgba(92, 101, 22, 0.6);
+        }
+      }
+    }
+  }
 }

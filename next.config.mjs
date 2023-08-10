@@ -6,6 +6,7 @@ const nextConfig = {
   output: 'standalone',
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'mdx'],
+  transpilePackages: ['three'],
   images: {
     domains: ['img.yoru.me'],
   },
