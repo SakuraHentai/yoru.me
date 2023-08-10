@@ -93,9 +93,6 @@ const Home: NextPage = () => {
             </ul>
           </nav>
         </header>
-        <main>
-          <section></section>
-        </main>
       </div>
     </>
   )
