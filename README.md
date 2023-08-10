@@ -1,6 +1,6 @@
 # yoru.me
 
-## Play
+## You can find the rabbits!
 
 Feed: `Space` or `Left Click`
 
