@@ -25,6 +25,7 @@ export default class Feeder extends Pet {
 
   #initEvents(): void {
     // keyboard event
+    // @ts-expect-error
     this.scene.input.keyboard.on(
       Phaser.Input.Keyboard.Events.ANY_KEY_DOWN,
       (e: KeyboardEvent) => {

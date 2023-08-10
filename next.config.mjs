@@ -3,7 +3,6 @@ import rehypeHighlight from 'rehype-highlight'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'mdx'],
   transpilePackages: ['three'],

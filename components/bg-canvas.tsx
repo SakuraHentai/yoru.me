@@ -36,7 +36,7 @@ const MoveEffect = () => {
       x: $mouseSpringPos.x,
       y: $mouseSpringPos.y,
     })
-  }, [$mouseSpringPos, viewport, size])
+  }, [$mouseSpringPos, smoothMove])
 
   return null
 }
