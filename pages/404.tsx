@@ -14,7 +14,7 @@ const Page404: NextPage = () => {
     <>
       <MetaInfo
         meta={{
-          title: '404',
+          title: 'You found many rabbits!',
         }}
       />
       <Game />
