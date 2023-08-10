@@ -1,4 +1,5 @@
 %demo {
+  scrollbar-gutter: stable;
   .demo {
     position: relative;
     margin: 1em 0;
@@ -175,8 +176,14 @@
   }
 }
 
+.info {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+}
+
 .author {
-  text-align: center;
   color: #fff;
   font-size: 2em;
   text-shadow: 0 0 3px #555;
@@ -186,8 +193,7 @@
 }
 
 .pages {
-  width: 86px; /* same as author text width */
-  margin: 1em auto;
+  text-indent: 0.1em;
   a {
     display: block;
     text-decoration: underline;
@@ -390,8 +396,14 @@
     }
   }
 
+  .author {
+    text-align: center;
+  }
+
   .pages {
-    margin: 1em auto;
+    display: flex;
+    justify-content: center;
+    text-indent: 0;
     a {
       display: inline;
       + a {

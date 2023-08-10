@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import avatar from '../assets/avatar.png'
 import asideBg from '../assets/bg-aside.jpg'
 import styles from '../styles/blog.module.scss'
 
-const BlogLayout: React.FC = ({ children }) => {
+const BlogLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <div className={styles.layout}>
       <aside>
@@ -26,18 +26,20 @@ const BlogLayout: React.FC = ({ children }) => {
               loading="lazy"
             />
           </div>
-          <h3 className={styles.author}>
-            <a
-              href="https://github.com/SakuraHentai"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Derek
-            </a>
-          </h3>
-          <div className={styles.pages}>
-            <Link href="/">Game</Link>
-            <Link href="/blog">Blog</Link>
+          <div className={styles.info}>
+            <h3 className={styles.author}>
+              <a
+                href="https://github.com/SakuraHentai"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Derek
+              </a>
+            </h3>
+            <div className={styles.pages}>
+              <Link href="/">Home</Link>
+              <Link href="/blog">Blog</Link>
+            </div>
           </div>
         </div>
       </aside>

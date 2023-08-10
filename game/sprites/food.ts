@@ -58,10 +58,7 @@ export default class Food extends Phaser.Physics.Arcade.Sprite {
     const colliderHandler = this.scene.physics.add.collider(
       this,
       obj,
-      (
-        item: Phaser.GameObjects.GameObject,
-        obj: Phaser.GameObjects.GameObject
-      ) => {
+      (item, obj) => {
         const r1: Food = item as Food
         const r2: Pet = obj as Pet
 

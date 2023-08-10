@@ -1,14 +1,70 @@
-.entries {
-  position: fixed;
-  bottom: 2vh;
-  right: 3vw;
-  color: #555;
-  font-family: 'Fipps';
-  font-size: 16px;
+@import url('https://fonts.googleapis.com/css2?family=Preahvihear&display=swap');
+
+.home {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  background: rgba(255, 229, 0, 1);
 }
-.sep {
-  margin: 0 1em;
-  font-family: 'Fipps';
-  font-size: 16px;
+
+.bgCanvas {
+  grid-row-start: 1;
+  grid-row-end: span 6;
+  grid-column-start: 1;
+  grid-column-end: span 12;
+}
+
+.header {
+  position: fixed;
+  right: 2em;
+  display: flex;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  height: 4em;
+  margin: 1em 0;
+  padding: 0.5em 2em;
+  background: rgba(22, 101, 52, 0.5);
+  border-radius: 4em;
+  ul {
+    display: flex;
+    gap: 1em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      a {
+        display: block;
+        min-width: 6em;
+        padding: 0.5em;
+        background: rgba(92, 101, 22, 0.3);
+        border-radius: 2em;
+        color: #fff;
+        text-align: center;
+        font-family: 'Preahvihear', sans-serif;
+        line-height: 1.6em;
+        transition: background 0.3s;
+        &:visited {
+          color: #fff;
+        }
+        &:hover {
+          background: rgba(92, 101, 22, 0.6);
+        }
+      }
+    }
+  }
+}
+
+.loading {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5vw;
+  font-family: 'Preahvihear', Tahoma, sans-serif;
   user-select: none;
 }

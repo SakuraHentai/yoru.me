@@ -1,7 +1,14 @@
-.notFound {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
+.entries {
+  position: fixed;
+  bottom: 2vh;
+  right: 3vw;
+  color: #555;
+  font-family: 'Fipps';
+  font-size: 16px;
+}
+.sep {
+  margin: 0 1em;
+  font-family: 'Fipps';
+  font-size: 16px;
+  user-select: none;
 }

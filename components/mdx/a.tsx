@@ -1,4 +1,6 @@
-type Props = {} & HTMLAnchorElement
+import { ReactNode } from 'react'
+
+type Props = { children: ReactNode } & HTMLAnchorElement
 
 const Anchor: React.FC<Props> = ({ href, children }) => {
   return (
