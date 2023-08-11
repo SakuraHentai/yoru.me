@@ -4,13 +4,11 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Suspense, useMemo, useState } from 'react'
 
 import mouseSpringPos from 'store/mouseSpringPos'
-import { useSnapshot } from 'valtio'
 
 import styles from '../styles/home.module.scss'
 
 const MoveEffect = () => {
   const { camera, viewport, size } = useThree()
-  const $mouseSpringPos = useSnapshot(mouseSpringPos)
   const [smoothMoveProps, smoothMove] = useSpring(
     {
       x: camera.position.x,
@@ -36,8 +34,8 @@ const MoveEffect = () => {
 
   useFrame(() => {
     smoothMove.start({
-      x: $mouseSpringPos.x,
-      y: $mouseSpringPos.y,
+      x: mouseSpringPos.x,
+      y: mouseSpringPos.y,
     })
   })
 
