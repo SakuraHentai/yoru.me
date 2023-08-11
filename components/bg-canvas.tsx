@@ -3,39 +3,37 @@ import { Center, Text3D } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Suspense, useMemo, useState } from 'react'
 
-import mouseSpringPos from 'store/mouseSpringPos'
-
 import styles from '../styles/home.module.scss'
 
 const MoveEffect = () => {
-  const { camera, viewport, size } = useThree()
+  const { camera, mouse, viewport, size } = useThree()
+  const isMobile = useMemo(() => {
+    return window.innerWidth < 768
+  }, [window.innerWidth])
   const [smoothMoveProps, smoothMove] = useSpring(
     {
       x: camera.position.x,
       y: camera.position.y,
-      z: camera.position.z,
+      z: 100,
     },
     [camera, size, viewport],
   )
 
   useFrame(() => {
-    // remap to scene coord.
-    const coordX =
-      (smoothMoveProps.x.get() / size.width) * viewport.width -
-      viewport.width / 2
-    const coordY =
-      (smoothMoveProps.y.get() / size.height) * viewport.height -
-      viewport.height / 2
-
     // set the camera
-    camera.position.set(-coordX, coordY, smoothMoveProps.z.get())
+    camera.position.set(
+      smoothMoveProps.x.get(),
+      smoothMoveProps.y.get(),
+      smoothMoveProps.z.get(),
+    )
     camera.lookAt(0, 0, 0)
   })
 
   useFrame(() => {
     smoothMove.start({
-      x: mouseSpringPos.x,
-      y: mouseSpringPos.y,
+      x: -(mouse.x * viewport.width) / 2,
+      y: -(mouse.y * viewport.height) / 2,
+      z: isMobile ? 20 : 10,
     })
   })
 
@@ -43,18 +41,9 @@ const MoveEffect = () => {
 }
 
 const BgCanvas = () => {
-  const isMobile = useMemo(() => {
-    return window.innerWidth < 768
-  }, [window.innerWidth])
-
   return (
     <>
-      <Canvas
-        className={styles.bgCanvas}
-        camera={{
-          position: [0, 0, isMobile ? 20 : 10],
-        }}
-      >
+      <Canvas className={styles.bgCanvas}>
         <Suspense fallback={null}>
           <MoveEffect />
           <Center rotation={[-0.3, 0.2, 0]}>
