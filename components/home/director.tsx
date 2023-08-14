@@ -48,7 +48,7 @@ const Director = () => {
         },
         4,
       )
-  }, [])
+  }, [viewport])
 
   useFrame(() => {
     if (tl.current) {
