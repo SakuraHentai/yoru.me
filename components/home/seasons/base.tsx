@@ -74,4 +74,6 @@ const SeasonBase = forwardRef(
   },
 )
 
+SeasonBase.displayName = `SeasonBase`
+
 export default SeasonBase

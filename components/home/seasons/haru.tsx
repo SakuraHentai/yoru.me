@@ -25,7 +25,7 @@ const Haru = () => {
         duration: 2,
       })
       .pause()
-  }, [])
+  }, [viewport])
 
   useFrame(() => {
     const inView = scroll.range(0 / 4, 1 / 4)

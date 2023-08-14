@@ -43,7 +43,7 @@ const Natsu = () => {
         1.5,
       )
       .pause()
-  }, [])
+  }, [viewport])
 
   useFrame(() => {
     const inView = scroll.range(1 / 10, 1 / 4)
@@ -55,7 +55,7 @@ const Natsu = () => {
   return (
     <SeasonBase
       texture={natsu.src}
-      position={[0, -viewport.height, 20]}
+      position={[0, -viewport.height / 2, 20]}
       rotation={[0, Math.PI * -2.8, 0]}
       ref={ref}
     />
