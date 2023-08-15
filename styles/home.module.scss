@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Preahvihear&display=swap');
 
+$bgColor: rgba(255, 229, 0, 1);
 .home {
   display: grid;
   width: 100vw;
   height: 100vh;
   grid-template-rows: repeat(6, minmax(0, 1fr));
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  background: rgba(255, 229, 0, 1);
+  background: $bgColor;
 }
 
 .bgCanvas {
@@ -15,11 +16,30 @@
   grid-column-start: 1;
   grid-column-end: span 12;
 }
+.canvasLoading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; // just smaller than header.
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $bgColor;
+  font-size: 5vw;
+  font-family: 'Preahvihear', Tahoma, sans-serif;
+  user-select: none;
+  span {
+    display: flex;
+  }
+}
 
 .header {
   position: fixed;
   right: 2em;
   display: flex;
+  z-index: 2;
 }
 
 .nav {
@@ -58,13 +78,78 @@
     }
   }
 }
-
+@keyframes ball {
+  0% {
+    height: 5px;
+    border-radius: 50px 50px 25px 25px;
+    transform: translateY(0px) scaleX(1.3);
+  }
+  40% {
+    height: 20px;
+    border-radius: 50%;
+  }
+  100% {
+    height: 20px;
+    border-radius: 50%;
+    transform: translateY(-60px) scaleX(1);
+  }
+}
+@keyframes shadow {
+  0% {
+    transform: scaleX(1.5);
+  }
+  20% {
+    transform: scaleX(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scaleX(0.2);
+    opacity: 0.4;
+  }
+}
 .loading {
-  position: fixed;
+  grid-column-start: 5;
+  grid-column-end: 9;
+  grid-row-start: 5;
+  grid-row-end: 6;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   font-size: 5vw;
   font-family: 'Preahvihear', Tahoma, sans-serif;
   user-select: none;
+}
+.loadingColumn {
+  width: 20px;
+  &:global(:nth-child(2)) {
+    .loadingBall,
+    .loadingBallShadow {
+      animation-delay: 0.2s;
+    }
+  }
+  &:global(:nth-child(3)) {
+    .loadingBall,
+    .loadingBallShadow {
+      animation-delay: 0.3s;
+    }
+  }
+}
+.loadingBall {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #fff;
+  transform-origin: 50%;
+  animation: ball 0.5s alternate infinite ease;
+  will-change: transform;
+}
+.loadingBallShadow {
+  width: 20px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  transform-origin: 50%;
+  filter: blur(1px);
+  animation: shadow 0.5s alternate infinite ease;
+  will-change: transform;
 }
