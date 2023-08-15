@@ -16,7 +16,7 @@ const Scene = () => {
         <Fuyu />
         <Director />
       </ScrollControls>
-      <axesHelper />
+      {/* <axesHelper /> */}
       {/* <OrbitControls
         enablePan={false}
         enableZoom={false}
