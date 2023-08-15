@@ -24,11 +24,18 @@ const Haru = () => {
         z: 2,
         duration: 2,
       })
+      // to center
+      .to(ref.current?.position as object, {
+        x: -viewport.width / 4,
+        y: viewport.height / 4,
+        z: 0,
+        duration: 1.2,
+      })
       .pause()
   }, [viewport])
 
   useFrame(() => {
-    const inView = scroll.range(0 / 4, 1 / 4)
+    const inView = scroll.range(0 / 4, 1 / 2)
     if (tl.current && inView) {
       tl.current.seek(inView * tl.current.duration())
     }

@@ -15,39 +15,38 @@ const Director = () => {
     tl.current = gsap.timeline()
 
     tl.current
+      .to(cameraPos.current, {
+        x: viewport.width / 2,
+        y: viewport.height / 5,
+        duration: 3,
+      })
       .to(
         cameraPos.current,
         {
-          x: viewport.width / 2,
-          y: viewport.height / 5,
-          duration: 3,
-        },
-        0,
-      )
-      .to(
-        cameraPos.current,
-        {
-          z: 16,
+          z: '+=6',
           duration: 1,
         },
-        0,
+        '<',
       )
-      .to(
-        cameraPos.current,
-        {
-          x: viewport.width / 4,
-          duration: 1,
+      .to(cameraPos.current, {
+        x: viewport.width / 4,
+        y: viewport.height / 3,
+        z: '+=2',
+        duration: 2,
+      })
+      .to(cameraPos.current, {
+        x: viewport.width / 3,
+      })
+      .to(cameraPos.current, {
+        x: (...args) => {
+          return viewport.width / 10
         },
-        3,
-      )
-      .to(
-        cameraPos.current,
-        {
-          y: viewport.height / 3,
-          duration: 2,
-        },
-        4,
-      )
+        y: 0,
+        z: 12,
+        duration: 3,
+        delay: 3,
+      })
+      .pause()
   }, [viewport])
 
   useFrame(() => {
@@ -58,6 +57,8 @@ const Director = () => {
         cameraPos.current.y,
         cameraPos.current.z,
       )
+
+      // camera.position.set(10, 10, 30)
       camera.lookAt(0, 0, 0)
     }
   })

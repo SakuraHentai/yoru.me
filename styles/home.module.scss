@@ -141,6 +141,7 @@ $bgColor: rgba(255, 229, 0, 1);
   background-color: #fff;
   transform-origin: 50%;
   animation: ball 0.5s alternate infinite ease;
+  will-change: transform;
 }
 .loadingBallShadow {
   width: 20px;
@@ -150,4 +151,5 @@ $bgColor: rgba(255, 229, 0, 1);
   transform-origin: 50%;
   filter: blur(1px);
   animation: shadow 0.5s alternate infinite ease;
+  will-change: transform;
 }

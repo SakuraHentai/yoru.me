@@ -17,28 +17,39 @@ const Aki = () => {
   useLayoutEffect(() => {
     tl.current = gsap.timeline()
     tl.current
+      .to(ref.current?.position as object, {
+        y: -viewport.height / 2,
+        z: 5,
+        duration: 2,
+      })
       .to(
         ref.current?.position as object,
         {
-          y: -viewport.height / 2,
-          z: 3,
-          duration: 2,
-        },
-        0,
-      )
-      .to(
-        ref.current?.position as object,
-        {
-          x: -viewport.width / 2,
+          x: viewport.width / 2,
           duration: 1,
         },
-        1.4,
+        '<0.2',
+      )
+      .to(ref.current?.position as object, {
+        x: -viewport.width / 2,
+        duration: 1,
+      })
+      // to center
+      .to(
+        ref.current?.position as object,
+        {
+          x: -viewport.width / 4,
+          y: -viewport.height / 4,
+          z: 0,
+          duration: 0.6,
+        },
+        '>',
       )
       .pause()
   }, [viewport])
 
   useFrame(() => {
-    const inView = scroll.range(1 / 5, 1 / 4)
+    const inView = scroll.range(1 / 5, 1 / 2)
     if (tl.current && inView) {
       tl.current.seek(inView * tl.current.duration())
     }
