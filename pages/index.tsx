@@ -29,7 +29,7 @@ const Loading = () => {
   )
 }
 
-const BgCanvas = dynamic(() => import('../components/home/bg-canvas'), {
+const BgCanvas = dynamic(() => import('../components/bg-canvas'), {
   loading: Loading,
   ssr: false,
 })
