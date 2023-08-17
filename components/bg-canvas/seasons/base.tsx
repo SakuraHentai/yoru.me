@@ -3,73 +3,79 @@ import {
   MeshPortalMaterial,
   PortalMaterialType,
   RoundedBox,
+  Scroll,
+  useCursor,
+  useScroll,
   useTexture,
 } from '@react-three/drei'
-import { useFrame, useThree } from '@react-three/fiber'
-import { ForwardedRef, forwardRef, useRef } from 'react'
+import { Euler, Vector3, useFrame, useThree } from '@react-three/fiber'
+import { ForwardedRef, forwardRef, useRef, useState } from 'react'
 
 import { DoubleSide, Mesh } from 'three'
+import { useSnapshot } from 'valtio'
+
+import { bgCanvasRootState, isBlending, setBlendName } from '../state'
 
 type SeasonBaseProps = {
-  position: [number, number, number]
+  name: string
+  position: Vector3
   // this rotation is the inner mesh rotation
   // not the outer mesh rotation
-  rotation: [number, number, number]
+  rotation: Euler
   texture: string
 }
 export type SeasonPositionProps = Pick<SeasonBaseProps, 'position'>
 
 const SeasonBase = forwardRef(
   (
-    { texture, position, rotation }: SeasonBaseProps,
+    { name, texture, position, rotation }: SeasonBaseProps,
     ref: ForwardedRef<Mesh>,
   ) => {
     const map = useTexture(texture)
 
-    const focus = useRef(false)
-    const [blend] = useSpring(
-      {
-        value: 0,
-      },
-      [],
-    )
-
     const { viewport } = useThree()
-
     const portalRef = useRef<PortalMaterialType>(null)
+    const scroll = useScroll()
+
+    // need it to render the blend
+    useSnapshot(bgCanvasRootState)
+    const blend = useSpring({
+      value: isBlending(name) ? 1 : 0,
+    })
 
     useFrame(() => {
       if (portalRef.current) {
-        blend.value.start({ to: focus.current ? 1 : 0 })
         portalRef.current.blend = blend.value.get()
       }
     })
 
     return (
-      <RoundedBox
-        // will have 4 seasons.
-        args={[
-          (viewport.width - viewport.width / 8) / 2,
-          (viewport.height - viewport.height / 8) / 2,
-          0.2,
-        ]}
-        position={position}
-        ref={ref}
-        // onPointerEnter={() => {
-        //   focus.current = true
-        // }}
-        onPointerLeave={() => {
-          focus.current = false
-        }}
-      >
-        <MeshPortalMaterial ref={portalRef} blend={0} side={DoubleSide}>
-          <mesh rotation={rotation}>
-            <sphereGeometry args={[50, 64, 64]} />
-            <meshBasicMaterial map={map} side={DoubleSide} />
-          </mesh>
-          <ambientLight />
-        </MeshPortalMaterial>
-      </RoundedBox>
+      <>
+        <RoundedBox
+          name={name}
+          // will have 4 seasons.
+          args={[
+            (viewport.width - viewport.width / 8) / 2,
+            (viewport.height - viewport.height / 8) / 2,
+            0.2,
+          ]}
+          position={position}
+          ref={ref}
+          onClick={() => {
+            if (scroll.offset > 0.95 && !isBlending()) {
+              setBlendName(name)
+            }
+          }}
+        >
+          <MeshPortalMaterial ref={portalRef} side={DoubleSide}>
+            <mesh rotation={rotation}>
+              <sphereGeometry args={[50, 64, 64]} />
+              <meshBasicMaterial map={map} side={DoubleSide} />
+            </mesh>
+            <ambientLight />
+          </MeshPortalMaterial>
+        </RoundedBox>
+      </>
     )
   },
 )

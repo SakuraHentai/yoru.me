@@ -1,10 +1,15 @@
 import { Canvas } from '@react-three/fiber'
 
+import { useSnapshot } from 'valtio'
+
 import styles from '../../styles/home.module.scss'
 import LoadingScreen from './loading-screen'
 import Scene from './scene'
+import { bgCanvasRootState, isBlending, setBlendName } from './state'
 
 const BgCanvas = () => {
+  useSnapshot(bgCanvasRootState)
+
   return (
     <>
       <Canvas
@@ -17,6 +22,16 @@ const BgCanvas = () => {
         <Scene />
       </Canvas>
       <LoadingScreen />
+      {isBlending() && (
+        <div
+          className={styles.closeBlend}
+          onClick={() => {
+            setBlendName('')
+          }}
+        >
+          ???
+        </div>
+      )}
     </>
   )
 }

@@ -153,3 +153,9 @@ $bgColor: rgba(255, 229, 0, 1);
   animation: shadow 0.5s alternate infinite ease;
   will-change: transform;
 }
+
+.closeBlend {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
