@@ -17,7 +17,6 @@ const Aki = () => {
 
   const position = useRef(new Vector3(0, viewport.height / 1.6, 20))
 
-  console.log(`rerun aki position`)
   useLayoutEffect(() => {
     // reset position for stable motion
     position.current.x = 0
@@ -39,10 +38,14 @@ const Aki = () => {
         },
         '<0.2',
       )
-      .to(position.current, {
-        x: -viewport.width / 2,
-        duration: 1,
-      })
+      .to(
+        position.current,
+        {
+          x: -viewport.width / 2,
+          duration: 1,
+        },
+        '>',
+      )
       // to center
       .to(
         position.current,
@@ -71,7 +74,7 @@ const Aki = () => {
 
   return (
     <SeasonBase
-      name="Aki"
+      name="aki"
       texture={aki.src}
       position={position.current}
       rotation={[0, Math.PI * -1.95, 0]}

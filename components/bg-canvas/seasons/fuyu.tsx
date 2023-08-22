@@ -79,7 +79,7 @@ const Fuyu = () => {
 
   return (
     <SeasonBase
-      name="Fuyu"
+      name="fuyu"
       texture={fuyu.src}
       position={position.current}
       rotation={[0, Math.PI * -1.8, 0]}

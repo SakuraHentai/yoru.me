@@ -56,7 +56,7 @@ const Haru = () => {
 
   return (
     <SeasonBase
-      name="Haru"
+      name="haru"
       texture={haru.src}
       position={position.current}
       rotation={[0, Math.PI * -2.7, 0]}

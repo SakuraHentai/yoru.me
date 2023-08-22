@@ -1,16 +1,22 @@
 import { Vector3 } from 'three'
-import { proxy, useSnapshot } from 'valtio'
+import { proxy } from 'valtio'
 
-export const bgCanvasRootState = proxy({
+export type BlendNameTypes = '' | 'haru' | 'natsu' | 'aki' | 'fuyu'
+type RootStateType = {
+  blendName: BlendNameTypes
+  cameraHandleBy: 'scroll' | 'blending'
+}
+export const bgCanvasRootState = proxy<RootStateType>({
   // the blend season mesh name
   blendName: '',
+  cameraHandleBy: 'scroll',
 })
 
-export const setBlendName = (name: string) => {
+export const setBlendName = (name: BlendNameTypes) => {
   bgCanvasRootState.blendName = name
 }
 
-export const isBlending = (name?: string) => {
+export const isBlending = (name?: BlendNameTypes) => {
   if (name) {
     return bgCanvasRootState.blendName === name
   } else {

@@ -83,7 +83,7 @@ const Natsu = () => {
 
   return (
     <SeasonBase
-      name="Natsu"
+      name="natsu"
       texture={natsu.src}
       position={position.current}
       rotation={[0, Math.PI * -2.8, 0]}

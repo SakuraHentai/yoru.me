@@ -3,21 +3,18 @@ import {
   MeshPortalMaterial,
   PortalMaterialType,
   RoundedBox,
-  Scroll,
-  useCursor,
   useScroll,
   useTexture,
 } from '@react-three/drei'
-import { Euler, Vector3, useFrame, useThree } from '@react-three/fiber'
-import { ForwardedRef, forwardRef, useRef, useState } from 'react'
+import { Euler, Vector3, useThree } from '@react-three/fiber'
+import { ForwardedRef, forwardRef, useRef } from 'react'
 
 import { DoubleSide, Mesh } from 'three'
-import { useSnapshot } from 'valtio'
 
-import { bgCanvasRootState, isBlending, setBlendName } from '../state'
+import { BlendNameTypes, isBlending, setBlendName } from '../state'
 
 type SeasonBaseProps = {
-  name: string
+  name: BlendNameTypes
   position: Vector3
   // this rotation is the inner mesh rotation
   // not the outer mesh rotation
@@ -37,16 +34,13 @@ const SeasonBase = forwardRef(
     const portalRef = useRef<PortalMaterialType>(null)
     const scroll = useScroll()
 
-    // need it to render the blend
-    useSnapshot(bgCanvasRootState)
-    const blend = useSpring({
+    useSpring({
       value: isBlending(name) ? 1 : 0,
-    })
-
-    useFrame(() => {
-      if (portalRef.current) {
-        portalRef.current.blend = blend.value.get()
-      }
+      onChange({ value: spring }) {
+        if (portalRef.current) {
+          // portalRef.current.blend = spring.value
+        }
+      },
     })
 
     return (
