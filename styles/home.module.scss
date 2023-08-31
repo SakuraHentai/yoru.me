@@ -8,6 +8,9 @@ $bgColor: rgba(255, 229, 0, 1);
   grid-template-rows: repeat(6, minmax(0, 1fr));
   grid-template-columns: repeat(12, minmax(0, 1fr));
   background: $bgColor;
+  &:not(&:has([class^='home_closeBlend'])) [data-camera-controls-version] {
+    touch-action: auto !important;
+  }
 }
 
 .bgCanvas {
