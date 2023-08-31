@@ -38,7 +38,7 @@ const SeasonBase = forwardRef(
       value: isBlending(name) ? 1 : 0,
       onChange({ value: spring }) {
         if (portalRef.current) {
-          // portalRef.current.blend = spring.value
+          portalRef.current.blend = spring.value
         }
       },
     })

@@ -20,7 +20,7 @@ const Scene = () => {
         <Fuyu />
         <Director />
       </ScrollControls>
-      <axesHelper />
+      {/* <axesHelper /> */}
     </>
   )
 }
