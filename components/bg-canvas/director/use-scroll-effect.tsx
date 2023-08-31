@@ -1,45 +1,51 @@
-import { useHelper, useScroll } from '@react-three/drei/web'
+import { useScroll } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useLayoutEffect, useRef } from 'react'
 
 import gsap from 'gsap'
-import { AxesHelper } from 'three'
+import { Vector3 } from 'three'
 
-const Director = () => {
-  const { camera, viewport } = useThree()
-  const scroll = useScroll()
-  const cameraPos = useRef(camera.position.clone())
+import { bgCanvasRootState, getDefaultCameraPosition } from '../state'
+
+const useScrollEffect = (callback: (position: Vector3) => void) => {
+  const enabled = bgCanvasRootState.cameraHandleBy === 'scroll'
+
+  const { camera, viewport, controls } = useThree()
+
+  const cameraMotionPosition = getDefaultCameraPosition()
+
   const tl = useRef<gsap.core.Timeline>()
+  const scroll = useScroll()
 
   useLayoutEffect(() => {
     tl.current = gsap.timeline()
 
     tl.current
-      .to(cameraPos.current, {
+      .to(cameraMotionPosition, {
         x: viewport.width / 2,
         y: viewport.height / 5,
         duration: 3,
       })
       .to(
-        cameraPos.current,
+        cameraMotionPosition,
         {
           z: '+=6',
           duration: 1,
         },
         '<',
       )
-      .to(cameraPos.current, {
+      .to(cameraMotionPosition, {
         x: viewport.width / 4,
         y: viewport.height / 3,
         z: '+=2',
         duration: 2,
       })
-      .to(cameraPos.current, {
+      .to(cameraMotionPosition, {
         x: viewport.width / 3,
       })
-      .to(cameraPos.current, {
-        x: (...args) => {
-          return viewport.width / 10
+      .to(cameraMotionPosition, {
+        x: () => {
+          return viewport.width / 20
         },
         y: 0,
         z: 12,
@@ -47,25 +53,15 @@ const Director = () => {
         delay: 3,
       })
       .pause()
-  }, [viewport])
+  }, [viewport, cameraMotionPosition])
 
   useFrame(() => {
-    if (tl.current) {
+    if (enabled && tl.current) {
       tl.current.seek(scroll.offset * tl.current.duration())
-      camera.position.set(
-        cameraPos.current.x,
-        cameraPos.current.y,
-        cameraPos.current.z,
-      )
 
-      // camera.position.set(10, 10, 30)
-      camera.lookAt(0, 0, 0)
+      callback(cameraMotionPosition)
     }
   })
-
-  // useHelper(camera as any, AxesHelper)
-
-  return null
 }
 
-export default Director
+export default useScrollEffect

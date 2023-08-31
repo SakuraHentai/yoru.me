@@ -8,6 +8,9 @@ $bgColor: rgba(255, 229, 0, 1);
   grid-template-rows: repeat(6, minmax(0, 1fr));
   grid-template-columns: repeat(12, minmax(0, 1fr));
   background: $bgColor;
+  &:not(&:has([class^='home_closeBlend'])) [data-camera-controls-version] {
+    touch-action: auto !important;
+  }
 }
 
 .bgCanvas {
@@ -152,4 +155,18 @@ $bgColor: rgba(255, 229, 0, 1);
   filter: blur(1px);
   animation: shadow 0.5s alternate infinite ease;
   will-change: transform;
+}
+
+.closeBlend {
+  position: fixed;
+  top: 2vw;
+  left: 2vw;
+  width: 3em;
+  height: 3em;
+  color: rgba(22, 101, 52, 0.8);
+  cursor: pointer;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 }
