@@ -11,6 +11,7 @@ import { bgCanvasRootState } from './state'
 const ANIMATION_DURATION = 5e3
 const Scene = () => {
   const loadingState = useProgress()
+
   const advance = useCallback(() => {
     if (bgCanvasRootState.timeline < 1) {
       bgCanvasRootState.timeline +=
