@@ -1,19 +1,19 @@
-import { useScroll } from '@react-three/drei'
-import { useFrame, useThree } from '@react-three/fiber'
-import { useLayoutEffect, useRef } from 'react'
+import { useThree } from '@react-three/fiber'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 
 import gsap from 'gsap'
 import { Mesh, Vector3 } from 'three'
+import { useSnapshot } from 'valtio'
 
 import haru from '../../../assets/home/haru.jpg'
-import { isBlending } from '../state'
+import { bgCanvasRootState, isBlending, timelineRange } from '../state'
 import SeasonBase from './base'
 
 const Haru = () => {
   const ref = useRef<Mesh>(null)
-  const scroll = useScroll()
   const { viewport } = useThree()
   const tl = useRef<ReturnType<typeof gsap.timeline>>()
+  const $rootState = useSnapshot(bgCanvasRootState)
 
   const position = useRef(new Vector3(0, 0, 4))
 
@@ -42,8 +42,8 @@ const Haru = () => {
       .pause()
   }, [viewport])
 
-  useFrame(() => {
-    const inView = scroll.range(0 / 4, 1 / 2)
+  useEffect(() => {
+    const inView = timelineRange(0 / 4, 1 / 2)
     if (tl.current && inView && !isBlending()) {
       tl.current.seek(inView * tl.current.duration())
       ref.current?.position.set(
@@ -52,7 +52,7 @@ const Haru = () => {
         position.current.z,
       )
     }
-  })
+  }, [$rootState.timeline])
 
   return (
     <SeasonBase

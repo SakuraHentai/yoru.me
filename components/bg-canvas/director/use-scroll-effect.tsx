@@ -1,9 +1,9 @@
-import { useScroll } from '@react-three/drei'
-import { useFrame, useThree } from '@react-three/fiber'
-import { useLayoutEffect, useRef } from 'react'
+import { useThree } from '@react-three/fiber'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 
 import gsap from 'gsap'
 import { Vector3 } from 'three'
+import { useSnapshot } from 'valtio'
 
 import { bgCanvasRootState, getDefaultCameraPosition } from '../state'
 
@@ -13,9 +13,9 @@ const useScrollEffect = (callback: (position: Vector3) => void) => {
   const { camera, viewport, controls } = useThree()
 
   const cameraMotionPosition = getDefaultCameraPosition()
+  const $rootState = useSnapshot(bgCanvasRootState)
 
   const tl = useRef<gsap.core.Timeline>()
-  const scroll = useScroll()
 
   useLayoutEffect(() => {
     tl.current = gsap.timeline()
@@ -55,13 +55,13 @@ const useScrollEffect = (callback: (position: Vector3) => void) => {
       .pause()
   }, [viewport, cameraMotionPosition])
 
-  useFrame(() => {
+  useEffect(() => {
     if (enabled && tl.current) {
-      tl.current.seek(scroll.offset * tl.current.duration())
+      tl.current.seek($rootState.timeline * tl.current.duration())
 
       callback(cameraMotionPosition)
     }
-  })
+  }, [$rootState.timeline])
 }
 
 export default useScrollEffect

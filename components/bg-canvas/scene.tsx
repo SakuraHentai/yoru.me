@@ -1,25 +1,48 @@
-import { ScrollControls } from '@react-three/drei'
-
-import { useSnapshot } from 'valtio'
+import { useCallback, useEffect, useState } from 'react'
 
 import Director from './director'
 import Aki from './seasons/aki'
 import Fuyu from './seasons/fuyu'
 import Haru from './seasons/haru'
 import Natsu from './seasons/natsu'
-import { bgCanvasRootState, isBlending } from './state'
+import { bgCanvasRootState } from './state'
 
+const ANIMATION_DURATION = 4e3
 const Scene = () => {
-  useSnapshot(bgCanvasRootState)
+  const [shouldStart, setShouldStart] = useState(false)
+  const advance = useCallback(() => {
+    if (shouldStart && bgCanvasRootState.timeline < 1) {
+      bgCanvasRootState.timeline +=
+        ANIMATION_DURATION /
+        ((60 * ANIMATION_DURATION) / 1e3) /
+        ANIMATION_DURATION
+      return requestAnimationFrame(advance)
+    }
+  }, [])
+  useEffect(() => {
+    const handle = requestAnimationFrame(advance)
+
+    return () => {
+      cancelAnimationFrame(handle)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handle = setTimeout(() => {
+      setShouldStart(true)
+    }, 1e3)
+
+    return () => {
+      clearTimeout(handle)
+    }
+  }, [])
   return (
     <>
-      <ScrollControls pages={4} damping={0.1} enabled={!isBlending()}>
-        <Haru />
-        <Natsu />
-        <Aki />
-        <Fuyu />
-        <Director />
-      </ScrollControls>
+      <Haru />
+      <Natsu />
+      <Aki />
+      <Fuyu />
+      <Director />
       {/* <axesHelper /> */}
     </>
   )

@@ -39,6 +39,7 @@ const BgCanvas = () => {
   return (
     <>
       <Canvas
+        frameloop="demand"
         className={styles.bgCanvas}
         flat
         camera={{
