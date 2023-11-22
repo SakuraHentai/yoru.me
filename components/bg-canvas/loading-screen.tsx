@@ -1,6 +1,6 @@
-import { a, useSpring, useSpringValue, useSprings } from '@react-spring/web'
-import { Loader, useProgress } from '@react-three/drei'
-import { useEffect, useMemo, useState } from 'react'
+import { a, useSpring } from '@react-spring/web'
+import { useProgress } from '@react-three/drei'
+import { useEffect, useState } from 'react'
 
 import styles from '../../styles/home.module.scss'
 

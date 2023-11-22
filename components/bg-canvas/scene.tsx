@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useProgress } from '@react-three/drei'
+import { useCallback, useEffect } from 'react'
 
 import Director from './director'
 import Aki from './seasons/aki'
@@ -7,35 +8,31 @@ import Haru from './seasons/haru'
 import Natsu from './seasons/natsu'
 import { bgCanvasRootState } from './state'
 
-const ANIMATION_DURATION = 4e3
+const ANIMATION_DURATION = 5e3
 const Scene = () => {
-  const [shouldStart, setShouldStart] = useState(false)
+  const loadingState = useProgress()
   const advance = useCallback(() => {
-    if (shouldStart && bgCanvasRootState.timeline < 1) {
+    if (bgCanvasRootState.timeline < 1) {
       bgCanvasRootState.timeline +=
         ANIMATION_DURATION /
         ((60 * ANIMATION_DURATION) / 1e3) /
         ANIMATION_DURATION
       return requestAnimationFrame(advance)
     }
+    return 0
   }, [])
+
   useEffect(() => {
-    const handle = requestAnimationFrame(advance)
+    let handle: ReturnType<typeof requestAnimationFrame>
+    if (loadingState.loaded > 0 && loadingState.progress === 100) {
+      handle = advance()
+    }
 
     return () => {
       cancelAnimationFrame(handle)
     }
-  }, [])
+  }, [loadingState])
 
-  useEffect(() => {
-    const handle = setTimeout(() => {
-      setShouldStart(true)
-    }, 1e3)
-
-    return () => {
-      clearTimeout(handle)
-    }
-  }, [])
   return (
     <>
       <Haru />

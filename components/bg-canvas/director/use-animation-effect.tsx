@@ -7,10 +7,8 @@ import { useSnapshot } from 'valtio'
 
 import { bgCanvasRootState, getDefaultCameraPosition } from '../state'
 
-const useScrollEffect = (callback: (position: Vector3) => void) => {
-  const enabled = bgCanvasRootState.cameraHandleBy === 'scroll'
-
-  const { camera, viewport, controls } = useThree()
+const useAnimationEffect = (callback: (position: Vector3) => void) => {
+  const { viewport } = useThree()
 
   const cameraMotionPosition = getDefaultCameraPosition()
   const $rootState = useSnapshot(bgCanvasRootState)
@@ -56,7 +54,7 @@ const useScrollEffect = (callback: (position: Vector3) => void) => {
   }, [viewport, cameraMotionPosition])
 
   useEffect(() => {
-    if (enabled && tl.current) {
+    if (tl.current) {
       tl.current.seek($rootState.timeline * tl.current.duration())
 
       callback(cameraMotionPosition)
@@ -64,4 +62,4 @@ const useScrollEffect = (callback: (position: Vector3) => void) => {
   }, [$rootState.timeline])
 }
 
-export default useScrollEffect
+export default useAnimationEffect

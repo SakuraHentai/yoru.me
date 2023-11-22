@@ -3,15 +3,20 @@ import {
   MeshPortalMaterial,
   PortalMaterialType,
   RoundedBox,
-  useScroll,
   useTexture,
 } from '@react-three/drei'
 import { Euler, Vector3, useThree } from '@react-three/fiber'
 import { ForwardedRef, forwardRef, useRef } from 'react'
 
 import { DoubleSide, Mesh } from 'three'
+import { useSnapshot } from 'valtio'
 
-import { BlendNameTypes, isBlending, setBlendName } from '../state'
+import {
+  BlendNameTypes,
+  bgCanvasRootState,
+  isBlending,
+  setBlendName,
+} from '../state'
 
 type SeasonBaseProps = {
   name: BlendNameTypes
@@ -28,20 +33,23 @@ const SeasonBase = forwardRef(
     { name, texture, position, rotation }: SeasonBaseProps,
     ref: ForwardedRef<Mesh>,
   ) => {
+    const $rootState = useSnapshot(bgCanvasRootState)
     const map = useTexture(texture)
 
     const { viewport } = useThree()
     const portalRef = useRef<PortalMaterialType>(null)
-    const scroll = useScroll()
 
-    useSpring({
-      value: isBlending(name) ? 1 : 0,
-      onChange({ value: spring }) {
-        if (portalRef.current) {
-          portalRef.current.blend = spring.value
-        }
+    useSpring(
+      {
+        value: isBlending(name) ? 1 : 0,
+        onChange({ value: spring }) {
+          if (portalRef.current) {
+            portalRef.current.blend = spring.value
+          }
+        },
       },
-    })
+      [$rootState.blendName],
+    )
 
     return (
       <>
@@ -56,7 +64,7 @@ const SeasonBase = forwardRef(
           position={position}
           ref={ref}
           onClick={() => {
-            if (scroll.offset > 0.95 && !isBlending()) {
+            if (bgCanvasRootState.timeline >= 1 && !isBlending()) {
               setBlendName(name)
             }
           }}
