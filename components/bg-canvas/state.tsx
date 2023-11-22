@@ -4,12 +4,12 @@ import { proxy } from 'valtio'
 export type BlendNameTypes = '' | 'haru' | 'natsu' | 'aki' | 'fuyu'
 type RootStateType = {
   blendName: BlendNameTypes
-  cameraHandleBy: 'scroll' | 'blending'
+  timeline: number
 }
 export const bgCanvasRootState = proxy<RootStateType>({
   // the blend season mesh name
   blendName: '',
-  cameraHandleBy: 'scroll',
+  timeline: 0, // from 0 -> 1
 })
 
 export const setBlendName = (name: BlendNameTypes) => {
@@ -26,3 +26,8 @@ export const isBlending = (name?: BlendNameTypes) => {
 
 // The default states makes the motion stable when component rerender
 export const getDefaultCameraPosition = () => new Vector3(0, 0, 10)
+
+export const timelineRange = (from: number, distance: number) => {
+  const currentTime = bgCanvasRootState.timeline
+  return currentTime < 0 ? 0 : (currentTime - from) / distance
+}

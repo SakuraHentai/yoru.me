@@ -1,19 +1,19 @@
-import { useScroll } from '@react-three/drei'
-import { useFrame, useThree } from '@react-three/fiber'
-import { useLayoutEffect, useRef } from 'react'
+import { useThree } from '@react-three/fiber'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 
 import gsap from 'gsap'
 import { Euler, Mesh, Vector3 } from 'three'
+import { useSnapshot } from 'valtio'
 
 import fuyu from '../../../assets/home/fuyu.jpg'
-import { isBlending } from '../state'
+import { bgCanvasRootState, isBlending, timelineRange } from '../state'
 import SeasonBase from './base'
 
 const Fuyu = () => {
   const ref = useRef<Mesh>(null)
   const { viewport } = useThree()
-  const scroll = useScroll()
   const tl = useRef<gsap.core.Timeline>()
+  const $rootState = useSnapshot(bgCanvasRootState)
 
   const position = useRef(
     new Vector3(viewport.width / 2, -viewport.height / 1.3, 10),
@@ -60,8 +60,8 @@ const Fuyu = () => {
       .pause()
   }, [viewport])
 
-  useFrame(() => {
-    const inView = scroll.range(1 / 4, 1 / 2)
+  useEffect(() => {
+    const inView = timelineRange(1 / 4, 1 / 2)
     if (tl.current && inView && !isBlending()) {
       tl.current.seek(inView * tl.current.duration())
       ref.current?.position.set(
@@ -75,7 +75,7 @@ const Fuyu = () => {
         rotation.current.z,
       )
     }
-  })
+  }, [$rootState.timeline])
 
   return (
     <SeasonBase

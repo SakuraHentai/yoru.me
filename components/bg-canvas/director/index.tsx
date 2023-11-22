@@ -4,30 +4,27 @@ import { useEffect, useRef } from 'react'
 import { useSnapshot } from 'valtio'
 
 import { bgCanvasRootState, isBlending } from '../state'
-import useScrollEffect from './use-scroll-effect'
-import useBlendingEffect from './useBlendingEffect'
+import useAnimationEffect from './use-animation-effect'
+import useBlendingEffect from './use-blending-effect'
 
 const Director = () => {
   // camera handle by scroll by default
   const $rootState = useSnapshot(bgCanvasRootState)
   const cameraControlRef = useRef<CameraControls>(null)
 
-  useScrollEffect((position) => {
+  useAnimationEffect((position) => {
     cameraControlRef.current?.setLookAt(...position.toArray(), 0, 0, 0)
   })
-  useBlendingEffect((position, lookAt, resetToScroll) => {
-    cameraControlRef.current
-      ?.setLookAt(...position.toArray(), ...lookAt.toArray(), true)
-      .then(() => {
-        if (resetToScroll) {
-          bgCanvasRootState.cameraHandleBy = 'scroll'
-        }
-      })
+  useBlendingEffect((position, lookAt) => {
+    cameraControlRef.current?.setLookAt(
+      ...position.toArray(),
+      ...lookAt.toArray(),
+      true,
+    )
   })
 
   useEffect(() => {
     if (isBlending()) {
-      bgCanvasRootState.cameraHandleBy = 'blending'
       if (cameraControlRef.current) {
         cameraControlRef.current.mouseButtons.left = 1 // rotate
         cameraControlRef.current.touches.one = 32 // rotate
