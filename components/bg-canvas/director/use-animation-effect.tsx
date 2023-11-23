@@ -1,4 +1,3 @@
-import { useThree } from '@react-three/fiber'
 import { useEffect, useMemo, useRef } from 'react'
 
 import gsap from 'gsap'
@@ -8,8 +7,6 @@ import { useSnapshot } from 'valtio'
 import { bgCanvasState, timelineRange } from '../store/state'
 
 const useAnimationEffect = (callback: (position: Vector3) => void) => {
-  const { viewport } = useThree()
-
   const cameraMotionPosition = useRef(new Vector3(0))
   const $rootState = useSnapshot(bgCanvasState)
 
@@ -61,7 +58,7 @@ const useAnimationEffect = (callback: (position: Vector3) => void) => {
     tl.seek(percentage * tl.duration())
 
     callback(cameraMotionPosition.current)
-  }, [$rootState.timeline, tl])
+  }, [$rootState.timeline, tl, callback])
 }
 
 export default useAnimationEffect

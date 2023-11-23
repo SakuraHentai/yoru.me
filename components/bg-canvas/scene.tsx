@@ -3,7 +3,6 @@ import { lazy, useEffect } from 'react'
 
 import { useSnapshot } from 'valtio'
 
-import Director from './director'
 import { useSeasonTextures } from './hooks/use-season-textures'
 import { advanceTimeline, bgCanvasState } from './store/state'
 
@@ -12,6 +11,7 @@ const Haru = lazy(() => import('./seasons/haru'))
 const Natsu = lazy(() => import('./seasons/natsu'))
 const Aki = lazy(() => import('./seasons/aki'))
 const Fuyu = lazy(() => import('./seasons/fuyu'))
+const Director = lazy(() => import('./director'))
 
 const Timeline = () => {
   const $rootState = useSnapshot(bgCanvasState)
@@ -41,6 +41,15 @@ const FixResizeRender = () => {
 
   return null
 }
+
+const FixNavigateBack = () => {
+  // replay animation when enter page.
+  useEffect(() => {
+    bgCanvasState.timeline = 0
+  }, [])
+
+  return null
+}
 const Scene = () => {
   const textures = useSeasonTextures()
 
@@ -54,6 +63,7 @@ const Scene = () => {
       {/* <axesHelper args={[5]} /> */}
       <Timeline />
       <FixResizeRender />
+      <FixNavigateBack />
     </>
   )
 }

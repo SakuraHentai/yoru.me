@@ -16,7 +16,7 @@
     "@react-spring/three": "^9.7.3",
     "@react-spring/web": "^9.7.3",
     "@react-three/drei": "^9.80.1",
-    "@react-three/fiber": "^8.13.6",
+    "@react-three/fiber": "^8.15.11",
     "dayjs": "^1.11.9",
     "esbuild": "^0.19.0",
     "gray-matter": "^4.0.3",

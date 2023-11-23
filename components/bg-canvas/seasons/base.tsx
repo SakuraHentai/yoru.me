@@ -4,7 +4,7 @@ import {
   PortalMaterialType,
   RoundedBox,
 } from '@react-three/drei'
-import { Euler, invalidate, useThree } from '@react-three/fiber'
+import { Euler, useThree } from '@react-three/fiber'
 import { ForwardedRef, forwardRef, useCallback, useMemo, useRef } from 'react'
 
 import { DoubleSide, Mesh, Texture } from 'three'
@@ -52,7 +52,7 @@ const SeasonBase = forwardRef(
           if (portalRef.current) {
             portalRef.current.blend = spring.value
             // queue a frame
-            invalidate()
+            // invalidate()
           }
         },
       },
