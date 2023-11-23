@@ -1,10 +1,10 @@
-import { useThree } from '@react-three/fiber'
 import { FC, useEffect, useMemo, useRef } from 'react'
 
 import gsap from 'gsap'
 import { Mesh, Texture, Vector3 } from 'three'
 import { useSnapshot } from 'valtio'
 
+import { useWindowViewport } from '../hooks/use-window-viewport'
 import { bgCanvasState, timelineRange } from '../store/state'
 import SeasonBase from './base'
 
@@ -14,7 +14,7 @@ type Props = {
 const Aki: FC<Props> = ({ map }) => {
   const ref = useRef<Mesh>(null)
   const $rootState = useSnapshot(bgCanvasState)
-  const { viewport } = useThree()
+  const viewport = useWindowViewport()
   const position = useRef(new Vector3(0))
   const portalRotation = useMemo(() => {
     return [0, 0, 0] as [number, number, number]

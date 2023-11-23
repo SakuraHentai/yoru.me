@@ -1,9 +1,10 @@
-import { invalidate, useThree } from '@react-three/fiber'
+import { invalidate } from '@react-three/fiber'
 import { lazy, useEffect } from 'react'
 
 import { useSnapshot } from 'valtio'
 
 import { useSeasonTextures } from './hooks/use-season-textures'
+import { useWindowViewport } from './hooks/use-window-viewport'
 import { advanceTimeline, bgCanvasState } from './store/state'
 
 // import Natsu from './seasons/natsu'
@@ -28,7 +29,7 @@ const Timeline = () => {
   return null
 }
 const FixResizeRender = () => {
-  const { viewport } = useThree()
+  const viewport = useWindowViewport()
 
   useEffect(() => {
     const handle = requestAnimationFrame(() => {

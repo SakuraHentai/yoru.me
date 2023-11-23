@@ -4,11 +4,12 @@ import {
   PortalMaterialType,
   RoundedBox,
 } from '@react-three/drei'
-import { Euler, useThree } from '@react-three/fiber'
+import { Euler } from '@react-three/fiber'
 import { ForwardedRef, forwardRef, useCallback, useMemo, useRef } from 'react'
 
 import { DoubleSide, Mesh, Texture } from 'three'
 
+import { useWindowViewport } from '../hooks/use-window-viewport'
 import {
   bgCanvasState,
   blendNameTypes,
@@ -30,7 +31,7 @@ const SeasonBase = forwardRef(
     { blending, name, texture, portalRotation }: SeasonBaseProps,
     ref: ForwardedRef<Mesh>,
   ) => {
-    const { viewport } = useThree()
+    const viewport = useWindowViewport()
     const portalRef = useRef<PortalMaterialType>(null)
     const args = useMemo(() => {
       const width = viewport.width
