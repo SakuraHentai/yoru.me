@@ -3,52 +3,60 @@ import {
   MeshPortalMaterial,
   PortalMaterialType,
   RoundedBox,
-  useTexture,
 } from '@react-three/drei'
-import { Euler, Vector3, useThree } from '@react-three/fiber'
-import { ForwardedRef, forwardRef, useRef } from 'react'
+import { Euler, invalidate, useThree } from '@react-three/fiber'
+import { ForwardedRef, forwardRef, useCallback, useMemo, useRef } from 'react'
 
-import { DoubleSide, Mesh } from 'three'
-import { useSnapshot } from 'valtio'
+import { DoubleSide, Mesh, Texture } from 'three'
 
 import {
-  BlendNameTypes,
-  bgCanvasRootState,
+  bgCanvasState,
+  blendNameTypes,
   isBlending,
   setBlendName,
-} from '../state'
+} from '../store/state'
 
 type SeasonBaseProps = {
-  name: BlendNameTypes
-  position: Vector3
+  blending: boolean
+  name: blendNameTypes
   // this rotation is the inner mesh rotation
   // not the outer mesh rotation
-  rotation: Euler
-  texture: string
+  portalRotation: Euler
+  texture: Texture
 }
-export type SeasonPositionProps = Pick<SeasonBaseProps, 'position'>
 
 const SeasonBase = forwardRef(
   (
-    { name, texture, position, rotation }: SeasonBaseProps,
+    { blending, name, texture, portalRotation }: SeasonBaseProps,
     ref: ForwardedRef<Mesh>,
   ) => {
-    const $rootState = useSnapshot(bgCanvasRootState)
-    const map = useTexture(texture)
-
     const { viewport } = useThree()
     const portalRef = useRef<PortalMaterialType>(null)
+    const args = useMemo(() => {
+      const width = viewport.width
+      const height = viewport.height
+      return [width / 2, height / 2, 0.2] as [number, number, number]
+    }, [viewport.width, viewport.height])
 
+    const handleClick = useCallback(() => {
+      if (bgCanvasState.timeline >= 1 && !isBlending()) {
+        setBlendName(name)
+      }
+    }, [name])
+
+    // blending effect
     useSpring(
       {
-        value: isBlending(name) ? 1 : 0,
+        value: blending ? 1 : 0,
         onChange({ value: spring }) {
           if (portalRef.current) {
             portalRef.current.blend = spring.value
+            // queue a frame
+            invalidate()
           }
         },
       },
-      [$rootState.blendName],
+      [blending],
     )
 
     return (
@@ -56,23 +64,14 @@ const SeasonBase = forwardRef(
         <RoundedBox
           name={name}
           // will have 4 seasons.
-          args={[
-            (viewport.width - viewport.width / 8) / 2,
-            (viewport.height - viewport.height / 8) / 2,
-            0.2,
-          ]}
-          position={position}
+          args={args}
           ref={ref}
-          onClick={() => {
-            if (bgCanvasRootState.timeline >= 1 && !isBlending()) {
-              setBlendName(name)
-            }
-          }}
+          onClick={handleClick}
         >
           <MeshPortalMaterial ref={portalRef} side={DoubleSide}>
-            <mesh rotation={rotation}>
+            <mesh rotation={portalRotation}>
               <sphereGeometry args={[50, 64, 64]} />
-              <meshBasicMaterial map={map} side={DoubleSide} />
+              <meshBasicMaterial map={texture} side={DoubleSide} />
             </mesh>
             <ambientLight />
           </MeshPortalMaterial>

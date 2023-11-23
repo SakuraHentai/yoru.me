@@ -1,47 +1,59 @@
-import { useProgress } from '@react-three/drei'
-import { useCallback, useEffect } from 'react'
+import { invalidate, useThree } from '@react-three/fiber'
+import { lazy, useEffect } from 'react'
+
+import { useSnapshot } from 'valtio'
 
 import Director from './director'
-import Aki from './seasons/aki'
-import Fuyu from './seasons/fuyu'
-import Haru from './seasons/haru'
-import Natsu from './seasons/natsu'
-import { bgCanvasRootState } from './state'
+import { useSeasonTextures } from './hooks/use-season-textures'
+import { advanceTimeline, bgCanvasState } from './store/state'
 
-const ANIMATION_DURATION = 5e3
-const Scene = () => {
-  const loadingState = useProgress()
+// import Natsu from './seasons/natsu'
+const Haru = lazy(() => import('./seasons/haru'))
+const Natsu = lazy(() => import('./seasons/natsu'))
+const Aki = lazy(() => import('./seasons/aki'))
+const Fuyu = lazy(() => import('./seasons/fuyu'))
 
-  const advance = useCallback(() => {
-    if (bgCanvasRootState.timeline < 1) {
-      bgCanvasRootState.timeline +=
-        ANIMATION_DURATION /
-        ((60 * ANIMATION_DURATION) / 1e3) /
-        ANIMATION_DURATION
-      return requestAnimationFrame(advance)
+const Timeline = () => {
+  const $rootState = useSnapshot(bgCanvasState)
+  useEffect(() => {
+    if (!$rootState.ready) {
+      return
     }
-    return 0
-  }, [])
+    const handle = advanceTimeline()
+    return () => {
+      handle && cancelAnimationFrame(handle)
+    }
+  }, [$rootState.timeline, $rootState.ready])
+
+  return null
+}
+const FixResizeRender = () => {
+  const { viewport } = useThree()
 
   useEffect(() => {
-    let handle: ReturnType<typeof requestAnimationFrame>
-    if (loadingState.loaded > 0 && loadingState.progress === 100) {
-      handle = advance()
-    }
-
+    const handle = requestAnimationFrame(() => {
+      invalidate()
+    })
     return () => {
       cancelAnimationFrame(handle)
     }
-  }, [loadingState])
+  }, [viewport.width, viewport.height])
+
+  return null
+}
+const Scene = () => {
+  const textures = useSeasonTextures()
 
   return (
     <>
-      <Haru />
-      <Natsu />
-      <Aki />
-      <Fuyu />
+      <Haru map={textures.haru} />
+      <Natsu map={textures.natsu} />
+      <Aki map={textures.aki} />
+      <Fuyu map={textures.fuyu} />
       <Director />
-      {/* <axesHelper /> */}
+      {/* <axesHelper args={[5]} /> */}
+      <Timeline />
+      <FixResizeRender />
     </>
   )
 }
