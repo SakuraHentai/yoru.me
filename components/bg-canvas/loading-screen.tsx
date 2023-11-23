@@ -1,13 +1,21 @@
 import { a, useSpring } from '@react-spring/web'
 import { useProgress } from '@react-three/drei'
-import { useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import styles from '../../styles/home.module.scss'
+import { bgCanvasState } from './store/state'
 
-const LoadingScreen = () => {
+type Props = {}
+const LoadingScreen: FC<Props> = () => {
   const loadingState = useProgress()
   const [loaded, setLoaded] = useState(false)
   const [done, setDone] = useState(false)
+
+  useEffect(() => {
+    if (done) {
+      bgCanvasState.ready = true
+    }
+  }, [done])
 
   const [progress] = useSpring(
     {
@@ -49,7 +57,7 @@ const LoadingScreen = () => {
     if (loadingState.loaded > 0 && loadingState.progress === 100) {
       setLoaded(true)
     }
-  }, [loadingState])
+  }, [loadingState.loaded, loadingState.progress])
 
   return (
     <>

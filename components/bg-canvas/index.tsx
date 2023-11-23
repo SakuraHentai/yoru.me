@@ -5,10 +5,10 @@ import { useSnapshot } from 'valtio'
 import styles from '../../styles/home.module.scss'
 import LoadingScreen from './loading-screen'
 import Scene from './scene'
-import { bgCanvasRootState, isBlending, setBlendName } from './state'
+import { bgCanvasState, isBlending, setBlendName } from './store/state'
 
 const CloseBlend = () => {
-  useSnapshot(bgCanvasRootState)
+  useSnapshot(bgCanvasState)
   return (
     <>
       {isBlending() && (
@@ -38,14 +38,7 @@ const CloseBlend = () => {
 const BgCanvas = () => {
   return (
     <>
-      <Canvas
-        frameloop="demand"
-        className={styles.bgCanvas}
-        flat
-        camera={{
-          position: [0, 0, 10],
-        }}
-      >
+      <Canvas frameloop="demand" className={styles.bgCanvas} flat>
         <Scene />
       </Canvas>
       <CloseBlend />

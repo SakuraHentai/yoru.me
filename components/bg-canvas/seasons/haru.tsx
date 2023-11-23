@@ -1,65 +1,79 @@
 import { useThree } from '@react-three/fiber'
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { FC, useEffect, useMemo, useRef } from 'react'
 
 import gsap from 'gsap'
-import { Mesh, Vector3 } from 'three'
+import { Mesh, Texture, Vector3 } from 'three'
 import { useSnapshot } from 'valtio'
 
-import haru from '../../../assets/home/haru.jpg'
-import { bgCanvasRootState, isBlending, timelineRange } from '../state'
+import { bgCanvasState, timelineRange } from '../store/state'
 import SeasonBase from './base'
 
-const Haru = () => {
+type Props = {
+  map: Texture
+}
+const Haru: FC<Props> = ({ map }) => {
   const ref = useRef<Mesh>(null)
+  const $rootState = useSnapshot(bgCanvasState)
   const { viewport } = useThree()
-  const tl = useRef<ReturnType<typeof gsap.timeline>>()
-  const $rootState = useSnapshot(bgCanvasRootState)
-
-  const position = useRef(new Vector3(0, 0, 4))
-
-  // create animation timeline
-  useLayoutEffect(() => {
-    // reset position & rotation for stable motion
-    position.current.x = 0
-    position.current.y = 0
-    position.current.z = 4
-
-    tl.current = gsap.timeline()
-    tl.current
-      .to(position.current, {
-        x: -viewport.width / 2,
-        y: viewport.height / 2,
-        z: 2,
-        duration: 2,
-      })
-      // to center
-      .to(position.current, {
-        x: -viewport.width / 4,
-        y: viewport.height / 4,
-        z: 0,
-        duration: 1.2,
-      })
-      .pause()
-  }, [viewport])
+  const position = useRef(new Vector3(0))
+  const portalRotation = useMemo(() => {
+    return [0, 0, 0] as [number, number, number]
+  }, [])
 
   useEffect(() => {
-    const inView = timelineRange(0 / 4, 1 / 2)
-    if (tl.current && inView && !isBlending()) {
-      tl.current.seek(inView * tl.current.duration())
-      ref.current?.position.set(
-        position.current.x,
-        position.current.y,
-        position.current.z,
-      )
-    }
-  }, [$rootState.timeline])
+    bgCanvasState.ready = true
+  }, [])
+
+  const tl = useMemo<ReturnType<typeof gsap.timeline>>(() => {
+    return (
+      gsap
+        .timeline({
+          defaults: {
+            ease: 'power2.inOut',
+          },
+        })
+        .fromTo(
+          position.current,
+          {
+            x: 0,
+            y: 0,
+            z: 0,
+          },
+          {
+            x: -viewport.width / 2,
+            y: viewport.height / 2,
+            z: -2,
+            duration: 2,
+          },
+        )
+        // to center
+        .to(position.current, {
+          x: -viewport.width / 2 + viewport.width / 4,
+          y: viewport.height / 2 - viewport.height / 4,
+          z: 0,
+          duration: 1,
+        })
+        .pause()
+    )
+  }, [viewport.width, viewport.height])
+
+  useEffect(() => {
+    const percentage = timelineRange(0, 1 / 2)
+    tl.seek(percentage * tl.duration())
+
+    ref.current?.position.set(
+      position.current.x,
+      position.current.y,
+      position.current.z,
+    )
+  }, [$rootState.timeline, tl])
 
   return (
     <SeasonBase
       name="haru"
-      texture={haru.src}
-      position={position.current}
-      rotation={[0, Math.PI * -2.7, 0]}
+      blending={$rootState.blend.name === 'haru'}
+      texture={map}
+      portalRotation={portalRotation}
       ref={ref}
     />
   )
