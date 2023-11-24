@@ -2,13 +2,12 @@ import { useEffect, useMemo, useRef } from 'react'
 
 import gsap from 'gsap'
 import { Euler, Vector3 } from 'three'
-import { useSnapshot } from 'valtio'
+import { subscribe } from 'valtio'
 
 import { bgCanvasState, timelineRange } from '../store/state'
 
 const useAnimationEffect = (callback: (position: Vector3) => void) => {
   const cameraMotionPosition = useRef(new Vector3(0))
-  const $rootState = useSnapshot(bgCanvasState)
 
   const tl = useMemo<ReturnType<typeof gsap.timeline>>(() => {
     const endPosition = new Vector3(0, 0, 8)
@@ -54,11 +53,13 @@ const useAnimationEffect = (callback: (position: Vector3) => void) => {
   }, [])
 
   useEffect(() => {
-    const percentage = timelineRange(0, 1)
-    tl.seek(percentage * tl.duration())
+    return subscribe(bgCanvasState.clock, () => {
+      const percentage = timelineRange(0, 1)
+      tl.seek(percentage * tl.duration())
 
-    callback(cameraMotionPosition.current)
-  }, [$rootState.timeline, tl, callback])
+      callback(cameraMotionPosition.current)
+    })
+  }, [tl, callback])
 }
 
 export default useAnimationEffect

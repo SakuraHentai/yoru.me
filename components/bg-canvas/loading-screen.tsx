@@ -13,7 +13,7 @@ const LoadingScreen: FC<Props> = () => {
 
   useEffect(() => {
     if (done) {
-      bgCanvasState.ready = true
+      bgCanvasState.loaded.ready = true
     }
   }, [done])
 
@@ -28,11 +28,6 @@ const LoadingScreen: FC<Props> = () => {
         if (loaded) {
           await next({
             o: 0,
-            config: {
-              mass: 1,
-              tension: 160,
-              friction: 30,
-            },
           })
           setDone(true)
         }

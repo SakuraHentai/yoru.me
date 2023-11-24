@@ -1,8 +1,8 @@
 import { FC, useEffect, useMemo, useRef } from 'react'
 
 import gsap from 'gsap'
-import { Mesh, Texture, Vector3 } from 'three'
-import { useSnapshot } from 'valtio'
+import { Euler, Mesh, Texture, Vector3 } from 'three'
+import { subscribe } from 'valtio'
 
 import { useWindowViewport } from '../hooks/use-window-viewport'
 import { bgCanvasState, timelineRange } from '../store/state'
@@ -13,11 +13,10 @@ type Props = {
 }
 const Aki: FC<Props> = ({ map }) => {
   const ref = useRef<Mesh>(null)
-  const $rootState = useSnapshot(bgCanvasState)
   const viewport = useWindowViewport()
   const position = useRef(new Vector3(0))
   const portalRotation = useMemo(() => {
-    return [0, 0, 0] as [number, number, number]
+    return new Euler(0)
   }, [])
 
   const tl = useMemo<ReturnType<typeof gsap.timeline>>(() => {
@@ -69,20 +68,21 @@ const Aki: FC<Props> = ({ map }) => {
   }, [viewport.width, viewport.height])
 
   useEffect(() => {
-    const percentage = timelineRange(1 / 5, 1 / 2)
-    tl.seek(percentage * tl.duration())
+    return subscribe(bgCanvasState.clock, () => {
+      const percentage = timelineRange(1 / 5, 1 / 2)
+      tl.seek(percentage * tl.duration())
 
-    ref.current?.position.set(
-      position.current.x,
-      position.current.y,
-      position.current.z,
-    )
-  }, [$rootState.timeline, tl])
+      ref.current?.position.set(
+        position.current.x,
+        position.current.y,
+        position.current.z,
+      )
+    })
+  }, [tl])
 
   return (
     <SeasonBase
       name="aki"
-      blending={$rootState.blend.name === 'aki'}
       texture={map}
       portalRotation={portalRotation}
       ref={ref}

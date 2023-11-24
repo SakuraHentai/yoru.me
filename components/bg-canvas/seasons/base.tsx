@@ -5,20 +5,23 @@ import {
   RoundedBox,
 } from '@react-three/drei'
 import { Euler } from '@react-three/fiber'
-import { ForwardedRef, forwardRef, useCallback, useMemo, useRef } from 'react'
+import {
+  ForwardedRef,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
 import { DoubleSide, Mesh, Texture } from 'three'
+import { subscribe } from 'valtio'
 
 import { useWindowViewport } from '../hooks/use-window-viewport'
-import {
-  bgCanvasState,
-  blendNameTypes,
-  isBlending,
-  setBlendName,
-} from '../store/state'
+import { bgCanvasState, blendNameTypes } from '../store/state'
 
 type SeasonBaseProps = {
-  blending: boolean
   name: blendNameTypes
   // this rotation is the inner mesh rotation
   // not the outer mesh rotation
@@ -28,36 +31,42 @@ type SeasonBaseProps = {
 
 const SeasonBase = forwardRef(
   (
-    { blending, name, texture, portalRotation }: SeasonBaseProps,
+    { name, texture, portalRotation }: SeasonBaseProps,
     ref: ForwardedRef<Mesh>,
   ) => {
     const viewport = useWindowViewport()
     const portalRef = useRef<PortalMaterialType>(null)
+    const [isBlending, setIsBlending] = useState(false)
     const args = useMemo(() => {
       const width = viewport.width
       const height = viewport.height
       return [width / 2, height / 2, 0.2] as [number, number, number]
     }, [viewport.width, viewport.height])
 
+    useEffect(() => {
+      return subscribe(bgCanvasState.blend, () => {
+        setIsBlending(bgCanvasState.blend.name === name)
+      })
+    }, [name])
+
     const handleClick = useCallback(() => {
-      if (bgCanvasState.timeline >= 1 && !isBlending()) {
-        setBlendName(name)
+      // if is others blending, ignore it.
+      if (bgCanvasState.clock.elapsed >= 1 && bgCanvasState.blend.name === '') {
+        bgCanvasState.blend.name = name
       }
     }, [name])
 
     // blending effect
     useSpring(
       {
-        value: blending ? 1 : 0,
+        value: isBlending ? 1 : 0,
         onChange({ value: spring }) {
           if (portalRef.current) {
             portalRef.current.blend = spring.value
-            // queue a frame
-            // invalidate()
           }
         },
       },
-      [blending],
+      [isBlending],
     )
 
     return (

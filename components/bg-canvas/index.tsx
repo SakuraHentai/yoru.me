@@ -1,17 +1,23 @@
 import { Canvas } from '@react-three/fiber'
+import { useEffect, useState } from 'react'
 
-import { useSnapshot } from 'valtio'
+import { subscribe } from 'valtio'
 
 import styles from '../../styles/home.module.scss'
 import LoadingScreen from './loading-screen'
 import Scene from './scene'
-import { bgCanvasState, isBlending, setBlendName } from './store/state'
+import { bgCanvasState, setBlendName } from './store/state'
 
 const CloseBlend = () => {
-  useSnapshot(bgCanvasState)
+  const [showClose, setShowClose] = useState(false)
+  useEffect(() => {
+    return subscribe(bgCanvasState.blend, () => {
+      setShowClose(bgCanvasState.blend.name !== '')
+    })
+  }, [])
   return (
     <>
-      {isBlending() && (
+      {showClose && (
         <div
           className={styles.closeBlend}
           onClick={() => {

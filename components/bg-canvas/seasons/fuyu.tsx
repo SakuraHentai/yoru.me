@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo, useRef } from 'react'
 
 import gsap from 'gsap'
 import { Euler, Mesh, Texture, Vector3 } from 'three'
-import { useSnapshot } from 'valtio'
+import { subscribe } from 'valtio'
 
 import { useWindowViewport } from '../hooks/use-window-viewport'
 import { bgCanvasState, timelineRange } from '../store/state'
@@ -13,12 +13,11 @@ type Props = {
 }
 const Fuyu: FC<Props> = ({ map }) => {
   const ref = useRef<Mesh>(null)
-  const $rootState = useSnapshot(bgCanvasState)
   const viewport = useWindowViewport()
   const position = useRef(new Vector3(0))
   const rotation = useRef(new Euler(0))
   const portalRotation = useMemo(() => {
-    return new Euler(0, 0, 0)
+    return new Euler(0, Math.PI / 1.1, 0)
   }, [])
 
   const tl = useMemo<ReturnType<typeof gsap.timeline>>(() => {
@@ -69,25 +68,26 @@ const Fuyu: FC<Props> = ({ map }) => {
   }, [viewport.width, viewport.height])
 
   useEffect(() => {
-    const percentage = timelineRange(1 / 4, 1 / 2)
-    tl.seek(percentage * tl.duration())
+    return subscribe(bgCanvasState.clock, () => {
+      const percentage = timelineRange(1 / 4, 1 / 2)
+      tl.seek(percentage * tl.duration())
 
-    ref.current?.position.set(
-      position.current.x,
-      position.current.y,
-      position.current.z,
-    )
-    ref.current?.rotation.set(
-      rotation.current.x,
-      rotation.current.y,
-      rotation.current.z,
-    )
-  }, [$rootState.timeline, tl])
+      ref.current?.position.set(
+        position.current.x,
+        position.current.y,
+        position.current.z,
+      )
+      ref.current?.rotation.set(
+        rotation.current.x,
+        rotation.current.y,
+        rotation.current.z,
+      )
+    })
+  }, [tl])
 
   return (
     <SeasonBase
       name="fuyu"
-      blending={$rootState.blend.name === 'fuyu'}
       texture={map}
       portalRotation={portalRotation}
       ref={ref}

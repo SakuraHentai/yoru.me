@@ -17,14 +17,15 @@ const Director = lazy(() => import('./director'))
 const Timeline = () => {
   const $rootState = useSnapshot(bgCanvasState)
   useEffect(() => {
-    if (!$rootState.ready) {
+    if (!$rootState.loaded.ready) {
       return
     }
     const handle = advanceTimeline()
+    invalidate()
     return () => {
       handle && cancelAnimationFrame(handle)
     }
-  }, [$rootState.timeline, $rootState.ready])
+  }, [$rootState.clock.elapsed, $rootState.loaded.ready])
 
   return null
 }
@@ -33,7 +34,7 @@ const FixResizeRender = () => {
 
   useEffect(() => {
     const handle = requestAnimationFrame(() => {
-      invalidate()
+      bgCanvasState.clock.elapsed += 0.000001
     })
     return () => {
       cancelAnimationFrame(handle)
@@ -46,7 +47,7 @@ const FixResizeRender = () => {
 const FixNavigateBack = () => {
   // replay animation when enter page.
   useEffect(() => {
-    bgCanvasState.timeline = 0
+    bgCanvasState.clock.elapsed = 0.000001
   }, [])
 
   return null
