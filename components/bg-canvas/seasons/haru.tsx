@@ -19,6 +19,11 @@ const Haru: FC<Props> = ({ map }) => {
     return new Euler(0, -Math.PI / 1.8, 0)
   }, [])
 
+  // we start the animation immediately when sprint season rendered
+  useEffect(() => {
+    bgCanvasState.loaded.ready = true
+  }, [])
+
   const tl = useMemo<ReturnType<typeof gsap.timeline>>(() => {
     return (
       gsap

@@ -3,19 +3,12 @@ import { useProgress } from '@react-three/drei'
 import { FC, useEffect, useState } from 'react'
 
 import styles from '../../styles/home.module.scss'
-import { bgCanvasState } from './store/state'
 
 type Props = {}
 const LoadingScreen: FC<Props> = () => {
   const loadingState = useProgress()
   const [loaded, setLoaded] = useState(false)
   const [done, setDone] = useState(false)
-
-  useEffect(() => {
-    if (done) {
-      bgCanvasState.loaded.ready = true
-    }
-  }, [done])
 
   const [progress] = useSpring(
     {
