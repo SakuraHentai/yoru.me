@@ -54,3 +54,8 @@ export const advanceTimeline = () => {
     bgCanvasState.clock.elapsed = (t - firstFrameTime) / ANIMATION_DURATION
   })
 }
+
+export const resetTimeline = () => {
+  firstFrameTime = 0
+  bgCanvasState.clock.elapsed = 0
+}

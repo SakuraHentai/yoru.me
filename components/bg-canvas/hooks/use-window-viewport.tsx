@@ -7,7 +7,7 @@ import { useMemo } from 'react'
  * and we move camera for animation effect.
  *
  */
-export const useWindowViewport = (): { width: number; height: number } => {
+export const useWindowViewport = () => {
   const { size } = useThree()
 
   const viewport = useMemo(() => {

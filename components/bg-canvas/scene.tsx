@@ -5,7 +5,7 @@ import { useSnapshot } from 'valtio'
 
 import { useSeasonTextures } from './hooks/use-season-textures'
 import { useWindowViewport } from './hooks/use-window-viewport'
-import { advanceTimeline, bgCanvasState } from './store/state'
+import { advanceTimeline, bgCanvasState, resetTimeline } from './store/state'
 
 // import Natsu from './seasons/natsu'
 const Haru = lazy(() => import('./seasons/haru'))
@@ -47,7 +47,7 @@ const FixResizeRender = () => {
 const FixNavigateBack = () => {
   // replay animation when enter page.
   useEffect(() => {
-    bgCanvasState.clock.elapsed = 0.000001
+    resetTimeline()
   }, [])
 
   return null
