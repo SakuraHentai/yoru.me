@@ -40,24 +40,17 @@ export const timelineRange = (from: number, distance: number) => {
 }
 
 const ANIMATION_DURATION = 6e3
-const FPS_DELTA = 1e3 / 60 // lock 60 fps
-const TIME_PER_FRAME =
-  ANIMATION_DURATION / ((60 * ANIMATION_DURATION) / 1e3) / ANIMATION_DURATION
 
-let prevFrameTime = 0
+let firstFrameTime = 0
 export const advanceTimeline = () => {
   if (bgCanvasState.clock.elapsed >= 1) {
     return 0
   }
   return requestAnimationFrame((t) => {
-    let delta = FPS_DELTA
-    if (!prevFrameTime) {
-      prevFrameTime = t
-    } else {
-      delta = t - prevFrameTime
+    if (!firstFrameTime) {
+      firstFrameTime = t
     }
 
-    prevFrameTime = t
-    bgCanvasState.clock.elapsed += (delta / FPS_DELTA) * TIME_PER_FRAME
+    bgCanvasState.clock.elapsed = (t - firstFrameTime) / ANIMATION_DURATION
   })
 }
