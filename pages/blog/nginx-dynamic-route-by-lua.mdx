@@ -1,0 +1,173 @@
+export const meta = {
+  title: 'Nginx 中使用 Lua 动态配置',
+  keywords: 'nginx, lua, dynamic route',
+  description: 'nginx中使用lua动态配置各产品路由',
+  date: '2023-12-20',
+  tags: ['nginx', 'lua'],
+  summary: '朋友公司清退所有人员, 当初冗余的前端机子需要进行整合, 涉及到什么呢? 点进来看看吧~',
+}
+
+import PostLayout from 'components/post-layout'
+import Img from 'components/mdx/img'
+
+<Img
+  src="/weibo/large/6708d6c2gy1hl04no2c7ej210c0ie7vy.jpg"
+  alt="nginx proxy"
+  width={1308}
+  height={662}
+/>
+
+### 业务背景
+
+业务是 SaaS 产品, 站点标识格式为: `uid.(p.domain){n}.com`, 客户可自由绑定域名到自己站点. 
+由于国内特殊原因, 需有境外/境内分别配置, 所以数据库使用 redis 只读实例放在对应代理机.
+
+初期考虑被攻击情况, 所以每个产品分别有境内/境外代理机. 当境内被攻击时, 由 DNSPod 检测某路径是否可用而切换到境外代理机.
+
+单独产品部署时, 原理很简单, 只需要获取 redis 中 Hash数据 `产品标识:绑定域名`-`uid`, 获取 `uid` 之后, 拼接对应产品后缀, 如 `uid.p1.domain.com`, 设置到 `proxy header` 即可
+```lua
+ngx.var.realhost = uid .. domainAffix
+```
+```bash
+proxy_set_header Host $realhost;
+```
+
+但由于现环境原因, 需要把所有产品只保留一个境内/境外代理机, 这需要考虑不同产品的`标识后缀`, `日志Index`等.
+
+### 开始整合
+
+首先需要获取到域名对应绑定的平台, 按照流量大小排了个序, 放在 `config.platforms` 中
+```lua
+platforms = {'p1', 'p2', 'p3'}
+-- 当初想直接使用 platformAffix 的 key, 结果 lua 的 pair 出来的顺序是不固定的, 就放弃了
+platformAffix = {
+  p1 = '.p1.domain.com',
+  p2 = '.p2.domain.com',
+  p3 = '.p3.domain.com'
+}
+```
+
+下面获取对应平台, 使用 host 参数而不直接使用 ngx.var.host, 是因为 ssl 阶段无法获取 host, 而是 client_hello 中的 server_name, 这样就可以复用函数
+
+```lua
+function getRecordPlatform(host)
+  -- nginx.conf 中定义的 `lua_shared_dict platformCache 10m` 缓存
+  -- 避免频繁查询 redis
+  local platformCache = ngx.shared.platformCache
+
+  local platform = platformCache:get(host)
+
+  if platform then
+    return platform
+  end
+
+  local red = redis:new(config.redis)
+
+  -- 避免在 lua for loop 提交请求到 redis
+  -- 直接使用 redis script 查询完返来.
+  local res, err = red:eval([[
+    for i=1,#ARGV do 
+      local platform = ARGV[i]
+      local host = KEYS[1]
+      local res, err = redis.call('exists', platform .. ':' .. host)
+
+      if res == 1 then
+        return platform
+      end
+    end
+
+    return nil
+  ]], 1, host, table.unpack(config.platforms))
+
+  if not res then
+    ngx.log(ngx.ERR, 'get record platform failed: ', err)
+    ngx.exit(ngx.HTTP_FORBIDDEN)
+  end
+
+  -- set cache, expire after one day
+  platformCache:set(host, res, 60 * 60 * 24)
+  return res
+  
+end
+```
+
+查询域名绑定的对应产品后, 再获取 `uid/cert pem/cert key`, 使用 `uid` 设置 Host, 使用 `cert pem/cert key` 调用 `ssl_certificate_by_lua_file` 设置证书
+```lua
+-- getUID 中 调用 getRecordPlatform 获取 platform 并设置 ngx.var
+local uid = getUID(host)
+
+if uid then
+  ngx.var.realhost = uid .. config.platformAffix[ngx.var.platform]
+  ngx.var.uid = uid
+end
+
+```
+至此, 需要的变量都已经获取完毕, 在 nginx 配置 `rewrite_by_lua_file xxxxx.lua` 即可使用设置的变量, 而为什么要放在 rewrite? 看看 [Nginx Phases](https://nginx.org/en/docs/dev/development_guide.html#http_phases) 吧
+
+<Img
+  src="/weibo/large/6708d6c2gy1hl07yt548cj20rx0pagqs.jpg"
+  alt="nginx lua directives"
+  width={1005}
+  height={910}
+/>
+
+### 日志
+
+由于以前都是硬编码到 `access_log`, 如:
+```text
+log_format es_log '$remote_addr || $http_host || $request_uri || $http_referer || $http_user_agent || $upstream_response_time || $status
+
+map $status $log2es {
+  ~^[23]  1;
+  default 0;
+}
+
+map $status $log2file {
+  ~^[23]  0;
+  default 1;
+}
+
+# 成功的请求才去日志服务器 (根据对应tag划分)
+# 失败的请求保留在本机, 配合 fail2ban 封IP
+access_log syslog:server=es-server,tag=p(n) es_log if=$log2es;
+```
+
+但多产品整合后, 需要在 `log_format` 加入对应产品, 由 logstash 再落库
+```text
+# 根据产品, 增加 log_tag
+map $platform $log_tag {
+  p1 p1index;
+  p2 p2index;
+  p3 p3index;
+}
+
+# 追加 log tag 给 logstash 分 index
+log_format es_log '$remote_addr || $http_host || $request_uri || $http_referer || $http_user_agent || $upstream_response_time || $status || $log_tag';
+```
+Logstash pipeline:
+```yml
+# ...
+filter {
+  # ...
+  grok {
+    remove_field => ["message"]
+    match => { "message" => "%{IP:ip} \|\| %{HOSTNAME:host} \|\| %{URIPATH:requestURI} \|\| %{GREEDYDATA:referer} \|\| %{GREEDYDATA:ua} \|\| %{NUMBER:responseTime} \|\| %{NUMBER:statusCode} \|\| %{WORD:index}" }
+  }
+  # ...
+}
+output {
+  elasticsearch {
+    # ...
+    index => "%{[index]}-logs-%{+YYYY-MM}"
+    # ...
+  }
+}
+```
+
+### 题外话
+
+之前无聊也用 Go 为 [Caddy](https://caddyserver.com/) 实现过一个插件, 原理也是差不多的. 放在了 [Github](https://github.com/SakuraHentai/caddy-dynamic-routing) 🎉
+
+-- Fin --
+
+export default ({ children }) => <PostLayout meta={meta}>{children}</PostLayout>
