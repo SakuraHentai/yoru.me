@@ -22,9 +22,13 @@ import Img from 'components/mdx/img'
 业务是 SaaS 产品, 站点标识格式为: `uid.(p.domain){n}.com`, 客户可自由绑定域名到自己站点. 
 由于国内特殊原因, 需有境外/境内分别配置, 所以数据库使用 redis 只读实例放在对应代理机.
 
+
 初期考虑被攻击情况, 所以每个产品分别有境内/境外代理机. 当境内被攻击时, 由 DNSPod 检测某路径是否可用而切换到境外代理机.
 
 单独产品部署时, 原理很简单, 只需要获取 redis 中 Hash数据 `产品标识:绑定域名`-`uid`, 获取 `uid` 之后, 拼接对应产品后缀, 如 `uid.p1.domain.com`, 设置到 `proxy header` 即可
+
+> 例如: www.example.com -> uid.p1.domain.com -> 业务机, redis 中 hash key: p1:www.example.com
+
 ```lua
 ngx.var.realhost = uid .. domainAffix
 ```
