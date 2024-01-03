@@ -54,11 +54,10 @@ img = cv2.imread("gray.png")
 # 灰度
 img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-# 将黑字转白 ( > 40 = 255 ), 其余转黑 ( < 40 = 0 )
-_, img = cv2.threshold(img, 40, 255, cv2.THRESH_BINARY_INV)
+# ref: http://opencv.jp/opencv-2svn/cpp/miscellaneous_image_transformations.html?highlight=threshold#threshold
+# 将黑字保持, 其它转白
+_, img = cv2.threshold(img, 40, 255, cv2.THRESH_BINARY)
 
-# 反转一下
-img = cv2.bitwise_not(img)
 cv2.imwrite("final.png", img)
 ```
 <Img
