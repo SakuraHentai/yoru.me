@@ -20,7 +20,7 @@ import PostLayout from 'components/post-layout'
 
 ### 开始试手
 
-写游戏工具第一步当然是打开 Cheat Engine, 载入进程. 然而发现怎么找都找不到相关数据, 合理怀疑是Webview, 也懒得开 Wireshark 求证了, 换过一种思路, 便想到了 OCR.
+写游戏工具第一步当然是打开 Cheat Engine, 载入进程. 然而发现怎么找都找不到相关数据, 合理怀疑是 Webview, 也懒得开 Wireshark 求证了, 换过一种思路, 便想到了 OCR.
 
 ### 截图
 
@@ -69,7 +69,7 @@ cv2.imwrite("final.png", img)
   height={320}
 />
 
-之后就可以用 tesseract 识别一下, 然而效果并不美妙...
+之后就可以用 `tesseract` 识别一下, 然而效果并不美妙...
 ```python
 # psm: tesseract --help-extra
 numbers = pytesseract.image_to_string(img, config='--psm 6 digits -c tessedit_char_whitelist="123456789"')
@@ -97,7 +97,7 @@ for contour in contours:
   height={433}
 />
 
-然而在循环中调用 Tesseract 太慢了, 思考了一下, 将格子留白位尽量去掉, 然后组合成行, 再一次过识别.
+然而在循环中调用 `tesseract` 太慢了, 思考了一下, 将格子留白位尽量去掉, 然后组合成行, 再一次过识别.
 ```python
 # ...
 numbers = []
