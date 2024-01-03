@@ -205,24 +205,45 @@
 
 .pager {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin: 1em 0;
   a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 6em;
+    flex: 1;
     height: 2em;
-    background: #92737b;
-    color: #fff;
+    color: #a17d5f;
     font-size: 1.2em;
     text-align: center;
     transition: 0.3s;
+    -webkit-tap-highlight-color: transparent;
     &:hover {
       color: #000;
     }
   }
+}
+.pagerNext {
+  &:active {
+    transform: translateX(5px);
+  }
+}
+.pagerPrev {
+  &:active {
+    transform: translateX(-5px);
+  }
+}
+.pagerInner {
+  display: flex;
+  background: rgba(247, 247, 247, 1);
+  width: 12em;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4em;
+}
+.pagerDivider {
+  width: 1px;
+  background: #fbe8d9;
 }
 
 .postCard {
