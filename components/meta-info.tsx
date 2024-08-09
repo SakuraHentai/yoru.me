@@ -48,8 +48,8 @@ const MetaInfo: React.FC<Props> = ({ meta }) => {
             referrerPolicy="no-referrer"
           />
         )}
-        <GoogleAnalyzer />
       </Head>
+      <GoogleAnalyzer />
       <MpShare
         title={metaInfo.title}
         desc={metaInfo.description}
