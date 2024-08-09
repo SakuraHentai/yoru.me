@@ -3,6 +3,7 @@ import Head from 'next/head'
 import React from 'react'
 
 import avatar from '../assets/avatar.png'
+import { GoogleAnalyzer } from './google-analyzer'
 import MpShare from './mp-share'
 
 export type MetaProps = {
@@ -48,6 +49,7 @@ const MetaInfo: React.FC<Props> = ({ meta }) => {
           />
         )}
       </Head>
+      <GoogleAnalyzer />
       <MpShare
         title={metaInfo.title}
         desc={metaInfo.description}
