@@ -68,6 +68,9 @@ dependencies:
   three:
     specifier: ^0.176.0
     version: 0.176.0
+  ts-pattern:
+    specifier: ^5.7.0
+    version: 5.7.0
   valtio:
     specifier: ^2.1.5
     version: 2.1.5(@types/react@19.1.4)(react@19.1.0)
@@ -6959,6 +6962,10 @@ packages:
       typescript: 5.8.3
       yargs-parser: 21.1.1
     dev: true
+
+  /ts-pattern@5.7.0:
+    resolution: {integrity: sha512-0/FvIG4g3kNkYgbNwBBW5pZBkfpeYQnH+2AA3xmjkCAit/DSDPKmgwC3fKof4oYUq6gupClVOJlFl+939VRBMg==}
+    dev: false
 
   /tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}

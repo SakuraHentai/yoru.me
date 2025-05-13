@@ -1,14 +1,15 @@
 'use client'
 
 import { Canvas } from '@react-three/fiber'
-import { useEffect, useState } from 'react'
+import { lazy, memo, useEffect, useState } from 'react'
 
 import { subscribe } from 'valtio'
 
 import styles from '../../styles/home.module.scss'
 import LoadingScreen from './loading-screen'
-import Scene from './scene'
 import { bgCanvasState, setBlendName } from './store/state'
+
+const Scene = lazy(() => import('./scene'))
 
 const CloseBlend = () => {
   const [showClose, setShowClose] = useState(false)
@@ -45,7 +46,7 @@ const CloseBlend = () => {
   )
 }
 
-const BgCanvas = () => {
+const BgCanvas = memo(() => {
   return (
     <>
       <Canvas frameloop="demand" className={styles.bgCanvas} flat>
@@ -55,6 +56,6 @@ const BgCanvas = () => {
       <LoadingScreen />
     </>
   )
-}
+})
 
 export default BgCanvas

@@ -3,7 +3,8 @@
 import { useProgress } from '@react-three/drei'
 import { FC, useEffect, useState } from 'react'
 
-import { motion, useSpring } from 'motion/react'
+import { animate, motion, useMotionValue } from 'motion/react'
+import { match } from 'ts-pattern'
 
 import styles from '../../styles/home.module.scss'
 
@@ -11,47 +12,58 @@ type Props = {}
 const LoadingScreen: FC<Props> = () => {
   const loadingState = useProgress()
   const [done, setDone] = useState(false)
+  const [progress, setProgress] = useState(0)
 
-  const v = useSpring(0, {
-    mass: 100,
-    damping: 100,
-    stiffness: 10,
-  })
-  const o = useSpring(100, {
-    mass: 5,
-    damping: 100,
-    stiffness: 600,
-  })
+  const v = useMotionValue(0)
+
+  const o = useMotionValue(1)
 
   useEffect(() => {
-    if (loadingState.loaded > 0 && loadingState.progress === 100) {
-      o.set(0)
-      v.stop()
-      o.on('animationComplete', () => {
-        setDone(true)
+    const animation = match(
+      loadingState.loaded > 0 && loadingState.progress === 100,
+    )
+      .with(true, () => {
+        // Done
+        return animate(v, 100, {
+          ease: 'easeOut',
+          duration: 1.2,
+          onUpdate(v) {
+            setProgress(Math.floor(v))
+          },
+          onComplete() {
+            animate(o, 0, {
+              duration: 0.5,
+              onComplete() {
+                setDone(true)
+              },
+            })
+          },
+        })
       })
-    }
-  }, [loadingState.loaded, loadingState.progress, o, v])
-
-  useEffect(() => {
-    const unsubscribe = v.on('change', (v) => {
-      console.log(v.toFixed(0))
-    })
-
-    v.set(100)
+      .otherwise(() => {
+        // Loading
+        return animate(v, 100, {
+          ease: [0, 0.95, 0.45, 0.99],
+          duration: 60,
+          onUpdate(v) {
+            setProgress(Math.floor(v))
+          },
+          onComplete() {
+            console.log(`done`)
+          },
+        })
+      })
 
     return () => {
-      unsubscribe()
+      animation.stop()
     }
-  }, [v])
+  }, [v, o, loadingState.progress, loadingState.loaded])
 
   return (
     <>
       {!done && (
         <motion.div className={styles.canvasLoading} style={{ opacity: o }}>
-          <motion.span className="progress">
-            {`${v.get().toFixed(0)} %`}
-          </motion.span>
+          <span className="progress">{`${progress} %`}</span>
         </motion.div>
       )}
     </>
