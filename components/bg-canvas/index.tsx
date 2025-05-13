@@ -1,3 +1,5 @@
+'use client'
+
 import { Canvas } from '@react-three/fiber'
 import { useEffect, useState } from 'react'
 
@@ -10,11 +12,13 @@ import { bgCanvasState, setBlendName } from './store/state'
 
 const CloseBlend = () => {
   const [showClose, setShowClose] = useState(false)
+
   useEffect(() => {
     return subscribe(bgCanvasState.blend, () => {
       setShowClose(bgCanvasState.blend.name !== '')
     })
   }, [])
+
   return (
     <>
       {showClose && (

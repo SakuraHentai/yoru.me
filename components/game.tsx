@@ -1,4 +1,5 @@
-import { a, useSprings } from '@react-spring/web'
+'use client'
+
 import { useCallback, useMemo, useRef, useState } from 'react'
 
 import styles from '../styles/game.module.scss'
@@ -9,39 +10,11 @@ const Loading = () => {
     return 'Loading...'.split('')
   }, [])
 
-  const [springs, api] = useSprings(loadingText.length, (i) => ({
-    y: 0,
-  }))
-
-  useIsomorphicLayoutEffect(() => {
-    let handler: ReturnType<typeof setTimeout>
-    const run = () => {
-      api.start((i) => ({
-        from: { y: 0 },
-        y: 1,
-        delay: i * 100,
-      }))
-      handler = setTimeout(run, 2e3)
-    }
-
-    run()
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [])
-
   return (
     <div className={styles.loading}>
-      {springs.map((prop, i) => (
-        <a.span
-          key={i}
-          style={{
-            y: prop.y.to([0, 0.5, 1], [0, 1, 0]).to((y) => -6 * y),
-          }}
-        >
-          {loadingText[i]}
-        </a.span>
-      ))}
+      {loadingText.map((char, idx) => {
+        return <span key={`${char}-${idx}`}>{char}</span>
+      })}
     </div>
   )
 }
@@ -51,11 +24,12 @@ const Game = () => {
   const gameWrapper = 'yoru'
   const [loading, setLoading] = useState(true)
   const needGameModule = useRef(true)
-  const gameModule = useRef<{ init: (parent: string) => Phaser.Game }>()
-  const gameInstance = useRef<Phaser.Game>()
+  const gameModule = useRef<{ init: (parent: string) => Phaser.Game }>(null)
+  const gameInstance = useRef<Phaser.Game>(null)
 
   // load game module
   const loadGame = useCallback(async () => {
+    debugger
     if (needGameModule.current) {
       needGameModule.current = false
       gameModule.current = await import('../game/index')
@@ -74,7 +48,7 @@ const Game = () => {
     })
     return () => {
       gameInstance.current?.destroy(true)
-      gameInstance.current = undefined
+      gameInstance.current = null
     }
   }, [])
 

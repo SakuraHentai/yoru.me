@@ -1,16 +1,12 @@
-'use client'
-
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
 import styles from '../styles/page404.module.scss'
 
-const Game = dynamic(() => import('../components/game'), {
-  ssr: false,
-})
+const Game = dynamic(() => import('../components/game'), {})
 
-export const generateMetadata = async () => {
+export async function generateMetadata() {
   return {
     title: 'You found many rabbits!',
   }

@@ -34,7 +34,7 @@ const Home: NextPage = () => {
   return (
     <>
       <div className={styles.home}>
-        {/* <BgCanvas /> */}
+        <BgCanvas />
         <header className={styles.header}>
           <nav className={styles.nav}>
             <ul>

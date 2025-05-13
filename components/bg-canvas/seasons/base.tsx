@@ -1,10 +1,6 @@
 import { useSpring } from '@react-spring/three'
-import {
-  MeshPortalMaterial,
-  PortalMaterialType,
-  RoundedBox,
-} from '@react-three/drei'
-import { Euler } from '@react-three/fiber'
+import { MeshPortalMaterial, RoundedBox } from '@react-three/drei'
+import { Euler, type ThreeElements } from '@react-three/fiber'
 import {
   ForwardedRef,
   forwardRef,
@@ -35,7 +31,7 @@ const SeasonBase = forwardRef(
     ref: ForwardedRef<Mesh>,
   ) => {
     const viewport = useWindowViewport()
-    const portalRef = useRef<PortalMaterialType>(null)
+    const portalRef = useRef<ThreeElements['portalMaterialImpl']>(null)
     const [isBlending, setIsBlending] = useState(false)
     const args = useMemo(() => {
       const width = viewport.width
@@ -78,6 +74,7 @@ const SeasonBase = forwardRef(
           ref={ref}
           onClick={handleClick}
         >
+          {/* @ts-ignore */}
           <MeshPortalMaterial ref={portalRef} side={DoubleSide}>
             <mesh rotation={portalRotation}>
               <sphereGeometry args={[50, 64, 64]} />

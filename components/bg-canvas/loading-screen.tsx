@@ -1,60 +1,58 @@
-import { a, useSpring } from '@react-spring/web'
+'use client'
+
 import { useProgress } from '@react-three/drei'
 import { FC, useEffect, useState } from 'react'
+
+import { motion, useSpring } from 'motion/react'
 
 import styles from '../../styles/home.module.scss'
 
 type Props = {}
 const LoadingScreen: FC<Props> = () => {
   const loadingState = useProgress()
-  const [loaded, setLoaded] = useState(false)
   const [done, setDone] = useState(false)
 
-  const [progress] = useSpring(
-    {
-      from: {
-        v: 0,
-        o: 1,
-      },
-      to: async (next) => {
-        await next({ v: 100 })
-        if (loaded) {
-          await next({
-            o: 0,
-          })
-          setDone(true)
-        }
-      },
-
-      config: loaded
-        ? {
-            mass: 1,
-            tension: 270,
-            friction: 40,
-          }
-        : {
-            mass: 5,
-            tension: 100,
-            friction: 600,
-          },
-    },
-    [loaded],
-  )
+  const v = useSpring(0, {
+    mass: 100,
+    damping: 100,
+    stiffness: 10,
+  })
+  const o = useSpring(100, {
+    mass: 5,
+    damping: 100,
+    stiffness: 600,
+  })
 
   useEffect(() => {
     if (loadingState.loaded > 0 && loadingState.progress === 100) {
-      setLoaded(true)
+      o.set(0)
+      v.stop()
+      o.on('animationComplete', () => {
+        setDone(true)
+      })
     }
-  }, [loadingState.loaded, loadingState.progress])
+  }, [loadingState.loaded, loadingState.progress, o, v])
+
+  useEffect(() => {
+    const unsubscribe = v.on('change', (v) => {
+      console.log(v.toFixed(0))
+    })
+
+    v.set(100)
+
+    return () => {
+      unsubscribe()
+    }
+  }, [v])
 
   return (
     <>
       {!done && (
-        <a.div className={styles.canvasLoading} style={{ opacity: progress.o }}>
-          <a.span className="progress">
-            {progress.v.to((v) => `${v.toFixed(0)} %`)}
-          </a.span>
-        </a.div>
+        <motion.div className={styles.canvasLoading} style={{ opacity: o }}>
+          <motion.span className="progress">
+            {`${v.get().toFixed(0)} %`}
+          </motion.span>
+        </motion.div>
       )}
     </>
   )
