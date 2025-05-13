@@ -1,22 +1,24 @@
+'use client'
+
 import type { NextPage } from 'next'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import MetaInfo from '../components/meta-info'
 
 import styles from '../styles/page404.module.scss'
-import dynamic from 'next/dynamic'
 
 const Game = dynamic(() => import('../components/game'), {
   ssr: false,
 })
 
+export const generateMetadata = async () => {
+  return {
+    title: 'You found many rabbits!',
+  }
+}
+
 const Page404: NextPage = () => {
   return (
     <>
-      <MetaInfo
-        meta={{
-          title: 'You found many rabbits!',
-        }}
-      />
       <Game />
       <div className={styles.entries}>
         <Link href="/blog" title="去看看前端~">

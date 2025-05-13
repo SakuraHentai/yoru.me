@@ -1,13 +1,9 @@
+'use client'
+
 import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
-import { a, useSpring, useSprings } from '@react-spring/web'
-import { PointerEvent, useEffect, useMemo, useRef } from 'react'
-
-import { throttle } from 'lodash-es'
-
-import MetaInfo from '../components/meta-info'
 import styles from '../styles/home.module.scss'
 
 const Loading = () => {
@@ -37,9 +33,8 @@ const BgCanvas = dynamic(() => import('../components/bg-canvas'), {
 const Home: NextPage = () => {
   return (
     <>
-      <MetaInfo />
       <div className={styles.home}>
-        <BgCanvas />
+        {/* <BgCanvas /> */}
         <header className={styles.header}>
           <nav className={styles.nav}>
             <ul>

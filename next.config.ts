@@ -1,7 +1,8 @@
 import MDXPlugin from '@next/mdx'
+import type { NextConfig } from 'next'
+
 import rehypeHighlight from 'rehype-highlight'
 
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'mdx'],
@@ -9,7 +10,7 @@ const nextConfig = {
   images: {
     domains: ['img.yoru.me'],
   },
-}
+} satisfies NextConfig
 
 const withMDX = MDXPlugin({
   extension: /\.mdx?$/,

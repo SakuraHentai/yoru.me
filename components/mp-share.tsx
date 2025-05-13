@@ -20,7 +20,9 @@ const setupSDK = (props: ShareProps) => {
     headers: {
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ url: currentURL }),
+    body: JSON.stringify({
+      url: currentURL,
+    }),
   })
     .then((res) => res.json())
     .then(async (res) => {
@@ -39,13 +41,13 @@ const setupSDK = (props: ShareProps) => {
             title: props.title,
             desc: props.desc,
             link: currentURL,
-            imgUrl: `https://yoru.me${props.imgURL}`,
+            imgUrl: `${process.env.NEXT_PUBLIC_SITE_URL!}${props.imgURL}`,
             success: function () {},
           })
           wx.updateTimelineShareData({
             title: props.title,
             link: currentURL,
-            imgUrl: `https://yoru.me${props.imgURL}`,
+            imgUrl: `${process.env.NEXT_PUBLIC_SITE_URL!}${props.imgURL}`,
             success: function () {},
           })
         })
