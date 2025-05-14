@@ -3,6 +3,7 @@
 import { Canvas } from '@react-three/fiber'
 import { lazy, useEffect, useState } from 'react'
 
+import { AnimatePresence, motion } from 'motion/react'
 import { useShallow } from 'zustand/shallow'
 
 import LoadingScreen from './loading-screen'
@@ -13,7 +14,7 @@ const Scene = lazy(() => import('./scene'))
 const CloseBlend = () => {
   const [showClose, setShowClose] = useState(false)
   const [blendName, setBlendName] = useBgCanvasStore(
-    useShallow((state) => [state.blend.name, state.setBlendName]),
+    useShallow((state) => [state.blend.name, state.setBlendName])
   )
 
   useEffect(() => {
@@ -21,10 +22,15 @@ const CloseBlend = () => {
   }, [blendName])
 
   return (
-    <>
+    <AnimatePresence>
       {showClose && (
-        <div
-          className={''}
+        <motion.div
+          className={
+            'fixed top-4 left-4 size-12 text-[rgba(22,101,52,.8)] cursor-pointer'
+          }
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.5 }}
           onClick={() => {
             setBlendName('')
           }}
@@ -34,27 +40,28 @@ const CloseBlend = () => {
             width="20"
             height="20"
             viewBox="0 0 20 20"
+            className="size-full"
           >
             <path
               fill="currentColor"
               d="M2.93 17.07A10 10 0 1 1 17.07 2.93A10 10 0 0 1 2.93 17.07zM11.4 10l2.83-2.83l-1.41-1.41L10 8.59L7.17 5.76L5.76 7.17L8.59 10l-2.83 2.83l1.41 1.41L10 11.41l2.83 2.83l1.41-1.41L11.41 10z"
             />
           </svg>
-        </div>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   )
 }
 
 const BgCanvas = () => {
   return (
-    <>
-      <Canvas frameloop="demand" className={''} flat>
+    <div className="relative size-full">
+      <Canvas frameloop="demand" className="col-span-full row-span-full" flat>
         <Scene />
       </Canvas>
       <CloseBlend />
       <LoadingScreen />
-    </>
+    </div>
   )
 }
 

@@ -1,11 +1,11 @@
-import { invalidate } from '@react-three/fiber'
+import { invalidate, useFrame } from '@react-three/fiber'
 import { lazy, useEffect } from 'react'
 
 import { useShallow } from 'zustand/shallow'
 
 import { useSeasonTextures } from './hooks/use-season-textures'
 import { useWindowViewport } from './hooks/use-window-viewport'
-import { advanceTimeline, resetTimeline, useBgCanvasStore } from './store'
+import { useBgCanvasStore } from './store'
 
 // import Natsu from './seasons/natsu'
 const Haru = lazy(() => import('./seasons/haru'))
@@ -15,45 +15,39 @@ const Fuyu = lazy(() => import('./seasons/fuyu'))
 const Director = lazy(() => import('./director'))
 
 const Timeline = () => {
-  const [ready] = useBgCanvasStore(useShallow((state) => [state.loaded.ready]))
+  const [ready, advanceTimeline] = useBgCanvasStore(
+    useShallow((state) => [state.loaded.ready, state.advanceTimeline])
+  )
+  const viewport = useWindowViewport()
+
+  useFrame(() => {
+    if (!ready) {
+      return
+    }
+
+    advanceTimeline(invalidate)
+  })
+
   useEffect(() => {
     if (!ready) {
       return
     }
-    const handle = advanceTimeline()
-    invalidate()
 
-    return () => {
-      if (handle) {
-        cancelAnimationFrame(handle)
-      }
-    }
-  }, [ready])
-
-  return null
-}
-const FixResizeRender = () => {
-  const viewport = useWindowViewport()
-
-  useEffect(() => {
-    const handle = requestAnimationFrame(() => {
-      const elapsed = useBgCanvasStore.getState().clock.elapsed
-
-      useBgCanvasStore.getState().setElapsed(elapsed + 0.000001)
-    })
-    return () => {
-      cancelAnimationFrame(handle)
-    }
-  }, [viewport.width, viewport.height])
+    advanceTimeline(invalidate, true)
+  }, [ready, viewport, advanceTimeline])
 
   return null
 }
 
 const FixNavigateBack = () => {
+  const [resetTimeline] = useBgCanvasStore(
+    useShallow((state) => [state.resetTimeline])
+  )
+
   // replay animation when enter page.
   useEffect(() => {
     resetTimeline()
-  }, [])
+  }, [resetTimeline])
 
   return null
 }
@@ -69,7 +63,6 @@ const Scene = () => {
       <Director />
       {/* <axesHelper args={[5]} /> */}
       <Timeline />
-      <FixResizeRender />
       <FixNavigateBack />
     </>
   )

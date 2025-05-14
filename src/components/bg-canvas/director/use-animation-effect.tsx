@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import gsap from 'gsap'
 import { Euler, Vector3 } from 'three'
 
-import { timelineRange, useBgCanvasStore } from '../store'
+import { useBgCanvasStore } from '../store'
 
 const useAnimationEffect = (callback: (position: Vector3) => void) => {
   const cameraMotionPosition = useRef(new Vector3(0))
@@ -17,28 +17,28 @@ const useAnimationEffect = (callback: (position: Vector3) => void) => {
     return gsap
       .timeline({
         defaults: {
-          ease: 'power2.inOut',
-        },
+          ease: 'power2.inOut'
+        }
       })
       .fromTo(
         cameraMotionPosition.current,
         {
           x: 0,
           y: 0,
-          z: 10,
+          z: 10
         },
         {
           x: 0,
           y: 0,
           z: 12,
-          duration: 3,
-        },
+          duration: 3
+        }
       )
       .to(cameraMotionPosition.current, {
         x: endPosition.x,
         y: 0,
         z: 12,
-        duration: 1,
+        duration: 1
       })
 
       .to(cameraMotionPosition.current, {
@@ -46,18 +46,21 @@ const useAnimationEffect = (callback: (position: Vector3) => void) => {
         y: endPosition.y,
         z: endPosition.z,
         duration: 1,
-        delay: 1,
+        delay: 1
       })
       .pause()
   }, [])
 
   useEffect(() => {
-    return useBgCanvasStore.subscribe(() => {
-      const percentage = timelineRange(0, 1)
-      tl.seek(percentage * tl.duration())
+    return useBgCanvasStore.subscribe(
+      (state) => state.clock.elapsed,
+      () => {
+        const percentage = useBgCanvasStore.getState().timelineRange(0, 1)
+        tl.seek(percentage * tl.duration())
 
-      callback(cameraMotionPosition.current)
-    })
+        callback(cameraMotionPosition.current)
+      }
+    )
   }, [tl, callback])
 }
 

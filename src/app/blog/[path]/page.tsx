@@ -19,7 +19,7 @@ export const generateMetadata = async (props: PageProps) => {
     return {
       title: metadata.title,
       description: metadata.description,
-      date: metadata.date,
+      date: metadata.date
     }
   } catch (error) {
     console.error(error)
@@ -29,13 +29,18 @@ export const generateMetadata = async (props: PageProps) => {
 
 const Page: FC<PageProps> = async (props) => {
   const { path } = await props.params
-  console.log(path)
 
   try {
     const { default: Post, metadata } = await import(`@/posts/${path}.mdx`)
 
     return (
       <>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css"
+          integrity="sha384-KiWOvVjnN8qwAZbuQyWDIbfCLFhLXNETzBQjA/92pIowpC0d2O3nppDGQVgwd2nB"
+          crossOrigin="anonymous"
+        />
         <div className="prose max-w-none">
           <Post />
         </div>

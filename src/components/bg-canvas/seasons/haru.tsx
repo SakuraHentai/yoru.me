@@ -5,7 +5,7 @@ import { Euler, Mesh, Texture, Vector3 } from 'three'
 import { useShallow } from 'zustand/shallow'
 
 import { useWindowViewport } from '../hooks/use-window-viewport'
-import { timelineRange, useBgCanvasStore } from '../store'
+import { useBgCanvasStore } from '../store'
 import SeasonBase from './base'
 
 type Props = {
@@ -30,45 +30,48 @@ const Haru: FC<Props> = ({ map }) => {
       gsap
         .timeline({
           defaults: {
-            ease: 'power2.inOut',
-          },
+            ease: 'power2.inOut'
+          }
         })
         .fromTo(
           position.current,
           {
             x: 0,
             y: 0,
-            z: 0,
+            z: 0
           },
           {
             x: -viewport.width / 2,
             y: viewport.height / 2,
             z: -2,
-            duration: 2,
-          },
+            duration: 2
+          }
         )
         // to center
         .to(position.current, {
           x: -viewport.width / 2 + viewport.width / 4,
           y: viewport.height / 2 - viewport.height / 4,
           z: 0,
-          duration: 1,
+          duration: 1
         })
         .pause()
     )
   }, [viewport.width, viewport.height])
 
   useEffect(() => {
-    return useBgCanvasStore.subscribe(() => {
-      const percentage = timelineRange(0, 1 / 2)
-      tl.seek(percentage * tl.duration())
+    return useBgCanvasStore.subscribe(
+      (state) => state.clock.elapsed,
+      () => {
+        const percentage = useBgCanvasStore.getState().timelineRange(0, 1 / 2)
+        tl.seek(percentage * tl.duration())
 
-      ref.current?.position.set(
-        position.current.x,
-        position.current.y,
-        position.current.z,
-      )
-    })
+        ref.current?.position.set(
+          position.current.x,
+          position.current.y,
+          position.current.z
+        )
+      }
+    )
   }, [tl])
 
   return (

@@ -16,7 +16,7 @@ const Director = () => {
     cameraControlRef.current?.setLookAt(
       ...position.toArray(),
       ...lookAt.toArray(),
-      true,
+      true
     )
   }, [])
 

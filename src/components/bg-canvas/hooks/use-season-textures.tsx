@@ -1,12 +1,12 @@
 import { useTexture } from '@react-three/drei'
 import { useCallback } from 'react'
 
-import { SRGBColorSpace, Texture } from 'three'
+import aki from '@/assets/home/aki.webp'
+import fuyu from '@/assets/home/fuyu.webp'
+import haru from '@/assets/home/haru.webp'
+import natsu from '@/assets/home/natsu.webp'
 
-import aki from '../../../assets/home/aki.jpg'
-import fuyu from '../../../assets/home/fuyu.jpg'
-import haru from '../../../assets/home/haru.jpg'
-import natsu from '../../../assets/home/natsu.jpg'
+import { SRGBColorSpace, Texture } from 'three'
 
 export const useSeasonTextures = () => {
   const convertToSRGB = useCallback((texture: Texture | Texture[]) => {

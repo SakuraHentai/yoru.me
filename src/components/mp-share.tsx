@@ -1,6 +1,36 @@
+'use client'
+
 import Script from 'next/script'
 
 import { useEffect, useState } from 'react'
+
+declare global {
+  interface Window {
+    wx: {
+      config: (config: {
+        appId: string
+        timestamp: number
+        nonceStr: string
+        signature: string
+        jsApiList: string[]
+      }) => void
+      ready: (callback: () => void) => void
+      updateAppMessageShareData: (data: {
+        title: string
+        desc: string
+        link: string
+        imgUrl: string
+        success?: () => void
+      }) => void
+      updateTimelineShareData: (data: {
+        title: string
+        link: string
+        imgUrl: string
+        success?: () => void
+      }) => void
+    }
+  }
+}
 
 type ShareProps = {
   title: string
@@ -18,9 +48,9 @@ const setupSDK = (props: ShareProps) => {
   fetch('https://mp.yoru.me/wxa/api/js-sdk', {
     method: 'post',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/json'
     },
-    body: JSON.stringify({ url: currentURL }),
+    body: JSON.stringify({ url: currentURL })
   })
     .then((res) => res.json())
     .then(async (res) => {
@@ -31,7 +61,7 @@ const setupSDK = (props: ShareProps) => {
           timestamp: res.data.timestamp,
           nonceStr: res.data.nonceStr,
           signature: res.data.signature,
-          jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData'],
+          jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
         })
 
         wx.ready(() => {
@@ -39,14 +69,14 @@ const setupSDK = (props: ShareProps) => {
             title: props.title,
             desc: props.desc,
             link: currentURL,
-            imgUrl: `https://yoru.me${props.imgURL}`,
-            success: function () {},
+            imgUrl: `${process.env.NEXT_PUBLIC_SITE_URL}${props.imgURL}`,
+            success: function () {}
           })
           wx.updateTimelineShareData({
             title: props.title,
             link: currentURL,
-            imgUrl: `https://yoru.me${props.imgURL}`,
-            success: function () {},
+            imgUrl: `${process.env.NEXT_PUBLIC_SITE_URL}${props.imgURL}`,
+            success: function () {}
           })
         })
       }

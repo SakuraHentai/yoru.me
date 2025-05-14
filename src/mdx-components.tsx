@@ -2,6 +2,8 @@ import Image from 'next/image'
 
 import type { MDXComponents } from 'mdx/types'
 
+import { cn } from './utils'
+
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
@@ -14,7 +16,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       )
     },
     img: ({ src, alt }) => {
-      const url = new URL(src, 'https://img.yoru.me')
+      const url = new URL(src.replaceAll('&amp;', '&'), 'https://img.yoru.me')
       const params = url.searchParams
 
       const width = params.get('width')
@@ -23,7 +25,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       if (!width || !height) {
         throw new Error(
-          'Image width and height are required, set them in URL query, e.g. ?width=100&height=100',
+          'Image width and height are required, set them in URL query, e.g. ?width=100&height=100'
         )
       }
 
@@ -32,7 +34,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
       return (
         <a
-          className="thumb-anchor"
+          className="text-center block no-underline"
           href={urlWithoutQuery}
           target="_blank"
           rel="noreferrer"
@@ -45,13 +47,23 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             width={parseFloat(width)}
             height={parseFloat(height)}
             style={{
-              aspectRatio,
+              aspectRatio
             }}
-            className="h-auto mt-0"
+            className="h-auto mx-auto mt-0 mb-2"
           />
-          {note ? <span className="note">{note}</span> : null}
+          {note ? <span className="text-sm text-gray-500">{note}</span> : null}
         </a>
       )
     },
+    code: ({ children }) => {
+      const cls = cn([
+        'inline-flex  border border-amber-100 px-1 rounded-sm text-gray-500 bg-amber-50 after:hidden before:hidden',
+        `[pre:has(&)>&]:block [pre:has(&)>&]:bg-transparent [pre:has(&)>&]:border-0 [pre:has(&)>&]:rounded-none [pre:has(&)>&]:p-0 [pre:has(&)>&]:not(:last-child):after:[content:'']`
+      ])
+      return <code className={cls}>{children}</code>
+    },
+    pre: ({ children }) => {
+      return <pre className="bg-gray-800 rounded-lg">{children}</pre>
+    }
   }
 }
