@@ -1,10 +1,8 @@
-import { GoogleAnalyzer } from '@/components/google-analyzer'
-
 import type { Metadata, Viewport } from 'next'
 
 import type { FC, ReactNode } from 'react'
 
-import '../styles/globals.scss'
+import { GoogleAnalyzer } from '@/components/google-analyzer'
 
 export const viewport = {
   width: 'device-width',
@@ -33,7 +31,7 @@ const Layout: FC<LayoutProps> = async ({ children }) => {
       <body>
         {children}
 
-        <GoogleAnalyzer />
+        {process.env.NODE_ENV === 'production' && <GoogleAnalyzer />}
       </body>
     </html>
   )

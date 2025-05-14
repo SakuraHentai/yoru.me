@@ -1,4 +1,3 @@
-import { useSpring } from '@react-spring/three'
 import { MeshPortalMaterial, RoundedBox } from '@react-three/drei'
 import { Euler, type ThreeElements } from '@react-three/fiber'
 import {
@@ -11,11 +10,13 @@ import {
   useState,
 } from 'react'
 
+import { animate } from 'motion/react'
 import { DoubleSide, Mesh, Texture } from 'three'
-import { subscribe } from 'valtio'
+import { match } from 'ts-pattern'
+import { useShallow } from 'zustand/shallow'
 
 import { useWindowViewport } from '../hooks/use-window-viewport'
-import { bgCanvasState, blendNameTypes } from '../store/state'
+import { type blendNameTypes, useBgCanvasStore } from '../store'
 
 type SeasonBaseProps = {
   name: blendNameTypes
@@ -33,6 +34,9 @@ const SeasonBase = forwardRef(
     const viewport = useWindowViewport()
     const portalRef = useRef<ThreeElements['portalMaterialImpl']>(null)
     const [isBlending, setIsBlending] = useState(false)
+    const [blendName, setBlendName] = useBgCanvasStore(
+      useShallow((state) => [state.blend.name, state.setBlendName]),
+    )
     const args = useMemo(() => {
       const width = viewport.width
       const height = viewport.height
@@ -40,30 +44,40 @@ const SeasonBase = forwardRef(
     }, [viewport.width, viewport.height])
 
     useEffect(() => {
-      return subscribe(bgCanvasState.blend, () => {
-        setIsBlending(bgCanvasState.blend.name === name)
-      })
-    }, [name])
+      setIsBlending(blendName === name)
+    }, [blendName, name])
 
     const handleClick = useCallback(() => {
-      // if is others blending, ignore it.
-      if (bgCanvasState.clock.elapsed >= 1 && bgCanvasState.blend.name === '') {
-        bgCanvasState.blend.name = name
+      const elapsed = useBgCanvasStore.getState().clock.elapsed
+      if (elapsed >= 1 && blendName === '') {
+        setBlendName(name)
       }
-    }, [name])
+    }, [name, blendName, setBlendName])
 
     // blending effect
-    useSpring(
-      {
-        value: isBlending ? 1 : 0,
-        onChange({ value: spring }) {
+    useEffect(() => {
+      const [from, to] = match(isBlending)
+        .with(true, () => {
+          return [0, 1]
+        })
+        .otherwise(() => {
+          return [1, 0]
+        })
+
+      const animation = animate(from, to, {
+        duration: 0.5,
+        ease: 'easeInOut',
+        onUpdate: (v) => {
           if (portalRef.current) {
-            portalRef.current.blend = spring.value
+            portalRef.current.blend = v
           }
         },
-      },
-      [isBlending],
-    )
+      })
+
+      return () => {
+        animation.stop()
+      }
+    }, [isBlending])
 
     return (
       <>
@@ -74,7 +88,7 @@ const SeasonBase = forwardRef(
           ref={ref}
           onClick={handleClick}
         >
-          {/* @ts-ignore */}
+          {/* @ts-expect-error r3f type */}
           <MeshPortalMaterial ref={portalRef} side={DoubleSide}>
             <mesh rotation={portalRotation}>
               <sphereGeometry args={[50, 64, 64]} />

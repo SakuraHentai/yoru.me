@@ -2,10 +2,9 @@ import { FC, useEffect, useMemo, useRef } from 'react'
 
 import gsap from 'gsap'
 import { Euler, Mesh, Texture, Vector3 } from 'three'
-import { subscribe } from 'valtio'
 
 import { useWindowViewport } from '../hooks/use-window-viewport'
-import { bgCanvasState, timelineRange } from '../store/state'
+import { timelineRange, useBgCanvasStore } from '../store'
 import SeasonBase from './base'
 
 type Props = {
@@ -68,7 +67,7 @@ const Aki: FC<Props> = ({ map }) => {
   }, [viewport.width, viewport.height])
 
   useEffect(() => {
-    return subscribe(bgCanvasState.clock, () => {
+    return useBgCanvasStore.subscribe(() => {
       const percentage = timelineRange(1 / 5, 1 / 2)
       tl.seek(percentage * tl.duration())
 

@@ -2,9 +2,8 @@ import { useEffect, useMemo, useRef } from 'react'
 
 import gsap from 'gsap'
 import { Euler, Vector3 } from 'three'
-import { subscribe } from 'valtio'
 
-import { bgCanvasState, timelineRange } from '../store/state'
+import { timelineRange, useBgCanvasStore } from '../store'
 
 const useAnimationEffect = (callback: (position: Vector3) => void) => {
   const cameraMotionPosition = useRef(new Vector3(0))
@@ -53,7 +52,7 @@ const useAnimationEffect = (callback: (position: Vector3) => void) => {
   }, [])
 
   useEffect(() => {
-    return subscribe(bgCanvasState.clock, () => {
+    return useBgCanvasStore.subscribe(() => {
       const percentage = timelineRange(0, 1)
       tl.seek(percentage * tl.duration())
 

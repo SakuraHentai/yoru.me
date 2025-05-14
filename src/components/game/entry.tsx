@@ -3,7 +3,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 
 import { useIsomorphicLayoutEffect } from '../../utils/use-isomorphic-layout-effect'
-import styles from '../styles/game.module.scss'
 
 const Loading = () => {
   const loadingText = useMemo(() => {
@@ -11,7 +10,7 @@ const Loading = () => {
   }, [])
 
   return (
-    <div className={styles.loading}>
+    <div className={''}>
       {loadingText.map((char, idx) => {
         return <span key={`${char}-${idx}`}>{char}</span>
       })}
@@ -53,7 +52,7 @@ const Game = () => {
 
   return (
     <>
-      <div id={gameWrapper} className={styles.yoru} />
+      <div id={gameWrapper} className={''} />
       {loading && <Loading />}
     </>
   )

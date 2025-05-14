@@ -1,18 +1,16 @@
 'use client'
 
-import BgCanvas from '@/components/bg-canvas'
-
 import Link from 'next/link'
 
-import styles from '../styles/home.module.scss'
+import BgCanvas from '@/components/bg-canvas'
 
 const Home = () => {
   return (
     <>
-      <div className={styles.home}>
+      <div className={''}>
         <BgCanvas />
-        <header className={styles.header}>
-          <nav className={styles.nav}>
+        <header className="">
+          <nav className="">
             <ul>
               <li>
                 <Link href={'/blog'} title="去看看前端~">

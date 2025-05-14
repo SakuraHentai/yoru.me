@@ -1,15 +1,12 @@
 'use client'
 
 import { useProgress } from '@react-three/drei'
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { animate, motion, useMotionValue } from 'motion/react'
 import { match } from 'ts-pattern'
 
-import styles from '../../styles/home.module.scss'
-
-type Props = {}
-const LoadingScreen: FC<Props> = () => {
+const LoadingScreen = () => {
   const loadingState = useProgress()
   const [done, setDone] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -62,7 +59,7 @@ const LoadingScreen: FC<Props> = () => {
   return (
     <>
       {!done && (
-        <motion.div className={styles.canvasLoading} style={{ opacity: o }}>
+        <motion.div className={''} style={{ opacity: o }}>
           <span className="progress">{`${progress} %`}</span>
         </motion.div>
       )}

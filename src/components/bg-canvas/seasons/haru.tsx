@@ -2,10 +2,10 @@ import { FC, useEffect, useMemo, useRef } from 'react'
 
 import gsap from 'gsap'
 import { Euler, Mesh, Texture, Vector3 } from 'three'
-import { subscribe } from 'valtio'
+import { useShallow } from 'zustand/shallow'
 
 import { useWindowViewport } from '../hooks/use-window-viewport'
-import { bgCanvasState, timelineRange } from '../store/state'
+import { timelineRange, useBgCanvasStore } from '../store'
 import SeasonBase from './base'
 
 type Props = {
@@ -18,11 +18,12 @@ const Haru: FC<Props> = ({ map }) => {
   const portalRotation = useMemo(() => {
     return new Euler(0, -Math.PI / 1.8, 0)
   }, [])
+  const [setReady] = useBgCanvasStore(useShallow((state) => [state.setReady]))
 
   // we start the animation immediately when sprint season rendered
   useEffect(() => {
-    bgCanvasState.loaded.ready = true
-  }, [])
+    setReady(true)
+  }, [setReady])
 
   const tl = useMemo<ReturnType<typeof gsap.timeline>>(() => {
     return (
@@ -58,7 +59,7 @@ const Haru: FC<Props> = ({ map }) => {
   }, [viewport.width, viewport.height])
 
   useEffect(() => {
-    return subscribe(bgCanvasState.clock, () => {
+    return useBgCanvasStore.subscribe(() => {
       const percentage = timelineRange(0, 1 / 2)
       tl.seek(percentage * tl.duration())
 

@@ -2,8 +2,6 @@ import type { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
-import styles from '../styles/page404.module.scss'
-
 const Game = dynamic(() => import('../components/game/entry'), {})
 
 export const generateMetadata = async () => {
@@ -16,11 +14,11 @@ const Page404: NextPage = () => {
   return (
     <>
       <Game />
-      <div className={styles.entries}>
+      <div className="">
         <Link href="/blog" title="去看看前端~">
           BLOG
         </Link>
-        <span className={styles.sep}>/</span>
+        <span className="">/</span>
         <Link
           href="https://github.com/sakurahentai"
           title="Github~"

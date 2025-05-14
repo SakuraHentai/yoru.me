@@ -1,30 +1,30 @@
 'use client'
 
 import { Canvas } from '@react-three/fiber'
-import { lazy, memo, useEffect, useState } from 'react'
+import { lazy, useEffect, useState } from 'react'
 
-import { subscribe } from 'valtio'
+import { useShallow } from 'zustand/shallow'
 
-import styles from '../../styles/home.module.scss'
 import LoadingScreen from './loading-screen'
-import { bgCanvasState, setBlendName } from './store/state'
+import { useBgCanvasStore } from './store'
 
 const Scene = lazy(() => import('./scene'))
 
 const CloseBlend = () => {
   const [showClose, setShowClose] = useState(false)
+  const [blendName, setBlendName] = useBgCanvasStore(
+    useShallow((state) => [state.blend.name, state.setBlendName]),
+  )
 
   useEffect(() => {
-    return subscribe(bgCanvasState.blend, () => {
-      setShowClose(bgCanvasState.blend.name !== '')
-    })
-  }, [])
+    setShowClose(blendName !== '')
+  }, [blendName])
 
   return (
     <>
       {showClose && (
         <div
-          className={styles.closeBlend}
+          className={''}
           onClick={() => {
             setBlendName('')
           }}
@@ -46,16 +46,16 @@ const CloseBlend = () => {
   )
 }
 
-const BgCanvas = memo(() => {
+const BgCanvas = () => {
   return (
     <>
-      <Canvas frameloop="demand" className={styles.bgCanvas} flat>
+      <Canvas frameloop="demand" className={''} flat>
         <Scene />
       </Canvas>
       <CloseBlend />
       <LoadingScreen />
     </>
   )
-})
+}
 
 export default BgCanvas

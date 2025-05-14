@@ -5,7 +5,6 @@ import type { FC, ReactNode } from 'react'
 
 import avatar from '@/assets/avatar.png'
 import asideBg from '@/assets/bg-aside.jpg'
-import styles from '@/styles/blog.module.scss'
 
 const BlogLayout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -17,7 +16,7 @@ const BlogLayout: FC<{ children: ReactNode }> = ({ children }) => {
         crossOrigin="anonymous"
         referrerPolicy="no-referrer"
       />
-      <div className={styles.layout}>
+      <div className="">
         <aside>
           <div className="inner">
             <div className="bg">
@@ -28,7 +27,7 @@ const BlogLayout: FC<{ children: ReactNode }> = ({ children }) => {
                 loading="lazy"
               />
             </div>
-            <div className={styles.avatar}>
+            <div className={''}>
               <Image
                 className="avatar-img"
                 src={avatar}
@@ -36,8 +35,8 @@ const BlogLayout: FC<{ children: ReactNode }> = ({ children }) => {
                 loading="lazy"
               />
             </div>
-            <div className={styles.info}>
-              <h3 className={styles.author}>
+            <div className={''}>
+              <h3 className={''}>
                 <a
                   href="https://github.com/SakuraHentai"
                   target="_blank"
@@ -46,7 +45,7 @@ const BlogLayout: FC<{ children: ReactNode }> = ({ children }) => {
                   Derek
                 </a>
               </h3>
-              <div className={styles.pages}>
+              <div className={''}>
                 <Link href="/">Home</Link>
                 <Link href="/blog">Blog</Link>
               </div>
@@ -55,11 +54,6 @@ const BlogLayout: FC<{ children: ReactNode }> = ({ children }) => {
         </aside>
         <main>{children}</main>
       </div>
-      {/* <MpShare
-        title={metaInfo.title}
-        desc={metaInfo.description}
-        imgURL={avatar.src}
-      /> */}
     </>
   )
 }

@@ -2,9 +2,8 @@ import { useThree } from '@react-three/fiber'
 import { useEffect, useRef } from 'react'
 
 import { Vector3 } from 'three'
-import { subscribe } from 'valtio'
 
-import { bgCanvasState } from '../store/state'
+import { useBgCanvasStore } from '../store'
 
 const useBlendingEffect = (
   callback: (position: Vector3, lookAt: Vector3) => void,
@@ -13,16 +12,16 @@ const useBlendingEffect = (
   const prevCameraPosition = useRef(camera.position.clone())
 
   useEffect(() => {
-    return subscribe(bgCanvasState.blend, () => {
+    return useBgCanvasStore.subscribe(() => {
       const position = new Vector3()
       const lookAt = new Vector3()
 
       // get the season position.
       scene
-        .getObjectByName(bgCanvasState.blend.name)
-        ?.getWorldPosition(position)!
+        .getObjectByName(useBgCanvasStore.getState().blend.name)
+        ?.getWorldPosition(position)
 
-      if (bgCanvasState.blend.name !== '') {
+      if (useBgCanvasStore.getState().blend.name !== '') {
         prevCameraPosition.current.copy(camera.position)
         lookAt.set(position.x, position.y, -2)
       } else {

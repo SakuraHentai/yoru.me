@@ -1,11 +1,11 @@
 import { invalidate } from '@react-three/fiber'
 import { lazy, useEffect } from 'react'
 
-import { useSnapshot } from 'valtio'
+import { useShallow } from 'zustand/shallow'
 
 import { useSeasonTextures } from './hooks/use-season-textures'
 import { useWindowViewport } from './hooks/use-window-viewport'
-import { advanceTimeline, bgCanvasState, resetTimeline } from './store/state'
+import { advanceTimeline, resetTimeline, useBgCanvasStore } from './store'
 
 // import Natsu from './seasons/natsu'
 const Haru = lazy(() => import('./seasons/haru'))
@@ -15,17 +15,20 @@ const Fuyu = lazy(() => import('./seasons/fuyu'))
 const Director = lazy(() => import('./director'))
 
 const Timeline = () => {
-  const $rootState = useSnapshot(bgCanvasState)
+  const [ready] = useBgCanvasStore(useShallow((state) => [state.loaded.ready]))
   useEffect(() => {
-    if (!$rootState.loaded.ready) {
+    if (!ready) {
       return
     }
     const handle = advanceTimeline()
     invalidate()
+
     return () => {
-      handle && cancelAnimationFrame(handle)
+      if (handle) {
+        cancelAnimationFrame(handle)
+      }
     }
-  }, [$rootState.clock.elapsed, $rootState.loaded.ready])
+  }, [ready])
 
   return null
 }
@@ -34,7 +37,9 @@ const FixResizeRender = () => {
 
   useEffect(() => {
     const handle = requestAnimationFrame(() => {
-      bgCanvasState.clock.elapsed += 0.000001
+      const elapsed = useBgCanvasStore.getState().clock.elapsed
+
+      useBgCanvasStore.getState().setElapsed(elapsed + 0.000001)
     })
     return () => {
       cancelAnimationFrame(handle)
