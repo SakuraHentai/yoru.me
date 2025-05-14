@@ -1,23 +1,20 @@
-import MDXPlugin from '@next/mdx'
+import rehypeShiki from '@shikijs/rehype'
+
+import createMDX from '@next/mdx'
 import type { NextConfig } from 'next'
 
-import rehypeHighlight from 'rehype-highlight'
-
-const nextConfig = {
-  reactStrictMode: true,
+const nextConfig: NextConfig = {
   pageExtensions: ['ts', 'tsx', 'mdx'],
   transpilePackages: ['three'],
   images: {
-    domains: ['img.yoru.me'],
+    remotePatterns: [new URL('https://img.yoru.me/**')],
   },
-} satisfies NextConfig
+}
 
-const withMDX = MDXPlugin({
+const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
-    providerImportSource: '@mdx-js/react',
-    remarkPlugins: [],
-    rehypePlugins: [rehypeHighlight],
+    rehypePlugins: [rehypeShiki],
   },
 })
 

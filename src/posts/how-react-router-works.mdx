@@ -1,0 +1,149 @@
+export const metadata = {
+  title: '走一圈 React Router',
+  keywords: 'react-router, react-router原理',
+  description: '简单地介绍一下react-router工作原理',
+  date: '2021-12-23',
+  tags: ['react', 'react-router'],
+  summary:
+    'react router是如何匹配路由, outlet是如何工作的, 带着问题一起走一圈源代码.',
+}
+
+![react-router](/weibo/large/6708d6c2gy1gxnlhflge3j216a0ksqb5.jpg?width=1522&height=748)
+
+> React Router 版本为 v6.
+
+从简单的 demo, 逐渐看看 react router 是如何运作的, Go.
+
+### BrowserRouter
+
+```ts
+<BrowserRouter>
+  <App />
+</BrowserRouter>
+```
+
+`BrowserRouter` 将创建 `history` 并监听(pushState/popstate event), `history` 传入到 navigator 以供后续 `useNavigate` 使用, 然后直接渲染 App
+
+![BrowserRouter](/weibo/large/6708d6c2gy1gxnnfezx80j21220vck1d.jpg?width=1370&height=1128)
+
+<div className="note">
+  [history](https://github.com/remix-run/history) 是 Remix 团队另外创建的库,
+  用于管理会话历史
+</div>
+
+### useRoutes
+
+创建完 `Router`, 就可以使用 `useRoutes` 配置路由. 当然, 你也可以使用 `Routes`+`Route` 组件设定.
+
+<Img
+  src="/weibo/large/6708d6c2gy1gxnnns7ihqj20kc0t8wim.jpg"
+  alt="useRoutes"
+  width={732}
+  height={1052}
+/>
+
+#### 拍平路由并计算优先级
+
+先将所有设定路由拍平为一维数组, 如上图 [`/`, `/about`, `/*`], 再按路径计算后的优先级排序以用于匹配
+
+```ts
+const paramRe = /^:\w+$/
+const dynamicSegmentValue = 3
+const indexRouteValue = 2
+const emptySegmentValue = 1
+const staticSegmentValue = 10
+const splatPenalty = -2
+const isSplat = (s: string) => s === '*'
+
+function computeScore(path: string, index: boolean | undefined): number {
+  // 将路径拆开
+  let segments = path.split('/')
+  // 初始优先级为路径层级
+  let initialScore = segments.length
+  // 如含有 `*`, 降低优先级, 如 /a/*
+  if (segments.some(isSplat)) {
+    initialScore += splatPenalty
+  }
+
+  // 索引页
+  if (index) {
+    initialScore += indexRouteValue
+  }
+
+  return segments
+    .filter((s) => !isSplat(s))
+    .reduce(
+      (score, segment) =>
+        score +
+        (paramRe.test(segment)
+          ? dynamicSegmentValue // 动态参数 如 :p
+          : segment === ''
+            ? emptySegmentValue
+            : staticSegmentValue), // 静态路径 如 /a/b/c 优先级最高
+      initialScore,
+    )
+}
+```
+
+匹配后的路由会进入渲染 `_renderMatches`
+
+```ts
+function _renderMatches(
+  matches: RouteMatch[] | null,
+  parentMatches: RouteMatch[] = []
+): React.ReactElement | null {
+  if (matches == null) return null
+
+  /**
+   * location: '/about'
+   * matches: [
+   *   {path: '/', ...},
+   *   {path: '/about', ...}
+   * ]
+   */
+  return matches.reduceRight((outlet, match, index) => {
+    return (
+      /**
+       * 将匹配路由嵌套层级, 形成
+       * Provider<{
+       *   path: '/',
+       *     children: 设定的element,
+       *     outlet: Provider<{ // 嵌套的路由
+       *       path: '/about',
+       *       children: 设定的element,
+       *       outlet: null
+       *    }>
+       * }>,
+       * 当渲染 `/` 时, Provider会将设定的value(outlet)设置到RouteContext中
+       * 所以当某层级含有 <Outlet /> 时, 渲染的即为当层嵌套路由 (见下)
+       *
+       */
+      <RouteContext.Provider
+        children={
+          match.route.element !== undefined ? match.route.element : <Outlet />
+        }
+        value={{
+          outlet,
+          matches: parentMatches.concat(matches.slice(0, index + 1)),
+        }}
+      />
+    )
+  }, null as React.ReactElement | null)
+}
+```
+
+> Provider 更新详见 [ReactFiberBeginWork.new.js](https://github.com/facebook/react/blob/v17.0.2/packages/react-reconciler/src/ReactFiberBeginWork.new.js#L2848)
+
+### Outlet
+
+最后, 在需要的地方渲染 `Outlet` 组件, 它将根据路由匹配的结果, 渲染相应的组件.
+
+![Outlet](/weibo/large/6708d6c2gy1gxnns3mzpkj217o0hmwla.jpg?width=1572&height=634)
+
+获取 `RouteContext` 对应的 outlet 直接渲染就是了.
+
+### 其它
+
+其它例如 `useNavigate`, `useParams`, `useLocation` 基本都是简单几行代码, 就不再赘述了.
+
+-- Fin --
