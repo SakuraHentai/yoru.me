@@ -5,7 +5,7 @@ export const metadata = {
   date: '2021-12-23',
   tags: ['react', 'react-router'],
   summary:
-    'react router是如何匹配路由, outlet是如何工作的, 带着问题一起走一圈源代码.',
+    'react router是如何匹配路由, outlet是如何工作的, 带着问题一起走一圈源代码.'
 }
 
 ![react-router](/weibo/large/6708d6c2gy1gxnlhflge3j216a0ksqb5.jpg?width=1522&height=748)
@@ -35,12 +35,7 @@ export const metadata = {
 
 创建完 `Router`, 就可以使用 `useRoutes` 配置路由. 当然, 你也可以使用 `Routes`+`Route` 组件设定.
 
-<Img
-  src="/weibo/large/6708d6c2gy1gxnnns7ihqj20kc0t8wim.jpg"
-  alt="useRoutes"
-  width={732}
-  height={1052}
-/>
+![useRoutes](/weibo/large/6708d6c2gy1gxnnns7ihqj20kc0t8wim.jpg?width=732&height=1052)
 
 #### 拍平路由并计算优先级
 
@@ -80,7 +75,7 @@ function computeScore(path: string, index: boolean | undefined): number {
           : segment === ''
             ? emptySegmentValue
             : staticSegmentValue), // 静态路径 如 /a/b/c 优先级最高
-      initialScore,
+      initialScore
     )
 }
 ```

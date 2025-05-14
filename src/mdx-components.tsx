@@ -1,9 +1,15 @@
+import { Fira_Code } from 'next/font/google'
 import Image from 'next/image'
 
 import type { MDXComponents } from 'mdx/types'
 
 import { cn } from './utils'
 
+const firaCode = Fira_Code({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500', '600', '700']
+})
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
@@ -57,13 +63,14 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     code: ({ children }) => {
       const cls = cn([
-        'inline-flex  border border-amber-100 px-1 rounded-sm text-gray-500 bg-amber-50 after:hidden before:hidden',
-        `[pre:has(&)>&]:block [pre:has(&)>&]:bg-transparent [pre:has(&)>&]:border-0 [pre:has(&)>&]:rounded-none [pre:has(&)>&]:p-0 [pre:has(&)>&]:not(:last-child):after:[content:'']`
+        firaCode.className,
+        'inline-flex border border-amber-100 px-1 rounded-sm text-gray-500 bg-amber-50 after:hidden before:hidden',
+        `group-[.code]:block group-[.code]:bg-transparent group-[.code]:border-0 group-[.code]:rounded-none group-[.code]:p-0`
       ])
       return <code className={cls}>{children}</code>
     },
     pre: ({ children }) => {
-      return <pre className="bg-gray-800 rounded-lg">{children}</pre>
+      return <pre className="bg-gray-800 rounded-lg group code">{children}</pre>
     }
   }
 }

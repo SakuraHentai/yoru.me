@@ -1,7 +1,6 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "yoru.me",
+  "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -15,6 +14,7 @@
     "@shikijs/rehype": "^3.4.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
+    "globby": "^14.1.0",
     "gsap": "^3.13.0",
     "immer": "^10.1.1",
     "lodash-es": "^4.17.21",

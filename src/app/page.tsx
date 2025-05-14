@@ -11,6 +11,7 @@ import { cn } from '@/utils'
 const pFont = Preahvihear({
   weight: '400',
   subsets: ['latin'],
+  display: 'swap'
 })
 
 const Home = () => {
@@ -20,7 +21,7 @@ const Home = () => {
       'py-2 w-24 block text-center',
       'font-[Preahvihear,_sans-serif]',
       'bg-[rgba(92,101,22,.3)]',
-      pFont.className,
+      pFont.className
     ])
   }, [])
 

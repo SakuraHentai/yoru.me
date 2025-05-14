@@ -5,7 +5,7 @@ export const metadata = {
   date: '2024-01-03',
   tags: ['python', 'tesseract'],
   summary:
-    '群友介绍了个微信小游戏<开局托儿所>, 怎么玩最高只有80分, 从小贯彻打不过就开挂的我, 拿起了手上的 python...',
+    '群友介绍了个微信小游戏<开局托儿所>, 怎么玩最高只有80分, 从小贯彻打不过就开挂的我, 拿起了手上的 python...'
 }
 
 ![tesseract](/weibo/large/6708d6c2gy1hlgko40qfqj20y80goqcp.jpg?width=1232&height=600)
@@ -79,13 +79,7 @@ for contour in contours:
   # 判断后再识别
 ```
 
-<Img
-  src="/weibo/large/6708d6c2gy1hlgmhl37yuj20pc0c1tfn.jpg"
-  alt="find the grid"
-  note="找出格子"
-  width={912}
-  height={433}
-/>
+![find the grid](/weibo/large/6708d6c2gy1hlgmhl37yuj20pc0c1tfn.jpg?width=921&height=433&note=找出格子)
 
 然而在循环中调用 `tesseract` 太慢了, 思考了一下, 将格子留白位尽量去掉, 然后组合成行, 再一次过识别.
 

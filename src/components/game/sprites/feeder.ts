@@ -4,14 +4,14 @@ import Pet from './pet'
 
 export enum DIRECTION {
   LEFT = -1,
-  RIGHT = 1,
+  RIGHT = 1
 }
 
 export default class Feeder extends Pet {
   #speed = 300
   #speedRatio = 1
   #direction = {
-    x: DIRECTION.LEFT,
+    x: DIRECTION.LEFT
     // y: 0
   }
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
@@ -25,8 +25,7 @@ export default class Feeder extends Pet {
 
   #initEvents(): void {
     // keyboard event
-    // @ts-expect-error
-    this.scene.input.keyboard.on(
+    this.scene?.input?.keyboard?.on(
       Phaser.Input.Keyboard.Events.ANY_KEY_DOWN,
       (e: KeyboardEvent) => {
         switch (e.key) {
@@ -47,7 +46,7 @@ export default class Feeder extends Pet {
             this.#goRight()
             break
         }
-      },
+      }
     )
     // mouse left to feed, right to change direction
     this.scene.input.on(
@@ -59,10 +58,14 @@ export default class Feeder extends Pet {
             this.#feed()
             break
           case 2:
-            this.body.velocity.x > 0 ? this.#goLeft() : this.#goRight()
+            if (this.body.velocity.x > 0) {
+              this.#goLeft()
+            } else {
+              this.#goRight()
+            }
             break
         }
-      },
+      }
     )
   }
 
@@ -71,7 +74,7 @@ export default class Feeder extends Pet {
       this.scene,
       this.x,
       this.y - TEXTURE.FOOD.HEIGHT,
-      TEXTURE.FOOD.NAME,
+      TEXTURE.FOOD.NAME
     )
     this.emit('feed', food)
   }

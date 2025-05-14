@@ -7,11 +7,15 @@ import { cn } from '@/utils'
 
 import { animate, motion, useMotionValue } from 'motion/react'
 import { match } from 'ts-pattern'
+import { useShallow } from 'zustand/shallow'
+
+import { useBgCanvasStore } from './store'
 
 const LoadingScreen = () => {
   const loadingState = useProgress()
   const [progress, setProgress] = useState(0)
   const [done, setDone] = useState(false)
+  const [setReady] = useBgCanvasStore(useShallow((state) => [state.setReady]))
 
   const v = useMotionValue(0)
 
@@ -25,14 +29,16 @@ const LoadingScreen = () => {
         // Done
         return animate(v, 100, {
           ease: 'easeOut',
-          duration: 2,
+          duration: 1.5,
           onUpdate(v) {
             setProgress(Math.floor(v))
           },
           onComplete() {
+            setReady(true)
             animate(o, 0, {
               duration: 0.5,
               ease: [0, 0.76, 0.82, 1],
+              delay: 0.1,
               onComplete() {
                 setDone(true)
               }
@@ -54,7 +60,7 @@ const LoadingScreen = () => {
     return () => {
       animation.stop()
     }
-  }, [v, o, loadingState.progress, loadingState.loaded])
+  }, [v, o, loadingState.progress, loadingState.loaded, setReady])
 
   const cls = useMemo(() => {
     return cn([

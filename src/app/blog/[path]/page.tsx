@@ -5,6 +5,18 @@ import type { FC } from 'react'
 import avatar from '@/assets/avatar.png'
 import MpShare from '@/components/mp-share'
 
+import { globby } from 'globby'
+import { basename } from 'node:path'
+
+export const generateStaticParams = async () => {
+  const posts = await globby('src/posts/*.mdx')
+  return posts.map((post) => {
+    return {
+      path: basename(post, '.mdx')
+    }
+  })
+}
+
 type PageProps = {
   params: Promise<{
     path: string
