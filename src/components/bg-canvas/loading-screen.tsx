@@ -75,8 +75,21 @@ const LoadingScreen = () => {
   return (
     <>
       {!done && (
-        <motion.div className={cls} style={{ opacity: o }}>
-          <span>{`${progress} %`}</span>
+        <motion.div
+          className={cls}
+          style={
+            {
+              // opacity: o
+            }
+          }
+        >
+          <motion.span
+            className="bg-clip-text text-transparent"
+            style={{
+              backgroundImage: `linear-gradient(to bottom, #fff ${v.get()}%, transparent 100%)`,
+              opacity: o
+            }}
+          >{`${progress} %`}</motion.span>
         </motion.div>
       )}
     </>
