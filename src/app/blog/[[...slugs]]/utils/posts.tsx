@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
-import { globby } from 'globby'
-import { basename } from 'node:path'
+import { readdir } from 'node:fs/promises'
+import { basename, join } from 'node:path'
 
 // ref: https://gohugo.io/content-management/front-matter/#front-matter-formats
 export type PostMetadata = {
@@ -29,19 +29,25 @@ const order = (a: Post, b: Post) => {
   return aDate.isBefore(bDate) ? 1 : -1
 }
 
+const POSTS_DIR = join(process.cwd(), `src/posts`)
+
 export const getAllPosts = async (
   tag: string = '',
   page: number = 1,
   limit: number = 6
 ) => {
-  const posts = await globby('src/posts/*.mdx')
+  const posts = await readdir(POSTS_DIR)
 
   // compile meta data
   const compiledPosts = await Promise.all(
-    posts.map(async (post) => {
-      const fileName = basename(post)
-      return await getPostByName(fileName)
-    })
+    posts
+      .filter((p) => {
+        return p.endsWith('.mdx')
+      })
+      .map(async (post) => {
+        const fileName = basename(post)
+        return await getPostByName(fileName)
+      })
   )
 
   // order by date
