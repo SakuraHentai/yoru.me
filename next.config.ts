@@ -9,6 +9,7 @@ import remarkMath from 'remark-math'
 import { bundledLanguages } from 'shiki'
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   pageExtensions: ['ts', 'tsx', 'mdx'],
   transpilePackages: ['three'],
   images: {

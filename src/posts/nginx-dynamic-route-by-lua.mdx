@@ -5,7 +5,7 @@ export const metadata = {
   date: '2023-12-20',
   tags: ['nginx', 'lua'],
   summary:
-    '朋友公司清退所有人员, 当初冗余的前端机子需要进行整合, 涉及到什么呢? 点进来看看吧~',
+    '朋友公司清退所有人员, 当初冗余的前端机子需要进行整合, 涉及到什么呢? 点进来看看吧~'
 }
 
 ![nginx proxy](/weibo/large/6708d6c2gy1hl04no2c7ej210c0ie7vy.jpg?width=1308&height=662)
@@ -110,7 +110,7 @@ end
 
 由于以前都是硬编码到 `access_log`, 如:
 
-```text
+```nginx
 log_format es_log '$remote_addr || $http_host || $request_uri || $http_referer || $http_user_agent || $upstream_response_time || $status
 
 map $status $log2es {
@@ -130,7 +130,7 @@ access_log syslog:server=es-server,tag=p(n) es_log if=$log2es;
 
 但多产品整合后, 需要在 `log_format` 加入对应产品, 由 logstash 再落库
 
-```text
+```nginx
 # 根据产品, 增加 log_tag
 map $platform $log_tag {
   p1 p1index;
