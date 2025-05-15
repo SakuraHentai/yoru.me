@@ -9,9 +9,9 @@ import asideBg from '@/assets/bg-aside.webp'
 const BlogLayout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <>
-      <div className="mx-auto flex max-w-[1200px]">
-        <aside className="w-[30vw] max-w-80">
-          <div className="sticky top-0 h-dvh py-[8vw]">
+      <div className="mx-auto flex max-w-[1200px] flex-col-reverse sm:flex-row">
+        <aside className="text-center sm:w-[30vw] sm:max-w-80 sm:text-left">
+          <div className="sticky top-0 py-[8vw] sm:h-dvh">
             <div className="absolute inset-0 -z-10">
               <Image
                 className="absolute inset-0 size-full object-cover"
@@ -39,7 +39,7 @@ const BlogLayout: FC<{ children: ReactNode }> = ({ children }) => {
                   Derek
                 </a>
               </h3>
-              <div className="indent-0.5">
+              <div className="sm:indent-0.5">
                 <Link
                   href="/"
                   className="block leading-relaxed text-white underline text-shadow-[2px_2px_1px_#555]"
