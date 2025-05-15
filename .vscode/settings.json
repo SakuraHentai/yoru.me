@@ -1,19 +1,15 @@
 {
   "cSpell.words": [
-    "anya",
-    "axios",
-    "babassl",
-    "ciphersuites",
-    "exceljs",
-    "fuyu",
-    "gtag",
-    "haru",
-    "natsu",
-    "ntls",
-    "tcpdump",
-    "tlsv",
-    "wakuwaku",
-    "wireshark",
-    "yoru"
+    "bprogress",
+    "Fipps",
+    "Fuyu",
+    "Haru",
+    "kizuna",
+    "Natsu",
+    "Shiki"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    "cn`([^`]*)",
+    ["cn\\(([^)]*)\\)", "'([^']*)'"]
   ]
 }
