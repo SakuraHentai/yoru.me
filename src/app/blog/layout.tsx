@@ -3,8 +3,8 @@ import Link from 'next/link'
 
 import type { FC, ReactNode } from 'react'
 
-import avatar from '@/assets/avatar.png'
-import asideBg from '@/assets/bg-aside.jpg'
+import avatar from '@/assets/avatar.webp'
+import asideBg from '@/assets/bg-aside.webp'
 
 const BlogLayout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -39,14 +39,24 @@ const BlogLayout: FC<{ children: ReactNode }> = ({ children }) => {
                   Derek
                 </a>
               </h3>
-              <div className={''}>
-                <Link href="/">Home</Link>
-                <Link href="/blog">Blog</Link>
+              <div className="indent-0.5">
+                <Link
+                  href="/"
+                  className="block leading-relaxed text-white underline text-shadow-[2px_2px_1px_#555]"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/blog"
+                  className="block leading-relaxed text-white underline text-shadow-[2px_2px_1px_#555]"
+                >
+                  Blog
+                </Link>
               </div>
             </div>
           </div>
         </aside>
-        <main>{children}</main>
+        <main className="min-w-0 flex-1 px-8 py-4">{children}</main>
       </div>
     </>
   )

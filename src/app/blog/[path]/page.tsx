@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import type { FC } from 'react'
 
-import avatar from '@/assets/avatar.png'
+import avatar from '@/assets/avatar.webp'
 import MpShare from '@/components/mp-share'
 
 import { globby } from 'globby'
@@ -42,7 +42,17 @@ const Page: FC<PageProps> = async (props) => {
   const { path } = await props.params
 
   try {
-    const { default: Post, metadata } = await import(`@/posts/${path}.mdx`)
+    const { default: Post, metadata } = (await import(
+      `@/posts/${path}.mdx`
+    )) as {
+      default: FC
+      metadata: {
+        title: string
+        description: string
+        date: string
+        tags: string[]
+      }
+    }
 
     return (
       <>
@@ -52,9 +62,27 @@ const Page: FC<PageProps> = async (props) => {
           integrity="sha384-KiWOvVjnN8qwAZbuQyWDIbfCLFhLXNETzBQjA/92pIowpC0d2O3nppDGQVgwd2nB"
           crossOrigin="anonymous"
         />
-        <div className="prose max-w-none">
+        <h1 className="mt-4 mb-8 text-4xl leading-tight font-normal">
+          {metadata.title}
+        </h1>
+        <article className="prose max-w-none">
           <Post />
-        </div>
+        </article>
+        <time
+          className="mt-4 block text-right text-xs text-[#92737b]"
+          dateTime={metadata.date}
+        >
+          {metadata.date}
+        </time>
+        <ul className="mt-2 flex flex-wrap justify-end gap-2">
+          {metadata.tags.map((tag) => (
+            <li key={tag} className="text-xs">
+              <a href={`/blog/tag/${tag}`} className="mr-2 text-[#2196f3]">
+                #{tag}
+              </a>
+            </li>
+          ))}
+        </ul>
         <MpShare
           title={metadata.title}
           desc={metadata.description}

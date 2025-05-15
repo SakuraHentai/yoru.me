@@ -1,5 +1,13 @@
 {
-  "cSpell.words": ["Fipps", "Fuyu", "Haru", "kizuna", "Natsu", "Shiki"],
+  "cSpell.words": [
+    "bprogress",
+    "Fipps",
+    "Fuyu",
+    "Haru",
+    "kizuna",
+    "Natsu",
+    "Shiki"
+  ],
   "tailwindCSS.experimental.classRegex": [
     "cn`([^`]*)",
     ["cn\\(([^)]*)\\)", "'([^']*)'"]

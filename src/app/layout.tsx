@@ -4,6 +4,7 @@ import type { FC, ReactNode } from 'react'
 
 import { GoogleAnalyzer } from '@/components/google-analyzer'
 
+import { ProgressBar } from './components/progress-bar'
 import './globals.css'
 
 export const viewport = {
@@ -34,7 +35,7 @@ const Layout: FC<LayoutProps> = async ({ children }) => {
   return (
     <html lang="zh-Hans">
       <body>
-        {children}
+        <ProgressBar>{children}</ProgressBar>
 
         {process.env.NODE_ENV === 'production' && <GoogleAnalyzer />}
       </body>
