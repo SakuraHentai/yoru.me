@@ -2,7 +2,10 @@
 
 import Script from 'next/script'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+
+import ky from 'ky'
+import useSWRImmutable from 'swr/immutable'
 
 declare global {
   interface Window {
@@ -45,15 +48,22 @@ const setupSDK = (props: ShareProps) => {
   if (!wx || !/MicroMessenger/i.test(navigator.userAgent)) return
 
   const currentURL = window.location.href
-  fetch('https://mp.yoru.me/wxa/api/js-sdk', {
-    method: 'post',
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify({ url: currentURL })
-  })
-    .then((res) => res.json())
-    .then(async (res) => {
+  return ky
+    .post('https://mp.yoru.me/wxa/api/js-sdk', {
+      json: {
+        url: currentURL
+      }
+    })
+    .json<{
+      code: number
+      data: {
+        appId: string
+        timestamp: number
+        nonceStr: string
+        signature: string
+      }
+    }>()
+    .then((res) => {
       if (res.code === 0) {
         wx.config({
           // debug: true,
@@ -85,10 +95,18 @@ const setupSDK = (props: ShareProps) => {
 
 const MpShare: React.FC<ShareProps> = (props) => {
   const [isSDKLoaded, setSDKLoaded] = useState(false)
+  useSWRImmutable(
+    () => {
+      if (!isSDKLoaded) {
+        return null
+      }
 
-  useEffect(() => {
-    setupSDK(props)
-  }, [props, isSDKLoaded])
+      return [props, isSDKLoaded]
+    },
+    async () => {
+      return setupSDK(props)
+    }
+  )
 
   return (
     <Script

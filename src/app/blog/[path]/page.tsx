@@ -30,8 +30,7 @@ export const generateMetadata = async (props: PageProps) => {
 
     return {
       title: metadata.title,
-      description: metadata.description,
-      date: metadata.date
+      description: metadata.description
     }
   } catch (error) {
     console.error(error)
