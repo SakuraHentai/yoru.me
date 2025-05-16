@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-export type blendNameTypes = '' | 'haru' | 'natsu' | 'aki' | 'fuyu'
+export type blendNameTypes = '' | 'haru' | 'natsu' | 'aki' | 'huyu'
 
 interface BgCanvasState {
   blend: {

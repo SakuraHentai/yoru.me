@@ -1,19 +1,14 @@
-import { useTexture } from '@react-three/drei'
 import { FC, useEffect, useMemo, useRef } from 'react'
 
-import huyu from '@/assets/home/huyu.webp'
-
 import gsap from 'gsap'
-import { Euler, Mesh, Vector3 } from 'three'
+import { Euler, Mesh, type Texture, Vector3 } from 'three'
 
 import { useWindowViewport } from '../hooks/use-window-viewport'
 import { useBgCanvasStore } from '../store'
-import { convertToSRGB } from '../utils/convert-to-srgb'
 import SeasonBase from './base'
 
-type Props = {}
-const Huyu: FC<Props> = ({}) => {
-  const map = useTexture(huyu.src, convertToSRGB)
+type Props = { src: Texture }
+const Huyu: FC<Props> = ({ src }) => {
   const ref = useRef<Mesh>(null)
   const viewport = useWindowViewport()
   const position = useRef(new Vector3(0, 0, 10))
@@ -94,8 +89,8 @@ const Huyu: FC<Props> = ({}) => {
 
   return (
     <SeasonBase
-      name="fuyu"
-      texture={map}
+      name="huyu"
+      texture={src}
       portalRotation={portalRotation}
       ref={ref}
     />

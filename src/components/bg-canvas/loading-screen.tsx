@@ -1,6 +1,5 @@
 'use client'
 
-import { useProgress } from '@react-three/drei'
 import { useEffect, useMemo, useState } from 'react'
 
 import { cn } from '@/utils'
@@ -12,18 +11,15 @@ import { useShallow } from 'zustand/shallow'
 import { useBgCanvasStore } from './store'
 
 const LoadingScreen = () => {
-  const loadingState = useProgress()
   const [progress, setProgress] = useState(0)
   const [done, setDone] = useState(false)
-  const [setReady] = useBgCanvasStore(useShallow((state) => [state.setReady]))
+  const [ready] = useBgCanvasStore(useShallow((state) => [state.loaded.ready]))
 
   const v = useMotionValue(0)
   const o = useMotionValue(1)
 
   useEffect(() => {
-    const animation = match(
-      loadingState.loaded > 0 && loadingState.progress === 100
-    )
+    const animation = match(ready)
       .with(true, () => {
         // Done
         return animate(v, 100, {
@@ -33,7 +29,6 @@ const LoadingScreen = () => {
             setProgress(Math.floor(v))
           },
           onComplete() {
-            setReady(true)
             animate(o, 0, {
               duration: 0.5,
               ease: [0, 0.76, 0.82, 1],
@@ -59,7 +54,7 @@ const LoadingScreen = () => {
     return () => {
       animation.stop()
     }
-  }, [v, o, loadingState.progress, loadingState.loaded, setReady])
+  }, [v, o, ready])
 
   const cls = useMemo(() => {
     return cn([

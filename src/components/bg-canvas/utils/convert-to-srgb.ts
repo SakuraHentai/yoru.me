@@ -1,7 +1,9 @@
-import { SRGBColorSpace, type Texture } from 'three'
+import { type Texture } from 'three'
 
-export const convertToSRGB = (texture: Texture | Texture[]) => {
+export const convertToSRGB = <T extends Texture | Texture[]>(texture: T) => {
   if (!Array.isArray(texture)) {
-    texture.colorSpace = SRGBColorSpace
+    // texture.colorSpace = SRGBColorSpace
   }
+
+  return texture
 }
