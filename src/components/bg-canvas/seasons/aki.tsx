@@ -1,19 +1,14 @@
-import { useTexture } from '@react-three/drei'
 import { FC, useEffect, useMemo, useRef } from 'react'
 
-import aki from '@/assets/home/aki.webp'
-
 import gsap from 'gsap'
-import { Euler, Mesh, Vector3 } from 'three'
+import { Euler, Mesh, type Texture, Vector3 } from 'three'
 
 import { useWindowViewport } from '../hooks/use-window-viewport'
 import { useBgCanvasStore } from '../store'
-import { convertToSRGB } from '../utils/convert-to-srgb'
 import SeasonBase from './base'
 
-type Props = {}
-const Aki: FC<Props> = ({}) => {
-  const map = useTexture(aki.src, convertToSRGB)
+type Props = { src: Texture }
+const Aki: FC<Props> = ({ src }) => {
   const ref = useRef<Mesh>(null)
   const viewport = useWindowViewport()
   const position = useRef(new Vector3(0))
@@ -90,7 +85,7 @@ const Aki: FC<Props> = ({}) => {
   return (
     <SeasonBase
       name="aki"
-      texture={map}
+      texture={src}
       portalRotation={portalRotation}
       ref={ref}
     />
