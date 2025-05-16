@@ -3,12 +3,11 @@ import ky from 'ky'
 
 const loader = {
   async load(url: string) {
-    console.time(`${url} load`)
     const blob = await ky.get(url).blob()
 
-    const map = await createImageBitmap(blob)
-
-    console.timeEnd(`${url} load`)
+    const map = await createImageBitmap(blob, {
+      imageOrientation: 'flipY'
+    })
 
     return map
   }

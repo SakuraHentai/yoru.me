@@ -13,18 +13,22 @@ import { useBgCanvasStore } from './store'
 const LoadingScreen = () => {
   const [progress, setProgress] = useState(0)
   const [done, setDone] = useState(false)
-  const [ready] = useBgCanvasStore(useShallow((state) => [state.loaded.ready]))
+  const [resourcesLoaded, setReady] = useBgCanvasStore(
+    useShallow((state) => [state.loaded.resources, state.setReady])
+  )
 
   const v = useMotionValue(0)
   const o = useMotionValue(1)
 
   useEffect(() => {
-    const animation = match(ready)
+    const animation = match(resourcesLoaded)
       .with(true, () => {
         // Done
+        setReady(true)
+
         return animate(v, 100, {
           ease: 'easeOut',
-          duration: 1.5,
+          duration: 0.3,
           onUpdate(v) {
             setProgress(Math.floor(v))
           },
@@ -32,7 +36,6 @@ const LoadingScreen = () => {
             animate(o, 0, {
               duration: 0.5,
               ease: [0, 0.76, 0.82, 1],
-              delay: 0.1,
               onComplete() {
                 setDone(true)
               }
@@ -54,7 +57,7 @@ const LoadingScreen = () => {
     return () => {
       animation.stop()
     }
-  }, [v, o, ready])
+  }, [v, o, resourcesLoaded, setReady])
 
   const cls = useMemo(() => {
     return cn([
@@ -69,22 +72,15 @@ const LoadingScreen = () => {
   return (
     <>
       {!done && (
-        <motion.div
-          className={cls}
-          style={
-            {
-              // opacity: o
-            }
-          }
-        >
+        <div className={cls}>
           <motion.span
             className="bg-clip-text text-transparent"
             style={{
-              backgroundImage: `linear-gradient(to bottom, #fff ${v.get()}%, transparent 100%)`,
+              backgroundImage: `linear-gradient(to top, #fff ${v.get()}%, transparent 100%)`,
               opacity: o
             }}
           >{`${progress} %`}</motion.span>
-        </motion.div>
+        </div>
       )}
     </>
   )

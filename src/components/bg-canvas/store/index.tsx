@@ -13,10 +13,12 @@ interface BgCanvasState {
   }
   loaded: {
     ready: boolean
+    resources: boolean
   }
   setBlendName: (name: blendNameTypes) => void
   setElapsed: (elapsed: number) => void
   setReady: (ready: boolean) => void
+  setResourcesLoaded: (loaded: boolean) => void
   timelineRange: (from: number, distance: number) => number
   advanceTimeline: (callback: () => void, force?: boolean) => void
   resetTimeline: () => void
@@ -35,7 +37,8 @@ export const useBgCanvasStore = create<BgCanvasState>()(
         elapsed: 0
       },
       loaded: {
-        ready: false
+        ready: false,
+        resources: false
       },
       setBlendName: (name) => {
         set((state) => {
@@ -50,6 +53,11 @@ export const useBgCanvasStore = create<BgCanvasState>()(
       setReady: (ready) => {
         set((state) => {
           state.loaded.ready = ready
+        })
+      },
+      setResourcesLoaded: (loaded) => {
+        set((state) => {
+          state.loaded.resources = loaded
         })
       },
       timelineRange: (from: number, distance: number) => {
