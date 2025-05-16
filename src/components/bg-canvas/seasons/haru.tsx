@@ -1,16 +1,19 @@
+import { useTexture } from '@react-three/drei'
 import { FC, useEffect, useMemo, useRef } from 'react'
 
+import haru from '@/assets/home/haru.webp'
+
 import gsap from 'gsap'
-import { Euler, Mesh, Texture, Vector3 } from 'three'
+import { Euler, Mesh, Vector3 } from 'three'
 
 import { useWindowViewport } from '../hooks/use-window-viewport'
 import { useBgCanvasStore } from '../store'
+import { convertToSRGB } from '../utils/convert-to-srgb'
 import SeasonBase from './base'
 
-type Props = {
-  map: Texture
-}
-const Haru: FC<Props> = ({ map }) => {
+type Props = {}
+const Haru: FC<Props> = ({}) => {
+  const map = useTexture(haru.src, convertToSRGB)
   const ref = useRef<Mesh>(null)
   const viewport = useWindowViewport()
   const position = useRef(new Vector3(0))

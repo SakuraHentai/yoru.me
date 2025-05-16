@@ -29,8 +29,8 @@ const Home = () => {
     <>
       <div className="h-dvh bg-[#ffe500]">
         <BgCanvas />
-        <header className="fixed right-8 top-4">
-          <nav className="h-16 py-2 px-8 bg-[rgba(22,101,52,.5)] rounded-[64px] flex items-center">
+        <header className="fixed top-4 right-8">
+          <nav className="flex h-16 items-center rounded-[64px] bg-[rgba(22,101,52,.5)] px-8 py-2">
             <ul className="flex items-center gap-4">
               <li>
                 <Link href={'/blog'} title="去看看前端~" className={anchorCls}>
