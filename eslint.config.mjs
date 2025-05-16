@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
+  baseDirectory: __dirname
 })
 
 const eslintConfig = [
@@ -15,8 +15,10 @@ const eslintConfig = [
   {
     rules: {
       'react/display-name': 'off',
-    },
-  },
+      '@typescript-eslint/no-empty-object-type': 'off',
+      '@typescript-eslint/no-unused-vars': ['warn']
+    }
+  }
 ]
 
 export default eslintConfig

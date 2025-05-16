@@ -18,7 +18,6 @@ const LoadingScreen = () => {
   const [setReady] = useBgCanvasStore(useShallow((state) => [state.setReady]))
 
   const v = useMotionValue(0)
-
   const o = useMotionValue(1)
 
   useEffect(() => {

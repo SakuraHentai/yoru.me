@@ -1,7 +1,8 @@
 'use client'
 
-import { Canvas } from '@react-three/fiber'
-import { lazy, useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
+
+import { useEffect, useState } from 'react'
 
 import { AnimatePresence, motion } from 'motion/react'
 import { useShallow } from 'zustand/shallow'
@@ -9,7 +10,12 @@ import { useShallow } from 'zustand/shallow'
 import LoadingScreen from './loading-screen'
 import { useBgCanvasStore } from './store'
 
-const Scene = lazy(() => import('./scene'))
+const Animation = dynamic(
+  () => import('./animation').then((mod) => mod.Animation),
+  {
+    ssr: false
+  }
+)
 
 const CloseBlend = () => {
   const [showClose, setShowClose] = useState(false)
@@ -26,7 +32,7 @@ const CloseBlend = () => {
       {showClose && (
         <motion.div
           className={
-            'fixed top-4 left-4 size-12 text-[rgba(22,101,52,.8)] cursor-pointer'
+            'fixed top-4 left-4 size-12 cursor-pointer text-[rgba(22,101,52,.8)]'
           }
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -56,9 +62,7 @@ const CloseBlend = () => {
 const BgCanvas = () => {
   return (
     <div className="relative size-full">
-      <Canvas frameloop="demand" className="col-span-full row-span-full" flat>
-        <Scene />
-      </Canvas>
+      <Animation />
       <CloseBlend />
       <LoadingScreen />
     </div>

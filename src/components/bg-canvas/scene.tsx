@@ -1,18 +1,29 @@
+import dynamic from 'next/dynamic'
+
 import { invalidate, useFrame } from '@react-three/fiber'
-import { lazy, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { useShallow } from 'zustand/shallow'
 
-import { useSeasonTextures } from './hooks/use-season-textures'
 import { useWindowViewport } from './hooks/use-window-viewport'
 import { useBgCanvasStore } from './store'
 
 // import Natsu from './seasons/natsu'
-const Haru = lazy(() => import('./seasons/haru'))
-const Natsu = lazy(() => import('./seasons/natsu'))
-const Aki = lazy(() => import('./seasons/aki'))
-const Fuyu = lazy(() => import('./seasons/fuyu'))
-const Director = lazy(() => import('./director'))
+const Haru = dynamic(() => import('./seasons/haru'), {
+  ssr: false
+})
+const Natsu = dynamic(() => import('./seasons/natsu'), {
+  ssr: false
+})
+const Aki = dynamic(() => import('./seasons/aki'), {
+  ssr: false
+})
+const Huyu = dynamic(() => import('./seasons/huyu'), {
+  ssr: false
+})
+const Director = dynamic(() => import('./director'), {
+  ssr: false
+})
 
 const Timeline = () => {
   const [ready, advanceTimeline] = useBgCanvasStore(
@@ -52,14 +63,12 @@ const FixNavigateBack = () => {
   return null
 }
 const Scene = () => {
-  const textures = useSeasonTextures()
-
   return (
     <>
-      <Haru map={textures.haru} />
-      <Natsu map={textures.natsu} />
-      <Aki map={textures.aki} />
-      <Fuyu map={textures.fuyu} />
+      <Haru />
+      <Natsu />
+      <Aki />
+      <Huyu />
       <Director />
       {/* <axesHelper args={[5]} /> */}
       <Timeline />
