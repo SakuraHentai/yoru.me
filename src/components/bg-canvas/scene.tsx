@@ -92,13 +92,13 @@ const Scene = () => {
       const texture = new Texture(map)
 
       // Important for ImageBitmap
-      // texture.flipY = false
+      texture.flipY = false
       texture.colorSpace = SRGBColorSpace
       texture.needsUpdate = true
 
       // Preload
       gl.initTexture(texture)
-      map.close()
+      // map.close()
 
       return texture
     })
