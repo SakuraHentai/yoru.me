@@ -16,7 +16,7 @@ export const metadata = {
 
 ### BrowserRouter
 
-```ts
+```tsx
 <BrowserRouter>
   <App />
 </BrowserRouter>
@@ -82,7 +82,7 @@ function computeScore(path: string, index: boolean | undefined): number {
 
 匹配后的路由会进入渲染 `_renderMatches`
 
-```ts
+```tsx
 function _renderMatches(
   matches: RouteMatch[] | null,
   parentMatches: RouteMatch[] = []
@@ -96,34 +96,37 @@ function _renderMatches(
    *   {path: '/about', ...}
    * ]
    */
-  return matches.reduceRight((outlet, match, index) => {
-    return (
-      /**
-       * 将匹配路由嵌套层级, 形成
-       * Provider<{
-       *   path: '/',
-       *     children: 设定的element,
-       *     outlet: Provider<{ // 嵌套的路由
-       *       path: '/about',
-       *       children: 设定的element,
-       *       outlet: null
-       *    }>
-       * }>,
-       * 当渲染 `/` 时, Provider会将设定的value(outlet)设置到RouteContext中
-       * 所以当某层级含有 <Outlet /> 时, 渲染的即为当层嵌套路由 (见下)
-       *
-       */
-      <RouteContext.Provider
-        children={
-          match.route.element !== undefined ? match.route.element : <Outlet />
-        }
-        value={{
-          outlet,
-          matches: parentMatches.concat(matches.slice(0, index + 1)),
-        }}
-      />
-    )
-  }, null as React.ReactElement | null)
+  return matches.reduceRight(
+    (outlet, match, index) => {
+      return (
+        /**
+         * 将匹配路由嵌套层级, 形成
+         * Provider<{
+         *   path: '/',
+         *     children: 设定的element,
+         *     outlet: Provider<{ // 嵌套的路由
+         *       path: '/about',
+         *       children: 设定的element,
+         *       outlet: null
+         *    }>
+         * }>,
+         * 当渲染 `/` 时, Provider会将设定的value(outlet)设置到RouteContext中
+         * 所以当某层级含有 <Outlet /> 时, 渲染的即为当层嵌套路由 (见下)
+         *
+         */
+        <RouteContext.Provider
+          children={
+            match.route.element !== undefined ? match.route.element : <Outlet />
+          }
+          value={{
+            outlet,
+            matches: parentMatches.concat(matches.slice(0, index + 1))
+          }}
+        />
+      )
+    },
+    null as React.ReactElement | null
+  )
 }
 ```
 
