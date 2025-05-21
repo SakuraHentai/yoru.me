@@ -13,6 +13,7 @@
     "@react-three/drei": "^10.0.7",
     "@react-three/fiber": "^9.1.2",
     "@shikijs/rehype": "^3.4.0",
+    "@tabler/icons-react": "^3.33.0",
     "clsx": "^2.1.1",
     "comlink": "^4.4.2",
     "dayjs": "^1.11.13",

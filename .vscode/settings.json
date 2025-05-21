@@ -7,7 +7,8 @@
     "Huyu",
     "kizuna",
     "Natsu",
-    "Shiki"
+    "Shiki",
+    "tabler"
   ],
   "tailwindCSS.experimental.classRegex": [
     "cn`([^`]*)",
