@@ -20,6 +20,9 @@ dependencies:
   '@shikijs/rehype':
     specifier: ^3.4.0
     version: 3.4.0
+  '@tabler/icons-react':
+    specifier: ^3.33.0
+    version: 3.33.0(react@19.1.0)
   clsx:
     specifier: ^2.1.1
     version: 2.1.1
@@ -1423,6 +1426,19 @@ packages:
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
     dependencies:
       tslib: 2.8.1
+    dev: false
+
+  /@tabler/icons-react@3.33.0(react@19.1.0):
+    resolution: {integrity: sha512-ay+HDecCjmFl25Lg14hcl59ffSjnOcgfrlV14shu8Qjbz+Xh4LRus93DuoyLQte8YSxE7Pe5gnEz6OF0GtwNtw==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      '@tabler/icons': 3.33.0
+      react: 19.1.0
+    dev: false
+
+  /@tabler/icons@3.33.0:
+    resolution: {integrity: sha512-NZeFfzcYe7xcBHR3zKoCSrw/cFWvfj6LjenPQ48yVMTGdX854HH9nH44ZfMH8rrDzHBllfjwl4CIX6Vh2tyN0Q==}
     dev: false
 
   /@tailwindcss/node@4.1.6:

@@ -1,8 +1,8 @@
 import { Fira_Code } from 'next/font/google'
-import Image from 'next/image'
 
 import type { MDXComponents } from 'mdx/types'
 
+import { ImagePreview } from './components/image-preview'
 import { cn } from './utils'
 
 const firaCode = Fira_Code({
@@ -22,44 +22,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       )
     },
     img: ({ src, alt }) => {
-      const url = new URL(src.replaceAll('&amp;', '&'), 'https://img.yoru.me')
-      const params = url.searchParams
-
-      const width = params.get('width')
-      const height = params.get('height')
-      const note = params.get('note') || null
-
-      if (!width || !height) {
-        throw new Error(
-          'Image width and height are required, set them in URL query, e.g. ?width=100&height=100'
-        )
-      }
-
-      const aspectRatio = `${width} / ${height}`
-      const urlWithoutQuery = `${url.origin}${url.pathname}`
-
-      return (
-        <a
-          className="text-center block no-underline"
-          href={urlWithoutQuery}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Image
-            src={urlWithoutQuery}
-            alt={alt}
-            referrerPolicy="no-referrer"
-            loading="lazy"
-            width={parseFloat(width)}
-            height={parseFloat(height)}
-            style={{
-              aspectRatio
-            }}
-            className="h-auto mx-auto mt-0 mb-2"
-          />
-          {note ? <span className="text-sm text-gray-500">{note}</span> : null}
-        </a>
-      )
+      return <ImagePreview src={src} alt={alt} />
     },
     code: ({ children }) => {
       const cls = cn([
@@ -70,7 +33,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       return <code className={cls}>{children}</code>
     },
     pre: ({ children }) => {
-      return <pre className="bg-gray-800 rounded-lg group code">{children}</pre>
+      return <pre className="group code rounded-lg bg-gray-800">{children}</pre>
     }
   }
 }
