@@ -2,9 +2,6 @@ import { notFound } from 'next/navigation'
 
 import type { FC } from 'react'
 
-import avatar from '@/assets/avatar.webp'
-import MpShare from '@/components/mp-share'
-
 import { globby } from 'globby'
 import { basename } from 'node:path'
 
@@ -83,11 +80,6 @@ const Page: FC<PageProps> = async (props) => {
             </li>
           ))}
         </ul>
-        <MpShare
-          title={metadata.title}
-          desc={metadata.description}
-          imgURL={avatar.src}
-        />
       </>
     )
   } catch {
