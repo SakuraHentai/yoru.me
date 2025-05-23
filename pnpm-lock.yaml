@@ -38,6 +38,9 @@ dependencies:
   gsap:
     specifier: ^3.13.0
     version: 3.13.0
+  hono:
+    specifier: ^4.7.10
+    version: 4.7.10
   immer:
     specifier: ^10.1.1
     version: 10.1.1
@@ -3821,6 +3824,11 @@ packages:
 
   /hls.js@1.6.2:
     resolution: {integrity: sha512-rx+pETSCJEDThm/JCm8CuadcAC410cVjb1XVXFNDKFuylaayHk1+tFxhkjvnMDAfqsJHxZXDAJ3Uc2d5xQyWlQ==}
+    dev: false
+
+  /hono@4.7.10:
+    resolution: {integrity: sha512-QkACju9MiN59CKSY5JsGZCYmPZkA6sIW6OFCUp7qDjZu6S6KHtJHhAc9Uy9mV9F8PJ1/HQ3ybZF2yjCa/73fvQ==}
+    engines: {node: '>=16.9.0'}
     dev: false
 
   /html-void-elements@3.0.0:
